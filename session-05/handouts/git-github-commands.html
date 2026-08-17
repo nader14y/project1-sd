@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>برگه‌ی سفر در زمان و GitHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:9mm; line-height:1.45; font-size:12px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:7px; margin-bottom:9px; }
+  .head h1 { font-size:22px; font-weight:900; }
+  .head .m { font-size:11px; color:#555; }
+
+  h2 { font-size:14px; font-weight:900; margin:12px 0 5px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  h2 .tag { font-size:9.5px; font-weight:900; background:#111; color:#fff;
+            border-radius:5px; padding:2px 7px; white-space:nowrap; }
+
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-right:4px solid #111;
+        border-radius:7px; padding:8px 11px; font-size:11.5px; line-height:1.7; margin:5px 0; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:10.8px; }
+  .why { font-size:11.5px; color:#555; }
+
+  table { width:100%; border-collapse:collapse; margin-top:4px; }
+  th { font-size:10.8px; font-weight:900; background:#111; color:#fff; padding:5px 8px; text-align:right; }
+  td { border:1px solid #ccc; padding:5px 8px; font-size:11px; vertical-align:top; line-height:1.5; }
+  td.k { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; font-weight:900;
+         white-space:nowrap; font-size:10.5px; }
+
+  .rule { border:2.5px solid #111; border-radius:9px; padding:8px 12px; margin:9px 0;
+          font-size:13px; font-weight:900; text-align:center; }
+  .warn { border:2px dashed #111; border-radius:8px; padding:8px 11px; margin-top:8px; font-size:11.5px; }
+  .cycle { display:flex; align-items:center; justify-content:center; gap:8px;
+           border:2px solid #111; border-radius:9px; padding:9px; margin:7px 0; }
+  .cycle .b { border:1.5px solid #999; border-radius:7px; padding:5px 14px;
+              font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; font-weight:900; font-size:12px; }
+  .cycle .a { font-size:13px; font-weight:900; }
+  .foot { margin-top:10px; text-align:center; font-size:10.5px; color:#888; }
+  .page2 { page-break-before:always; }
+</style>
+</head>
+<body>
+
+<!-- ══════════ صفحه ۱: git محلی ══════════ -->
+
+<div class="head">
+  <h1>⏳ سفر در زمان با git</h1>
+  <div class="m">Quiz Battle · جلسه‌ی ۵ · صفحه‌ی ۱ از ۲</div>
+</div>
+
+<div class="why">
+  هفته‌ی پیش یاد گرفتیم <b>save</b> کنیم و به <b>آخرین</b> save برگردیم.
+  امروز یاد می‌گیریم در تاریخچه <b>قدم بزنیم</b>.
+</div>
+
+<h2><span class="tag">۱</span> چه چیزی عوض شده؟</h2>
+<pre>git status        ← کدام فایل عوض شده
+git diff          ← چه چیزی عوض شده، خط‌به‌خط</pre>
+<div class="why">
+  خط با <code>-</code> = آنچه بود &nbsp;·&nbsp; خط با <code>+</code> = آنچه شد.<br>
+  👉 <b>عادت طلایی: قبل از هر commit یک <code>git diff</code> بزن.</b>
+  نصف اشتباه‌ها همان‌جا معلوم می‌شود — <code>print</code> دیباگی جامانده، خطی که اشتباهی پاک شده.
+</div>
+
+<h2><span class="tag">۲</span> تاریخچه را بگرد</h2>
+<pre>git log --oneline           ← لیست کوتاه همه‌ی commitها
+git log --oneline --stat    ← هر commit چه فایل‌هایی را دست زد
+git show 3f2a1b9            ← آن روز دقیقاً چه کار کردم؟</pre>
+<div class="warn">
+  <b>⚠️ ترمینال هنگ نکرده!</b> خروجی <code>diff</code>، <code>log</code> و <code>show</code>
+  در یک صفحه‌ی مخصوص باز می‌شود. با فلش حرکت کن و با کلید <b><code>q</code></b> ببندش.
+</div>
+
+<h2><span class="tag">۳</span> ⭐ برگشتن به یک save قدیمی</h2>
+<pre>git restore game.py
+        ← برگرد به <b>آخرین</b> save
+
+git restore --source=3f2a1b9 -- game.py
+        ← برگرد به <b>آن</b> save</pre>
+<div class="why">
+  hash را از <code>git log --oneline</code> کپی کن — ۷ کاراکتر اول کافی است.<br>
+  ⚠️ حرف <code>--</code> را جا نینداز، وگرنه git گیج می‌شود.
+</div>
+<div class="rule">این دستور تاریخچه را پاک نمی‌کند.<br>فقط فایل روی دیسک را عوض می‌کند — هر لحظه می‌توانی برگردی.</div>
+
+<h2><span class="tag">۴</span> باطل کردن یک commit</h2>
+<pre>git revert 3f2a1b9</pre>
+<div class="why">
+  یک commit <b>جدید</b> می‌سازد که کارِ آن commit را برمی‌گرداند.
+  مثل نوشتن «صفحه‌ی قبل را باطل کردم» در دفتر — نه پاره‌کردن صفحه.
+</div>
+
+<h2>سه ابزار، سه کار متفاوت</h2>
+<table>
+  <tr><th>دستور</th><th>چه می‌کند</th><th style="width:100px">تاریخچه</th></tr>
+  <tr><td class="k">git restore &lt;file&gt;</td><td>فایل → آخرین commit</td><td>دست‌نخورده</td></tr>
+  <tr><td class="k">git restore --source=&lt;hash&gt; -- &lt;file&gt;</td><td>فایل → <b>آن</b> commit</td><td>دست‌نخورده</td></tr>
+  <tr><td class="k">git revert &lt;hash&gt;</td><td>commit جدیدی که آن را باطل می‌کند</td><td>یکی <b>اضافه</b> می‌شود</td></tr>
+</table>
+
+<div class="foot">git تقریباً هیچ‌وقت چیزی را گم نمی‌کند — به شرطی که commit کرده باشی.</div>
+
+
+<!-- ══════════ صفحه ۲: GitHub ══════════ -->
+<div class="page2">
+
+<div class="head">
+  <h1>☁️ پروژه روی GitHub</h1>
+  <div class="m">Quiz Battle · جلسه‌ی ۵ · صفحه‌ی ۲ از ۲</div>
+</div>
+
+<div class="rule" style="font-size:12.5px;font-weight:700;line-height:1.7">
+  <b>git</b> یک <b>برنامه</b> است روی لپ‌تاپ تو — تا امروز یک بایت هم به اینترنت نرفت.<br>
+  <b>GitHub</b> یک <b>سایت</b> است: خانه‌ای در اینترنت برای repo تو.
+</div>
+
+<h2><span class="tag">عضو اول</span> ساخت repo و اولین push</h2>
+<div class="why">
+  github.com → دکمه‌ی <b>+</b> بالا راست → <b>New repository</b> → اسم: <code>quiz-battle</code> →
+  <b>Private</b>
+</div>
+<div class="warn">
+  <b>🚨 مهم‌ترین تله:</b> تیک <b>Add a README</b> و <b>Add .gitignore</b> را
+  <b>نزن</b>. repo باید کاملاً <b>خالی</b> باشد، وگرنه اولین <code>push</code> رد می‌شود.
+</div>
+<pre>git remote add origin https://github.com/USERNAME/quiz-battle.git
+git branch -M main
+git push -u origin main</pre>
+<table>
+  <tr><td class="k">remote add origin</td><td>به git می‌گویی خانه‌ی اینترنتی‌ات کجاست. <code>origin</code> فقط یک اسم مستعار برای آن آدرس است.</td></tr>
+  <tr><td class="k">branch -M main</td><td>مطمئن می‌شوی اسم شاخه‌ی اصلی <code>main</code> است.</td></tr>
+  <tr><td class="k">push -u origin main</td><td>هلش بده بالا. <code>-u</code> یعنی از این به بعد فقط <code>git push</code> کافی است.</td></tr>
+</table>
+<div class="why" style="margin-top:5px">
+  🔐 یک پنجره باز می‌شود و می‌گوید با مرورگر وارد GitHub شو → <b>Authorize</b>. یک‌بار برای همیشه.<br>
+  ⚠️ <b>اگر رمز عبور خواست، رمز را نزن</b> — GitHub رمز را قبول نمی‌کند.
+</div>
+
+<h2><span class="tag">عضو اول</span> دعوت هم‌تیمی</h2>
+<div class="why">
+  repo → <b>Settings</b> → <b>Collaborators</b> → <b>Add people</b> → نام کاربری هم‌تیمی.<br>
+  هم‌تیمی در مرورگر خودش، از <b>زنگ اعلان‌ها</b> یا ایمیل، دعوت را <b>قبول</b> می‌کند.
+</div>
+
+<h2><span class="tag">عضو دوم</span> clone کردن پروژه</h2>
+<pre>cd C:\dev
+git clone https://github.com/USERNAME/quiz-battle.git
+cd quiz-battle
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python game.py</pre>
+<div class="why">
+  ⚠️ حتماً اول <code>cd C:\dev</code> — وگرنه پروژه داخل پروژه clone می‌شود.<br>
+  🤔 چرا پوشه‌ی <code>venv</code> در آنچه clone شد نبود؟ چون در <code>.gitignore</code> است —
+  و از روی <code>requirements.txt</code> دوباره ساخته می‌شود.
+</div>
+
+<h2>چرخه‌ی روزانه — تا آخر دوره ده‌ها بار</h2>
+<div class="cycle">
+  <div class="b">git pull</div><div class="a">←</div>
+  <div class="b">کار کن</div><div class="a">←</div>
+  <div class="b">git commit</div><div class="a">←</div>
+  <div class="b">git push</div>
+</div>
+<div class="why">
+  <code>pull</code> = اول ببین هم‌تیمی‌ات چه فرستاده &nbsp;·&nbsp;
+  <code>push</code> = آخر، کارت را بفرست
+</div>
+
+<h2>🔧 اگر گیر کردی</h2>
+<table>
+  <tr><th style="width:47%">پیام</th><th>راه‌حل</th></tr>
+  <tr><td class="k">password authentication was removed</td><td>رمز کار نمی‌کند. پنجره‌ی مرورگر باید باز شود → Authorize</td></tr>
+  <tr><td class="k">Updates were rejected<br>non-fast-forward</td><td>repo را با README ساخته‌ای. پاکش کن و <b>خالی</b> بساز</td></tr>
+  <tr><td class="k">remote origin already exists</td><td><code>git remote set-url origin &lt;آدرس&gt;</code></td></tr>
+  <tr><td class="k">Repository not found</td><td>آدرس را از دکمه‌ی سبز <b>Code</b> کپی کن؛ دعوت را قبول کرده‌ای؟</td></tr>
+  <tr><td class="k">src refspec main does not match any</td><td><code>git branch -M main</code> — و مطمئن شو حداقل یک commit داری</td></tr>
+  <tr><td class="k">fatal: not a git repository</td><td>ترمینال در پوشه‌ی پروژه نیست → <code>File → Open Folder</code></td></tr>
+</table>
+
+<div class="foot"><b>قانون ۵ دوره: هر جلسه با <code>push</code> تمام می‌شود.</b>
+لپ‌تاپ خراب شود، پوشه پاک شود — کارت سالم است.</div>
+
+</div>
+</body>
+</html>

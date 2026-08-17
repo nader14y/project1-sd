@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تمرین خانه — جلسه‌ی ۵</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:11mm; line-height:1.55; font-size:13px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:8px; margin-bottom:7px; }
+  .head h1 { font-size:24px; font-weight:900; }
+  .head .m { font-size:12px; color:#555; }
+  .name { display:flex; gap:18px; margin-bottom:12px; font-size:12px; color:#555; }
+  .name span { flex:1; border-bottom:1.5px dotted #999; padding-bottom:3px; }
+
+  h2 { font-size:15px; font-weight:900; margin:13px 0 7px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  ol.tasks { list-style:none; counter-reset:t; }
+  ol.tasks > li { counter-increment:t; position:relative; padding:8px 40px 8px 6px; margin-bottom:7px;
+                  border:1.5px solid #ccc; border-radius:9px; }
+  ol.tasks > li::before { content:counter(t); position:absolute; right:8px; top:7px;
+     width:23px; height:23px; border-radius:6px; background:#111; color:#fff;
+     font-weight:900; font-size:12.5px; display:grid; place-items:center; }
+  b { font-weight:900; }
+  .hint { font-size:11.5px; color:#555; margin-top:4px; }
+  .line { border-bottom:1.5px dotted #aaa; height:21px; margin-top:5px; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11.5px; line-height:1.7; margin-top:5px; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:9px 12px; margin-top:11px; }
+  .box .t { font-weight:900; font-size:13.5px; margin-bottom:4px; }
+  .check { list-style:none; font-size:12.5px; }
+  .check li { padding:2px 0; }
+  .check li::before { content:"☐ "; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>تمرین خانه — جلسه‌ی ۵</h1>
+  <div class="m">Quiz Battle · تحویل: ابتدای جلسه‌ی ۶</div>
+</div>
+<div class="name"><span>نام:</span><span>تیم:</span><span>آدرس repo:</span></div>
+
+<h2>بخش الف — ⏳ سفر در زمان</h2>
+<ol class="tasks">
+  <li>
+    یک تغییر کوچک در بازی بده، <b>ذخیره کن ولی commit نکن</b>، و <code>git diff</code> بزن.
+    <div class="hint">یک خط از خروجی که با <code>-</code> شروع می‌شود را اینجا بنویس:</div>
+    <div class="line"></div>
+  </li>
+  <li>
+    با <code>git log --oneline</code> یک commit <b>قدیمی</b> پیدا کن و فایل را به آن برگردان:
+<pre>git restore --source=&lt;hash&gt; -- game.py</pre>
+    <div class="hint">بازی را اجرا کن و ببین چه چیزی عوض شد. بعد با <code>git restore game.py</code> برگرد.</div>
+    <div class="hint">آن نسخه چه چیزی <b>نداشت</b> که الان دارد؟</div>
+    <div class="line"></div>
+  </li>
+  <li>
+    یکی از commitهای خودت را با <code>git show &lt;hash&gt;</code> ببین.
+    <div class="hint">یادت باشد: با <code>q</code> بسته می‌شود.</div>
+  </li>
+</ol>
+
+<h2>بخش ب — ☁️ کار تیمی روی GitHub</h2>
+<ol class="tasks">
+  <li>
+    <b>حداقل ۳ سؤال جدید</b> به بازی اضافه کن، در <b>۳ commit جدا</b>، و همه را <code>push</code> کن.
+<pre>git add .
+git commit -m "Add three history questions"
+git push</pre>
+  </li>
+  <li>
+    <b>هم‌تیمی‌ات کار کرده — بیاورش:</b>
+<pre>git pull</pre>
+    <div class="hint">سؤال‌های او را در فایل خودت ببین. چند سؤال اضافه کرده بود؟</div>
+    <div class="line"></div>
+  </li>
+  <li>
+    در مرورگر، صفحه‌ی repo تیمت را باز کن و روی تب <b>Commits</b> برو.
+    <div class="hint">
+      روی یکی از commitهای <b>هم‌تیمی‌ات</b> کلیک کن و تغییرش را ببین.
+      (این همان <code>git show</code> است، فقط با ماوس.)
+    </div>
+  </li>
+</ol>
+
+<div class="box">
+  <div class="t">قبل از تحویل، چک کن</div>
+  <ul class="check">
+    <li>در صفحه‌ی GitHub، commitهای <b>هر دو عضو</b> تیم دیده می‌شود</li>
+    <li><code>git status</code> تمیز است و <code>git push</code> چیزی برای فرستادن ندارد</li>
+    <li>بازی بدون خطا اجرا می‌شود</li>
+    <li>یک‌بار <code>git restore --source</code> را تجربه کردم</li>
+    <li>هر دو سؤال این برگه را جواب داده‌ام</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐ اختیاری — برای کسی که حوصله دارد</div>
+  <div class="hint" style="margin-top:0">
+    یک فایل <code>README.md</code> در پروژه بساز و در آن بنویس بازی‌ات چیست و چطور اجرا می‌شود.
+    <code>push</code> کن و صفحه‌ی repo را refresh کن — GitHub خودش نمایشش می‌دهد.
+    <br>(جلسه‌ی ۹ حرفه‌ای‌اش می‌کنیم، ولی همین حالا هم می‌توانی شروع کنی.)
+  </div>
+</div>
+
+<div class="box">
+  <div class="t">🔮 برای جلسه‌ی بعد</div>
+  <div class="hint" style="margin-top:0">
+یادت هست جلسه‌ی ۱ پرسیدم «خواهر کوچکت که برنامه‌نویس نیست چطور به بازی‌ات سؤال
+    اضافه کند؟» <b>جلسه‌ی بعد حلش می‌کنیم</b> — سؤال‌ها از دل کد بیرون می‌آیند و
+    رده‌بندی بین اجراها می‌ماند.
+    <br><b>با پروژه‌ی push‌شده بیا.</b>
+  </div>
+</div>
+
+</body>
+</html>
