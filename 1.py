@@ -18,7 +18,7 @@ while playing:
                 print(opt)
             answer = input("Your Answer: ").strip().upper()
             if answer == correct_answer:
-                score += 10
+                score += 5
                 correct_count += 1
                 console.print("Correct", style="green")
             else:
