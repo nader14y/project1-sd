@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Battle — از کدنویس تا سازنده‌ی محصول</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#080C1A; --bg1:#0E1430; --bg2:#141C3D;
+  --ink:#EAEEFB; --ink-dim:#9BA8CC; --ink-faint:#66739A;
+  --cyan:#31E1D2; --amber:#FBBF24; --violet:#A78BFA; --rose:#FB7185; --green:#4ADE80;
+  --line:rgba(255,255,255,.10);
+  --card:rgba(255,255,255,.045);
+  --font:'Vazirmatn','IRANSans','Vazir','Segoe UI',Tahoma,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;}
+body{
+  background:var(--bg0);
+  font-family:var(--font);
+  color:var(--ink);
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-font-smoothing:antialiased;
+}
+#viewport{position:relative;width:100%;height:100%;overflow:hidden;}
+
+/* ---------- stage : fixed 1600x900, scaled by JS ---------- */
+#stage{
+  position:absolute;top:50%;left:50%;
+  width:1600px;height:900px;
+  transform-origin:center center;
+  transform:translate(-50%,-50%) scale(var(--s,1));
+}
+.slide{
+  position:absolute;inset:0;
+  padding:74px 96px 96px;
+  display:none;
+  flex-direction:column;
+  background:
+    radial-gradient(1100px 620px at 88% -12%, rgba(49,225,210,.13), transparent 62%),
+    radial-gradient(900px 560px at 6% 108%, rgba(167,139,250,.13), transparent 60%),
+    linear-gradient(160deg,var(--bg1) 0%, var(--bg0) 55%, var(--bg2) 100%);
+}
+.slide.active{display:flex;animation:in .38s cubic-bezier(.2,.7,.3,1) both}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- typography ---------- */
+.eyebrow{
+  font-size:19px;font-weight:700;letter-spacing:.06em;color:var(--cyan);
+  display:flex;align-items:center;gap:12px;margin-bottom:16px;
+}
+.eyebrow::before{content:"";width:34px;height:3px;border-radius:3px;background:var(--cyan)}
+h1{font-size:86px;font-weight:900;line-height:1.18;letter-spacing:-.01em}
+h2{font-size:52px;font-weight:800;line-height:1.28;margin-bottom:10px}
+h3{font-size:27px;font-weight:700;line-height:1.4}
+.lead{font-size:26px;line-height:1.75;color:var(--ink-dim);max-width:1120px}
+.dim{color:var(--ink-dim)}
+.faint{color:var(--ink-faint)}
+b,strong{font-weight:800;color:#fff}
+.ltr{direction:ltr;display:inline-block;font-family:'SF Mono',ui-monospace,Menlo,Consolas,monospace;font-size:.92em}
+.rule{height:1px;background:var(--line);margin:26px 0}
+.head{margin-bottom:34px}
+.body{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.body.top{justify-content:flex-start}
+
+/* ---------- bits ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:14px}
+.chip{
+  border:1px solid var(--line);background:var(--card);
+  padding:11px 20px;border-radius:999px;font-size:20px;font-weight:600;color:var(--ink-dim);
+}
+.chip.hi{border-color:rgba(49,225,210,.45);color:var(--cyan);background:rgba(49,225,210,.08)}
+.chip.am{border-color:rgba(251,191,36,.4);color:var(--amber);background:rgba(251,191,36,.07)}
+
+.grid{display:grid;gap:22px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 28px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.card .t{font-size:25px;font-weight:800}
+.card .d{font-size:19px;line-height:1.7;color:var(--ink-dim)}
+.card .ic{font-size:34px;line-height:1}
+.card.accent{border-color:rgba(49,225,210,.35);background:linear-gradient(180deg,rgba(49,225,210,.10),rgba(49,225,210,.02))}
+.card.amberc{border-color:rgba(251,191,36,.32);background:linear-gradient(180deg,rgba(251,191,36,.10),rgba(251,191,36,.02))}
+.card.violetc{border-color:rgba(167,139,250,.32);background:linear-gradient(180deg,rgba(167,139,250,.10),rgba(167,139,250,.02))}
+
+.num{
+  width:52px;height:52px;flex:0 0 52px;border-radius:15px;
+  display:grid;place-items:center;font-size:25px;font-weight:900;
+  background:rgba(49,225,210,.13);color:var(--cyan);border:1px solid rgba(49,225,210,.3);
+}
+.row{display:flex;gap:18px;align-items:flex-start}
+
+/* session list */
+.ses{display:flex;gap:18px;align-items:center;background:var(--card);border:1px solid var(--line);
+  border-radius:16px;padding:16px 20px}
+.ses .n{width:44px;height:44px;flex:0 0 44px;border-radius:12px;display:grid;place-items:center;
+  font-size:21px;font-weight:900;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.ses .tx .t{font-size:22px;font-weight:800;line-height:1.35}
+.ses .tx .d{font-size:17px;color:var(--ink-dim);line-height:1.55;margin-top:3px}
+.ses.c .n{background:rgba(49,225,210,.14);color:var(--cyan);border-color:rgba(49,225,210,.3)}
+.ses.a .n{background:rgba(251,191,36,.14);color:var(--amber);border-color:rgba(251,191,36,.3)}
+.ses.v .n{background:rgba(167,139,250,.14);color:var(--violet);border-color:rgba(167,139,250,.3)}
+
+/* flow diagram */
+.flow{display:flex;align-items:center;gap:0;flex-wrap:nowrap;justify-content:center}
+.node{
+  border:1px solid var(--line);background:var(--card);border-radius:18px;
+  padding:20px 24px;text-align:center;min-width:186px;
+}
+.node .t{font-size:22px;font-weight:800}
+.node .s{font-size:16px;color:var(--ink-faint);margin-top:5px}
+.node.hi{border-color:rgba(49,225,210,.45);background:rgba(49,225,210,.08)}
+.node.am{border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.08)}
+.arrow{width:56px;height:2px;background:linear-gradient(to left,var(--line),rgba(255,255,255,.35));position:relative;flex:0 0 56px}
+.arrow::after{content:"";position:absolute;left:0;top:-5px;border:6px solid transparent;border-left-color:rgba(255,255,255,.45)}
+.loop{margin-top:22px;text-align:center;font-size:19px;color:var(--ink-faint)}
+
+/* rules poster */
+.poster{display:grid;grid-template-columns:1fr 1fr;gap:12px 34px}
+.pl{display:flex;gap:14px;align-items:baseline;font-size:20px;line-height:1.6;padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.07)}
+.pl .k{font-size:15px;font-weight:800;color:var(--cyan);flex:0 0 74px}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:20px}
+th{text-align:right;font-size:18px;color:var(--ink-faint);font-weight:700;padding:0 18px 14px;border-bottom:1px solid var(--line)}
+td{padding:17px 18px;border-bottom:1px solid rgba(255,255,255,.06);line-height:1.6;vertical-align:top}
+td.w{font-weight:900;color:var(--cyan);white-space:nowrap;font-size:23px}
+td.n{font-weight:800;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+
+/* quote */
+.quote{
+  border-right:4px solid var(--amber);padding:22px 30px;background:rgba(251,191,36,.06);
+  border-radius:0 18px 18px 0;font-size:30px;line-height:1.7;font-weight:600;
+}
+.big-stat{font-size:64px;font-weight:900;line-height:1;color:var(--cyan)}
+.stat-l{font-size:19px;color:var(--ink-dim);margin-top:10px;line-height:1.5}
+
+/* title slide */
+.title-slide{justify-content:center}
+.brand{
+  position:absolute;top:70px;left:96px;font-size:19px;color:var(--ink-faint);
+  letter-spacing:.05em;
+}
+.swords{font-size:70px;margin-bottom:22px}
+
+/* ---------- chrome ---------- */
+#bar{
+  position:fixed;bottom:0;right:0;left:0;height:52px;
+  display:flex;align-items:center;gap:16px;padding:0 22px;
+  background:linear-gradient(to top,rgba(0,0,0,.55),transparent);
+  z-index:20;opacity:.28;transition:opacity .25s;
+}
+#bar:hover{opacity:1}
+#track{flex:1;height:3px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden}
+#fill{height:100%;width:0;background:linear-gradient(to left,var(--cyan),var(--violet));transition:width .3s}
+#cnt{font-size:15px;color:var(--ink-dim);font-variant-numeric:tabular-nums;min-width:62px;text-align:center}
+.nav{
+  background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--ink);
+  width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:16px;line-height:1;
+}
+.nav:hover{background:rgba(255,255,255,.16)}
+#hint{
+  position:fixed;top:16px;left:18px;font-size:13px;color:var(--ink-faint);z-index:20;
+  opacity:.5;
+}
+
+@media print{
+  @page{size:1600px 900px;margin:0}
+  body,#viewport{overflow:visible;display:block;height:auto}
+  #stage{position:static;transform:none;width:1600px;height:auto}
+  .slide{display:flex!important;position:relative;height:900px;page-break-after:always;animation:none}
+  #bar,#hint{display:none}
+}
+</style>
+</head>
+<body>
+<div id="viewport">
+<div id="stage">
+
+<!-- 1 ─────────────────────────────────────────── -->
+<section class="slide title-slide">
+  <div class="brand">دوره‌ی پروژه‌محور پایتون — ویژه‌ی ۱۳ تا ۱۶ سال</div>
+  <div class="swords">⚔️</div>
+  <h1>از کدنویس،<br>به سازنده‌ی محصول</h1>
+  <p class="lead" style="margin-top:28px;font-size:29px">
+    <b>Quiz Battle</b> — یک بازی رقابتیِ دونفره که بچه‌ها از صفر می‌سازند،
+    تست می‌کنند، و در پایان دوره برای همه‌ی دنیا <b>منتشر</b> می‌کنند.
+  </p>
+  <div class="chips" style="margin-top:44px">
+    <div class="chip hi">۱۲ جلسه × ۹۰ دقیقه</div>
+    <div class="chip">تیم‌های ۲ نفره</div>
+    <div class="chip">۷۰٪ ساخت — ۳۰٪ آموزش</div>
+    <div class="chip am">خروجی: یک محصول منتشرشده</div>
+  </div>
+</section>
+
+<!-- 2 ─────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">چرا این دوره</div>
+    <h2>بچه‌ها کد نوشتن را بلدند… و بعد؟</h2>
+  </div>
+  <div class="body">
+    <div class="grid g2">
+      <div class="card">
+        <div class="ic">📗</div>
+        <div class="t">چیزی که تا امروز داشته‌اند</div>
+        <div class="d">
+          حلقه، شرط، تابع، کلاس — همه‌چیز درست و به‌جا.<br>
+          اما تمرین‌هایی که بعد از کلاس بسته می‌شوند،<br>
+          و کدی که فقط روی لپ‌تاپ خودشان اجرا می‌شود.
+        </div>
+      </div>
+      <div class="card accent">
+        <div class="ic">🚀</div>
+        <div class="t">چیزی که هنوز کم است</div>
+        <div class="d">
+          پروژه‌ای که تا آخر می‌رود و نیمه‌کاره رها نمی‌شود،<br>
+          کار تیمی روی یک کد مشترک،<br>
+          و محصولی که به دست آدم‌های واقعی برسد.
+        </div>
+      </div>
+    </div>
+    <div class="quote" style="margin-top:34px">
+      فاصله‌ی بین «پایتون بلد بودن» و «یک نرم‌افزار ساختن»، همان چیزی است که این ۱۲ جلسه پُر می‌کند.
+    </div>
+  </div>
+</section>
+
+<!-- 3 ─────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">خروجی دوره</div>
+    <h2>پایان دوره، فرزند شما این‌ها را دارد</h2>
+  </div>
+  <div class="body">
+    <div class="grid g4">
+      <div class="card accent">
+        <div class="ic">💾</div>
+        <div class="t">یک فایل اجرایی</div>
+        <div class="d">بازی روی هر کامپیوتری — حتی بدون نصب پایتون — با دابل‌کلیک اجرا می‌شود.</div>
+      </div>
+      <div class="card violetc">
+        <div class="ic">🌍</div>
+        <div class="t">یک نمونه‌کار عمومی</div>
+        <div class="d">صفحه‌ی پروژه روی GitHub با <span class="ltr">Release</span> قابل دانلود — اولین خط رزومه‌ی فنی‌شان.</div>
+      </div>
+      <div class="card amberc">
+        <div class="ic">🎮</div>
+        <div class="t">یک بازی واقعی</div>
+        <div class="d">Quiz Battle دونفره، رنگی، با تابلوی امتیاز و قابلیت اختصاصی تیم خودشان.</div>
+      </div>
+      <div class="card">
+        <div class="ic">🛠️</div>
+        <div class="t">مهارت‌های یک تیم مهندسی</div>
+        <div class="d">تست خودکار، کد ریویو، کنترل نسخه، مدیریت خطا و مانیتورینگ محصول.</div>
+      </div>
+    </div>
+    <div class="chips" style="margin-top:36px;justify-content:center">
+      <div class="chip">و مهم‌تر از همه: تجربه‌ی «تحویل دادن» — کاری که تا آخر رفت</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 ─────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">محصول دوره</div>
+    <h2>Quiz Battle چیست؟</h2>
+    <p class="lead" style="margin-top:14px">
+      یک بازی مسابقه‌ای <b>دونفره پشت یک کیبورد</b> در ترمینال. دو بازیکن به یک سؤال جواب می‌دهند،
+      سریع‌تر بونوس می‌گیرد، بعضی سؤال‌ها قدرت ویژه دارند — و در پایان، برنده اعلام می‌شود.
+    </p>
+  </div>
+  <div class="body">
+    <div class="grid g3">
+      <div class="card"><div class="ic">🐍</div><div class="t">پایتون خالص + <span class="ltr">rich</span></div>
+        <div class="d">بدون فریم‌ورک تازه؛ همان چیزی که بلدند، این‌بار در قامت یک محصول.</div></div>
+      <div class="card"><div class="ic">🔌</div><div class="t">صفر وابستگی بیرونی</div>
+        <div class="d">نه اینترنت، نه سرویس، نه توکن. هیچ جلسه‌ای گروگان شبکه‌ی کلاس نیست.</div></div>
+      <div class="card"><div class="ic">👨‍👩‍👧</div><div class="t">قابل بازی برای همه</div>
+        <div class="d">آن‌قدر ساده که آخر دوره پدر و مادرها با آن مسابقه می‌دهند.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 ─────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">قرارداد محصول — از جلسه‌ی ۱ روی دیوار کلاس</div>
+    <h2>۵ قانونی که تعریف رسمی بازی است</h2>
+  </div>
+  <div class="body">
+    <div class="grid g2" style="gap:16px">
+      <div class="card row"><div class="num">۱</div><div><div class="t">دو بازیکن، یک سؤال</div>
+        <div class="d">هر دو نوبتی به همان سؤال جواب می‌دهند؛ نتیجه بعد از جواب هر دو اعلام می‌شود.</div></div></div>
+      <div class="card row"><div class="num">۲</div><div><div class="t">جواب درست = ۱۰ امتیاز</div>
+        <div class="d">بین درست‌جواب‌ها، سریع‌تر ۳ امتیاز بونوس سرعت می‌گیرد.</div></div></div>
+      <div class="card row"><div class="num">۳</div><div><div class="t">قدرت‌های ویژه</div>
+        <div class="d">حدود یکی از هر سه سؤال: ⚡ دوبل (امتیاز ×۲) و 🎯 سرقت (۵ امتیاز از حریف).</div></div></div>
+      <div class="card row"><div class="num">۴</div><div><div class="t">زمان و نوبت محدود</div>
+        <div class="d">هر مسابقه دقیقاً ۵ راند؛ هر جواب ۳۰ ثانیه مهلت — دیرتر یعنی صفر.</div></div></div>
+      <div class="card row" style="grid-column:span 2"><div class="num">۵</div><div><div class="t">برنده، همان‌جا مشخص می‌شود</div>
+        <div class="d">بعد از راند پنجم برنده اعلام می‌شود. فقط «رده‌بندی کل» بین اجراها ذخیره می‌ماند — و این خودش یک درس معماری است: چه داده‌ای ارزش ماندن دارد؟</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 ─────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">طراحی</div>
+    <h2>جریان یک مسابقه</h2>
+  </div>
+  <div class="body">
+    <div class="flow">
+      <div class="node hi"><div class="t">منو</div><div class="s">شروع / رده‌بندی</div></div>
+      <div class="arrow"></div>
+      <div class="node"><div class="t">نام دو بازیکن</div><div class="s">اعتبارسنجی ورودی</div></div>
+      <div class="arrow"></div>
+      <div class="node am"><div class="t">راند ۱ تا ۵</div><div class="s">سؤال ← دو جواب ← نتیجه</div></div>
+      <div class="arrow"></div>
+      <div class="node hi"><div class="t">اعلام برنده</div><div class="s">به‌روزرسانی رده‌بندی</div></div>
+    </div>
+    <div class="loop">↺ &nbsp; و بازگشت به منو برای ری‌مچ</div>
+    <div class="rule"></div>
+    <div class="grid g3">
+      <div class="card"><div class="t">🧠 مغز (موتور بازی)</div><div class="d">قواعد، امتیاز و قدرت‌های ویژه — بدون هیچ چاپ و ورودی‌ای.</div></div>
+      <div class="card"><div class="t">👄 دهان (رابط کاربر)</div><div class="d">نمایش رنگی، گرفتن جواب، کرنومتر و پیام‌های دوستانه.</div></div>
+      <div class="card"><div class="t">💾 حافظه (ذخیره‌سازی)</div><div class="d">بانک سؤال و رده‌بندی ماندگار روی دیسک.</div></div>
+    </div>
+    <p class="lead" style="margin-top:24px;font-size:22px">
+      این جداسازی، ستون فقرات دوره است — و در جلسه‌ی ۱۱ ثابت می‌شود: ظاهر بازی کاملاً عوض می‌شود بی‌آنکه یک خط از مغز دست بخورد.
+    </p>
+  </div>
+</section>
+
+<!-- 7 ─────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">همه یک بازی می‌سازند، هیچ دو بازی‌ای شبیه هم نیست</div>
+    <h2>قابلیت امضای هر تیم</h2>
+    <p class="lead" style="margin-top:14px">
+      هسته‌ی بازی برای همه یکی است، اما هر تیم در جلسه‌ی اول <b>یک قابلیت اختصاصی</b> انتخاب می‌کند
+      که تا آخر دوره می‌سازد، تست می‌کند و در دموی نهایی از آن دفاع می‌کند. تکراری ممنوع.
+    </p>
+  </div>
+  <div class="body">
+    <div class="grid g3" style="gap:18px">
+      <div class="card"><div class="ic">🛡️</div><div class="t">سپر</div><div class="d">جریمه‌ی سرقتِ بعدی را خنثی می‌کند.</div></div>
+      <div class="card"><div class="ic">⏳</div><div class="t">وقت اضافه</div><div class="d">مهلت این سؤال ۶۰ ثانیه می‌شود.</div></div>
+      <div class="card"><div class="ic">🔀</div><div class="t">تعویض سؤال</div><div class="d">سؤال فعلی با یک سؤال تازه عوض می‌شود.</div></div>
+      <div class="card"><div class="ic">🗂️</div><div class="t">دسته‌بندی موضوعی</div><div class="d">انتخاب موضوع سؤال‌ها از منو.</div></div>
+      <div class="card"><div class="ic">🥇</div><div class="t">سؤال طلایی</div><div class="d">راند آخر با امتیاز دوبرابر.</div></div>
+      <div class="card"><div class="ic">💥</div><div class="t">مرگ ناگهانی</div><div class="d">در تساوی، یک سؤال تعیین‌کننده.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 ─────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">پشت بازی چه چیزی یاد می‌گیرند</div>
+    <h2>هفت ستون مهندسی دوره</h2>
+  </div>
+  <div class="body">
+    <div class="grid g4" style="gap:20px">
+      <div class="card"><div class="ic">🌿</div><div class="t">git و GitHub</div><div class="d">تاریخچه، شاخه‌ها، کار هم‌زمان دو نفر و حل تعارض.</div></div>
+      <div class="card"><div class="ic">👀</div><div class="t">کد ریویو</div><div class="d">ورود به پروژه فقط از در <span class="ltr">Pull Request</span> — با یک جفت چشم دیگر.</div></div>
+      <div class="card"><div class="ic">✅</div><div class="t">تست خودکار</div><div class="d">رباتی که قواعد بازی را در یک ثانیه هزار بار چک می‌کند.</div></div>
+      <div class="card"><div class="ic">🔍</div><div class="t">دیباگ روشمند</div><div class="d">بازتولید، خواندن خطا، فرضیه، آزمایش — نه حدس شانسی.</div></div>
+      <div class="card"><div class="ic">📓</div><div class="t">لاگ و مانیتورینگ</div><div class="d">هیچ خرابی‌ای بی‌رد نمی‌ماند؛ خطاها خودشان خبر می‌دهند.</div></div>
+      <div class="card"><div class="ic">🏗️</div><div class="t">معماری لایه‌ای</div><div class="d">مغز، دهان، حافظه — هر کد جای مشخص خودش را دارد.</div></div>
+      <div class="card"><div class="ic">📦</div><div class="t">انتشار محصول</div><div class="d">از پروژه‌ی روی لپ‌تاپ تا فایل اجرایی و <span class="ltr">Release</span> عمومی.</div></div>
+      <div class="card accent"><div class="ic">📝</div><div class="t">مستندسازی</div><div class="d">راهنمایی که یک غریبه فقط با خواندنش پروژه را اجرا می‌کند.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 ─────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">کلاس چطور می‌گذرد</div>
+    <h2>هر جلسه، یک قدم قابل‌لمس جلوتر</h2>
+  </div>
+  <div class="body">
+    <div class="grid g4" style="gap:20px;margin-bottom:30px">
+      <div class="card accent" style="align-items:center;text-align:center">
+        <div class="big-stat">۷۰٪</div><div class="stat-l">وقت کلاس صرف ساختن می‌شود، نه گوش‌دادن</div></div>
+      <div class="card" style="align-items:center;text-align:center">
+        <div class="big-stat">۹۰</div><div class="stat-l">دقیقه — طول هر جلسه</div></div>
+      <div class="card" style="align-items:center;text-align:center">
+        <div class="big-stat">۲</div><div class="stat-l">نفر در هر تیم؛ تیم‌ها ثابت می‌مانند</div></div>
+      <div class="card amberc" style="align-items:center;text-align:center">
+        <div class="big-stat">۱۲</div><div class="stat-l">جلسه روی یک پروژه‌ی واحد</div></div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="t">قانون طلایی کلاس</div><div class="d">هر جلسه با یک پروژه‌ی سالم و قابل‌اجرا تمام می‌شود. هیچ‌کس با کد خراب از کلاس بیرون نمی‌رود.</div></div>
+      <div class="card"><div class="t">یادگیری سر بزنگاه</div><div class="d">هر مفهوم مهندسی دقیقاً وقتی آموزش داده می‌شود که بچه‌ها دردش را چشیده‌اند — نه یک جلسه زودتر.</div></div>
+      <div class="card"><div class="t">تیم‌ها همدیگر را می‌سنجند</div><div class="d">پروژه‌ی هر تیم را تیم دیگر اجرا، نقد و تست می‌کند. چشم غریبه سخت‌گیرتر و مفیدتر است.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">نقشه‌ی راه</div>
+    <h2>سه فاز، دوازده جلسه</h2>
+  </div>
+  <div class="body">
+    <div class="grid g3" style="gap:26px">
+      <div class="card accent" style="padding:34px">
+        <div class="ic">1️⃣</div>
+        <div class="t" style="font-size:30px">از کد تا محصول</div>
+        <div class="chip hi" style="align-self:flex-start">جلسات ۱ تا ۵</div>
+        <div class="d">بازی از یک فایل ساده به یک موتور دونفره‌ی تمیز با بانک سؤال و رده‌بندی ماندگار تبدیل می‌شود.</div>
+      </div>
+      <div class="card amberc" style="padding:34px">
+        <div class="ic">2️⃣</div>
+        <div class="t" style="font-size:30px">مهندسی سر بزنگاه</div>
+        <div class="chip am" style="align-self:flex-start">جلسات ۶ تا ۹</div>
+        <div class="d">تست خودکار، کار تیمی روی GitHub، کد ریویو، مدیریت خطا و مستندسازی.</div>
+      </div>
+      <div class="card violetc" style="padding:34px">
+        <div class="ic">3️⃣</div>
+        <div class="t" style="font-size:30px">انتشار و ارائه</div>
+        <div class="chip" style="align-self:flex-start;border-color:rgba(167,139,250,.45);color:var(--violet)">جلسات ۱۰ تا ۱۲</div>
+        <div class="d">فایل اجرایی، مانیتورینگ خطا، صیقل نهایی، <span class="ltr">Release</span> عمومی و دموی روز آخر.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">فاز ۱ — جلسات ۱ تا ۵</div>
+    <h2>از کد، تا محصول</h2>
+  </div>
+  <div class="body">
+    <div class="grid" style="gap:14px">
+      <div class="ses c"><div class="n">۱</div><div class="tx"><div class="t">کیک‌آف: اولین نسخه‌ی قابل‌بازی</div>
+        <div class="d">دموی زنده‌ی نسخه‌ی نهایی توسط مربی، انتخاب قابلیت امضا، و ساخت اولین کوییز — همان جلسه‌ی اول.</div></div></div>
+      <div class="ses c"><div class="n">۲</div><div class="tx"><div class="t">محیط واقعی پروژه + اولین رنگ‌ها</div>
+        <div class="d">محیط ایزوله و فهرست وابستگی‌ها؛ آزمونش: تیم مقابل باید بتواند پروژه را روی لپ‌تاپ خودش راه بیندازد.</div></div></div>
+      <div class="ses c"><div class="n">۳</div><div class="tx"><div class="t">ابزارها: VS Code و git نجات‌دهنده</div>
+        <div class="d">تسلط بر محیط کار — و بعد مربی عمداً کد را خراب می‌کند تا بچه‌ها راه برگشت بسازند. قانون جدید: «کاری که ثبت نشده، انجام نشده.»</div></div></div>
+      <div class="ses c"><div class="n">۴</div><div class="tx"><div class="t">شی‌گرایی در عمل: موتور بازی دونفره</div>
+        <div class="d">مهم‌ترین جلسه‌ی فنی دوره. پایان جلسه: اولین مسابقه‌ی واقعی دونفره‌ی هر تیم — لحظه‌ی بزرگ دوره.</div></div></div>
+      <div class="ses c"><div class="n">۵</div><div class="tx"><div class="t">داده و جداسازی موتور از نمایش</div>
+        <div class="d">سؤال‌ها از دل کد بیرون می‌آیند و رده‌بندی بین اجراها می‌ماند؛ و بازی به دو نیمه تقسیم می‌شود: مغز و دهان.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">فاز ۲ — جلسات ۶ تا ۹</div>
+    <h2>مهندسی، درست سر بزنگاه</h2>
+  </div>
+  <div class="body">
+    <div class="grid" style="gap:14px">
+      <div class="ses a"><div class="n">۶</div><div class="tx"><div class="t">تست‌نویسی: موتور بازی زیر ذره‌بین</div>
+        <div class="d">قواعد بازی به تست تبدیل می‌شوند — «تست، قانونِ نوشته‌شده‌ی بازی توست.»</div></div></div>
+      <div class="ses a"><div class="n">۷</div><div class="tx"><div class="t">کار تیمی با git و GitHub</div>
+        <div class="d">پروژه روی اینترنت، دو نفر هم‌زمان روی یک کد، و حل اولین تعارض.</div></div></div>
+      <div class="ses a"><div class="n">۸</div><div class="tx"><div class="t">Pull Request و کد ریویو</div>
+        <div class="d">جلسه‌ی بلوغ حرفه‌ای: نقد کردن و نقد شنیدن، با ادب و چک‌لیست.</div></div></div>
+      <div class="ses a"><div class="n">۹</div><div class="tx"><div class="t">دیباگ، خطا و لاگ + مستندسازی</div>
+        <div class="d">بازی دیگر وسط مسابقه نمی‌میرد و هیچ خرابی‌ای بی‌رد نمی‌ماند. آزمون آتش: تیم مقابل فقط از روی راهنما، بدون یک کلمه سؤال، بازی را اجرا می‌کند.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">فاز ۳ — جلسات ۱۰ تا ۱۲</div>
+    <h2>از پروژه، تا محصولِ دستِ مردم</h2>
+  </div>
+  <div class="body">
+    <div class="grid" style="gap:18px">
+      <div class="ses v"><div class="n">۱۰</div><div class="tx"><div class="t">انتشار: بازی روی کامپیوتری بدون پایتون</div>
+        <div class="d">لحظه‌ی «واو» دوره — فایل اجرایی هر تیم روی یک کامپیوتر تمیز، جلوی کلاس، اجرا می‌شود. و از همین‌جا خطاهای کاربران واقعی خودشان خبر می‌دهند.</div></div></div>
+      <div class="ses v"><div class="n">۱۱</div><div class="tx"><div class="t">صیقل نهایی + تمرین ارائه + انتشار عمومی</div>
+        <div class="d">کادر، جدول امتیاز و تشریفات برنده — همه فقط در لایه‌ی نمایش، بدون دست‌زدن به موتور. بعد: دموی تمرینی ۵ دقیقه‌ای و انتشار نسخه‌ی نهایی روی GitHub.</div></div></div>
+      <div class="ses v"><div class="n">۱۲</div><div class="tx"><div class="t">دموی نهایی: روز مسابقه 🏆</div>
+        <div class="d">ارائه‌ی رسمی، تورنمنت زنده‌ی والدین، و گواهی با ذکر دستاورد مشخص هر نفر.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">پنج لحظه‌ای که فراموش نمی‌شود</div>
+    <h2>نقاط اوج دوره</h2>
+  </div>
+  <div class="body">
+    <div class="grid g5" style="gap:18px">
+      <div class="card"><div class="chip hi" style="align-self:flex-start;font-size:16px">جلسه ۳</div>
+        <div class="t">فاجعه‌ی طراحی‌شده</div><div class="d">مربی عمداً کد را خراب می‌کند تا خودشان راه برگشت بسازند.</div></div>
+      <div class="card"><div class="chip hi" style="align-self:flex-start;font-size:16px">جلسه ۴</div>
+        <div class="t">اولین مسابقه</div><div class="d">دو عضو تیم، رو در روی هم، روی بازی‌ای که خودشان ساخته‌اند.</div></div>
+      <div class="card"><div class="chip hi" style="align-self:flex-start;font-size:16px">جلسه ۷</div>
+        <div class="t">اولین تعارض</div><div class="d">دو نفر یک خط را عوض کرده‌اند — و خودشان حلش می‌کنند.</div></div>
+      <div class="card accent"><div class="chip am" style="align-self:flex-start;font-size:16px">جلسه ۱۰</div>
+        <div class="t">کامپیوتر بدون پایتون</div><div class="d">«این دیگر تمرین کلاسی نیست؛ یک نرم‌افزار است.»</div></div>
+      <div class="card amberc"><div class="chip am" style="align-self:flex-start;font-size:16px">جلسه ۱۲</div>
+        <div class="t">تورنمنت والدین</div><div class="d">پدر و مادرها با بازی مسابقه می‌دهند و فرزندشان داور است.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 15 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">پوستر کلاس — هر جلسه یک خط اضافه می‌شود</div>
+    <h2>قوانین دوره</h2>
+  </div>
+  <div class="body">
+    <div class="poster">
+      <div class="pl"><span class="k">جلسه ۱</span><span>هر جلسه با پروژه‌ی سالم تمام می‌شود.</span></div>
+      <div class="pl"><span class="k">جلسه ۷</span><span>نسخه‌ی اصلی همیشه سالم و قابل‌بازی است.</span></div>
+      <div class="pl"><span class="k">جلسه ۲</span><span>هر پروژه جعبه‌ابزار خودش را دارد.</span></div>
+      <div class="pl"><span class="k">جلسه ۸</span><span>ورود به نسخه‌ی اصلی فقط از در ریویو.</span></div>
+      <div class="pl"><span class="k">جلسه ۳</span><span>کاری که ثبت نشده، انجام نشده.</span></div>
+      <div class="pl"><span class="k">جلسه ۹</span><span>هر باگِ حل‌شده یک تستِ نگهبان می‌گیرد.</span></div>
+      <div class="pl"><span class="k">جلسه ۴</span><span>موتور بازی چاپ و ورودی ندارد. هرگز.</span></div>
+      <div class="pl"><span class="k">جلسه ۱۰</span><span>خروجی ساخت، کد نیست.</span></div>
+      <div class="pl"><span class="k">جلسه ۵</span><span>فقط داده‌ای می‌ماند که از دست‌رفتنش فاجعه باشد.</span></div>
+      <div class="pl"><span class="k">جلسه ۱۰</span><span>هیچ خطای دستِ کاربر بی‌خبر نمی‌ماند.</span></div>
+      <div class="pl"><span class="k">جلسه ۵</span><span>کد جدید اول جواب می‌دهد: مغز است، یا دهان؟</span></div>
+      <div class="pl"><span class="k">جلسه ۱۱</span><span>عوض‌کردن ظاهر نباید موتور را دست بزند.</span></div>
+      <div class="pl"><span class="k">جلسه ۶</span><span>قبل از ثبت هر تغییر، تست‌ها سبز.</span></div>
+    </div>
+    <div class="quote" style="margin-top:26px;font-size:24px">
+      این‌ها فقط قواعد کلاس نیستند؛ همان قواعدی‌اند که تیم‌های نرم‌افزاری واقعی هر روز با آن‌ها کار می‌کنند.
+    </div>
+  </div>
+</section>
+
+<!-- 16 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">ارزیابی — بدون امتحان</div>
+    <h2>نمره از روی کاری که ساخته شده</h2>
+    <p class="lead" style="margin-top:12px;font-size:22px">
+      همه‌ی شواهد از دل پروژه‌ی واقعی بیرون می‌آید: تاریخچه‌ی کار، کیفیت کد، تست‌ها و محصول نهایی.
+    </p>
+  </div>
+  <div class="body">
+    <table>
+      <thead><tr><th style="width:220px">محور</th><th style="width:90px">وزن</th><th>چه چیزی بررسی می‌شود</th></tr></thead>
+      <tbody>
+        <tr><td class="n">تاریخچه‌ی کار</td><td class="w">۲۰٪</td><td>ثبت‌های کوچک و منظم در طول دوره با پیام معنادار — نه انباشته‌ی شب آخر.</td></tr>
+        <tr><td class="n">کیفیت کد</td><td class="w">۲۰٪</td><td>لایه‌بندی درست، نام‌گذاری روشن، نبود میان‌بُرهای خطرناک.</td></tr>
+        <tr><td class="n">تست</td><td class="w">۱۵٪</td><td>بیش از ۱۵ تست پاس‌شده که هر ۵ قانون بازی و قابلیت امضای تیم را پوشش می‌دهد.</td></tr>
+        <tr><td class="n">همکاری</td><td class="w">۱۵٪</td><td>ریویوی مکتوب از هر دو عضو، گزارش باگ‌های بازتولیدپذیر، تقسیم عادلانه‌ی کار.</td></tr>
+        <tr><td class="n">مستندسازی</td><td class="w">۱۰٪</td><td>راهنمایی که در «آزمون آتش» توسط تیم دیگر قبول شده باشد.</td></tr>
+        <tr><td class="n">محصول و انتشار</td><td class="w">۲۰٪</td><td>فایل اجرایی سالم روی ماشین تمیز، انتشار عمومی، و کیفیت دموی نهایی.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 17 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">قبل از شروع</div>
+    <h2>پیش‌نیازها</h2>
+  </div>
+  <div class="body">
+    <div class="grid g2" style="gap:22px">
+      <div class="card accent"><div class="ic">🎒</div><div class="t">دانش‌آموز چه باید بلد باشد</div>
+        <div class="d">پایتون از پایه تا شی‌گرایی: متغیر، حلقه، شرط، تابع، لیست و دیکشنری، و آشنایی اولیه با کلاس. هیچ پیش‌نیاز دیگری لازم نیست.</div></div>
+      <div class="card"><div class="ic">💻</div><div class="t">تجهیزات هر دانش‌آموز</div>
+        <div class="d">یک لپ‌تاپ با پایتون نسخه‌ی ۳٫۱۰ به بالا و ویرایشگر <span class="ltr">VS Code</span> — همین.</div></div>
+      <div class="card"><div class="ic">🌐</div><div class="t">اینترنت</div>
+        <div class="d">فقط برای جلسات کار تیمی روی GitHub و انتشار لازم است؛ بقیه‌ی جلسات کاملاً آفلاین پیش می‌روند.</div></div>
+      <div class="card"><div class="ic">🔑</div><div class="t">حساب‌های رایگان</div>
+        <div class="d">یک حساب GitHub برای هر دانش‌آموز (از جلسه‌ی ۷) و یک حساب رایگان مانیتورینگ برای هر تیم (از جلسه‌ی ۱۰).</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 18 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">یک سؤال منصفانه</div>
+    <h2>چرا بازی ترمینالی، نه یک بازی گرافیکی؟</h2>
+  </div>
+  <div class="body">
+    <div class="grid g3" style="gap:22px">
+      <div class="card"><div class="ic">🎯</div><div class="t">تمام وقت صرف هدف اصلی می‌شود</div>
+        <div class="d">اگر فریم‌ورک تازه‌ای وسط باشد، نصف دوره صرف یادگیری آن می‌شود. اینجا هر ۱۲ جلسه صرف مهارت‌های مهندسی می‌شود — چیزی که در هر زبان و هر پروژه‌ای به‌کار می‌آید.</div></div>
+      <div class="card"><div class="ic">🔒</div><div class="t">هیچ جلسه‌ای گروگان شبکه نیست</div>
+        <div class="d">بازی هیچ وابستگی بیرونی ندارد. قطعی اینترنت کلاس، مسیر دوره را متوقف نمی‌کند.</div></div>
+      <div class="card violetc"><div class="ic">🪟</div><div class="t">و پله‌ی بعدی آماده است</div>
+        <div class="d">چون موتور بازی از ظاهر جدا ساخته می‌شود، همین موتور بدون یک خط تغییر می‌تواند پشت یک صفحه‌ی وب بنشیند. جایزه‌ی معماری، در دوره‌ی بعد نقد می‌شود.</div></div>
+    </div>
+    <div class="quote" style="margin-top:32px;font-size:26px">
+      سختی این دوره در گرافیک نیست؛ در این است که یک کار را تا آخر، درست، و به‌صورت تیمی تحویل بدهی.
+    </div>
+  </div>
+</section>
+
+<!-- 19 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">بعد از دوره</div>
+    <h2>سه مسیر ادامه</h2>
+  </div>
+  <div class="body">
+    <div class="grid g3" style="gap:26px">
+      <div class="card accent" style="padding:34px">
+        <div class="ic">🌐</div><div class="t" style="font-size:29px">وب</div>
+        <div class="d">طبیعی‌ترین ادامه: همان موتور بازی، این‌بار پشت یک صفحه‌ی وب. فقط پوسته عوض می‌شود — و بچه‌ها معنی واقعی «معماری خوب» را همان‌جا می‌فهمند.</div></div>
+      <div class="card amberc" style="padding:34px">
+        <div class="ic">⚙️</div><div class="t" style="font-size:29px">عمق مهندسی</div>
+        <div class="d">دیتابیس واقعی، اجرای خودکار تست‌ها روی هر تغییر، و ساخت خودکار نسخه‌ی جدید هنگام انتشار.</div></div>
+      <div class="card violetc" style="padding:34px">
+        <div class="ic">🏫</div><div class="t" style="font-size:29px">محصول</div>
+        <div class="d">بازی را به مدرسه ببرند، بانک سؤال درسی بسازند، یا نسخه‌ی دوم را با حالت چندنفره و سؤال تصویری شروع کنند.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 20 ────────────────────────────────────────── -->
+<section class="slide">
+  <div class="head">
+    <div class="eyebrow">جلسه‌ی ۱۲</div>
+    <h2>روز مسابقه 🏆</h2>
+  </div>
+  <div class="body">
+    <div class="grid g2" style="gap:24px">
+      <div class="card"><div class="t">۱۰ تا ۵۰ — دموها</div>
+        <div class="d">هر تیم ۵ دقیقه ارائه + ۲ دقیقه پرسش: مسئله، راه‌حل، دموی زنده، و سخت‌ترین چالش فنی‌ای که حل کرده‌اند.</div></div>
+      <div class="card amberc"><div class="t">۵۰ تا ۷۰ — تورنمنت والدین</div>
+        <div class="d">والدین دو‌به‌دو با بازی‌ها مسابقه می‌دهند و فرزندشان داور و پشتیبان فنی است. فینال روی پرده‌ی بزرگ.</div></div>
+      <div class="card"><div class="t">۷۰ تا ۸۰ — اختتامیه</div>
+        <div class="d">گواهی با ذکر دستاورد مشخص هر نفر: «بهترین گزارش باگ»، «تمیزترین تاریخچه»، «معمار موتور بازی»…</div></div>
+      <div class="card accent"><div class="t">و محصول با مهمان‌ها به خانه می‌رود</div>
+        <div class="d">فایل اجرایی بازی به همه‌ی مهمان‌ها داده می‌شود — چیزی که خانواده همان شب با آن بازی می‌کند.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 21 ────────────────────────────────────────── -->
+<section class="slide title-slide">
+  <div class="eyebrow">جمله‌ی پایانی دوره</div>
+  <h1 style="font-size:66px;line-height:1.35;max-width:1240px">
+    «شما دیگر منتظر تمرینِ معلم نیستید —<br>
+    ایده دارید، ابزار دارید،<br>
+    و بلدید <span style="color:var(--cyan)">تحویل بدهید</span>. بروید بسازید.»
+  </h1>
+  <div class="chips" style="margin-top:52px">
+    <div class="chip hi">۱۲ جلسه</div>
+    <div class="chip">یک محصول واقعی</div>
+    <div class="chip am">یک نمونه‌کار عمومی</div>
+    <div class="chip">و یک عادت تازه: کار را تمام کردن</div>
+  </div>
+</section>
+
+</div><!-- /stage -->
+</div><!-- /viewport -->
+
+<div id="hint">← → حرکت · F تمام‌صفحه</div>
+<div id="bar">
+  <button class="nav" id="next" title="اسلاید بعدی">‹</button>
+  <div id="track"><div id="fill"></div></div>
+  <button class="nav" id="prev" title="اسلاید قبلی">›</button>
+  <div id="cnt"></div>
+</div>
+
+<script>
+(function(){
+  var stage  = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var fill   = document.getElementById('fill');
+  var cnt    = document.getElementById('cnt');
+  var i = 0;
+
+  var fa = function(n){ return String(n).replace(/\d/g, function(d){ return '۰۱۲۳۴۵۶۷۸۹'[d]; }); };
+
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(s, k){ s.classList.toggle('active', k === i); });
+    fill.style.width = ((i + 1) / slides.length * 100) + '%';
+    cnt.textContent = fa(i + 1) + ' / ' + fa(slides.length);
+    if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
+  }
+
+  function fit(){
+    var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    stage.style.setProperty('--s', s);
+  }
+
+  window.addEventListener('resize', fit);
+  document.getElementById('next').onclick = function(){ show(i + 1); };
+  document.getElementById('prev').onclick = function(){ show(i - 1); };
+
+  document.addEventListener('keydown', function(e){
+    switch(e.key){
+      case 'ArrowLeft': case 'PageDown': case ' ': case 'Enter':
+        e.preventDefault(); show(i + 1); break;
+      case 'ArrowRight': case 'PageUp': case 'Backspace':
+        e.preventDefault(); show(i - 1); break;
+      case 'Home': show(0); break;
+      case 'End':  show(slides.length - 1); break;
+      case 'f': case 'F':
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen();
+        break;
+    }
+  });
+
+  var x0 = null;
+  document.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 55) show(i + (dx > 0 ? 1 : -1));
+    x0 = null;
+  }, {passive:true});
+
+  fit();
+  show(parseInt((location.hash || '#1').slice(1), 10) - 1 || 0);
+})();
+</script>
+</body>
+</html>

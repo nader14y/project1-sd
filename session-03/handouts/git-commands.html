@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>برگه‌ی دستورها — git</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:10mm; line-height:1.5; font-size:13px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:8px; margin-bottom:10px; }
+  .head h1 { font-size:24px; font-weight:900; }
+  .head .m { font-size:12px; color:#555; }
+
+  h2 { font-size:15px; font-weight:900; margin:13px 0 6px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  h2 .n { background:#111; color:#fff; width:21px; height:21px; border-radius:6px;
+          display:grid; place-items:center; font-size:12px; }
+
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-right:4px solid #111;
+        border-radius:7px; padding:8px 11px; font-size:12.5px; line-height:1.75; margin:5px 0; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:12px; }
+  .why { font-size:12px; color:#555; padding-right:3px; }
+
+  .flow { display:flex; align-items:center; gap:6px; justify-content:center;
+          border:2px solid #111; border-radius:9px; padding:9px; margin:7px 0; }
+  .flow .b { border:1.5px solid #999; border-radius:7px; padding:6px 12px; text-align:center; }
+  .flow .b b { display:block; font-size:13px; font-weight:900; }
+  .flow .b span { font-size:10.5px; color:#666; font-family:monospace; direction:ltr; }
+  .flow .a { font-size:11px; font-weight:900; white-space:nowrap; }
+
+  table { width:100%; border-collapse:collapse; margin-top:5px; }
+  th { font-size:11.5px; font-weight:900; background:#111; color:#fff; padding:6px 8px; text-align:right; }
+  td { border:1px solid #ccc; padding:5px 8px; font-size:11.5px; vertical-align:top; line-height:1.55; }
+  td code { font-size:11px; }
+
+  .ok { border:2px solid #111; border-radius:8px; padding:8px 11px; margin-top:9px; font-size:12.5px; }
+  .ok b { font-weight:900; }
+  .warn { border:2px dashed #111; border-radius:8px; padding:8px 11px; margin-top:9px; font-size:12px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .two > div { border:1.5px solid #ccc; border-radius:8px; padding:7px 10px; font-size:12px; }
+  .two b { font-weight:900; }
+  .foot { margin-top:10px; text-align:center; font-size:11px; color:#888; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>🌿 برگه‌ی دستورها — git</h1>
+  <div class="m">Quiz Battle · جلسه‌ی ۲ · این برگه روی میزت بماند</div>
+</div>
+
+<div class="why">
+  <b>git دکمه‌ی save بازی است.</b> هر <code>commit</code> یعنی یک save.
+  هر جا save کردی، هر وقت خواستی برمی‌گردی — حتی اگر فایل را بسته باشی،
+  کامپیوتر را خاموش کرده باشی، یا یک هفته گذشته باشد.
+</div>
+
+<div class="flow">
+  <div class="b"><b>پوشه‌ی کار</b><span>working</span></div>
+  <div class="a">◀── add ──</div>
+  <div class="b"><b>سبد خرید</b><span>staging</span></div>
+  <div class="a">◀── commit ──</div>
+  <div class="b"><b>آلبوم عکس</b><span>history</span></div>
+</div>
+
+<h2><span class="n">۰</span> یک‌بار برای همیشه (روی هر کامپیوتر تازه)</h2>
+<pre>git config --global user.name "نام تو"
+git config --global user.email "ایمیل تو"</pre>
+<div class="why">git می‌خواهد بداند هر save را چه کسی زده. بدون این، اولین commit خطا می‌دهد.</div>
+
+<h2><span class="n">۱</span> شروع کردن پروژه (فقط یک‌بار برای هر پروژه)</h2>
+<pre>git init</pre>
+
+<h2><span class="n">۲</span> چه چیزی عوض شده؟</h2>
+<pre>git status</pre>
+<div class="why">قرمز = هنوز در سبد نیست · سبز = در سبد است، آماده‌ی عکس‌گرفتن</div>
+
+<h2><span class="n">۳</span> چیزهایی که git اصلاً نباید ببیند</h2>
+<div class="why">یک فایل به اسم <code>.gitignore</code> بساز (با نقطه‌ی اول، بدون <code>.txt</code>) و داخلش:</div>
+<pre>venv/
+__pycache__/</pre>
+<div class="why">
+  چرا <code>venv</code>؟ چون سنگین است و <b>از روی <code>requirements.txt</code> دوباره ساخته می‌شود.</b>
+  چیزی که بازسازی‌شدنی است در آلبوم جا نمی‌گیرد.
+</div>
+
+<h2><span class="n">۴</span> ثبت یک save</h2>
+<pre>git add .
+git commit -m "Add colored quiz with 5 questions"</pre>
+<div class="why"><code>add .</code> یعنی «همه‌ی تغییرها را بریز در سبد». بعد <code>commit</code> از سبد عکس می‌گیرد.</div>
+
+<h2><span class="n">۵</span> دیدن آلبوم</h2>
+<pre>git log --oneline</pre>
+<div class="warn">
+  <b>⚠️ ترمینال هنگ نکرده!</b> خروجی <code>git log</code> در یک صفحه‌ی مخصوص باز می‌شود.
+  با فلش بالا/پایین حرکت کن و با کلید <b><code>q</code></b> ببندش.
+</div>
+
+<h2><span class="n">۶</span> 🎉 برگرداندن فایل خراب</h2>
+<pre>git restore game.py</pre>
+<div class="ok">
+  <b>این همان جادوی امروز است.</b> هر بلایی سر فایل آورده باشی، به آخرین save برمی‌گردد.
+  کاری که Ctrl+Z نمی‌توانست بکند.
+</div>
+
+<h2>✍️ پیام commit خوب</h2>
+<div class="two">
+  <div><b>✅ خوب</b><br><code>Add start menu</code><br><code>Fix score not resetting</code><br><code>Add 5 new questions</code></div>
+  <div><b>❌ بد</b><br><code>تغییرات</code><br><code>final2</code><br><code>asdfgh</code></div>
+</div>
+<div class="why" style="margin-top:5px">
+  فعل امری + چه چیزی + کوتاه. پیام commit را برای <b>خودتِ سه ماه بعد</b> می‌نویسی.
+</div>
+
+<h2>🔧 اگر گیر کردی</h2>
+<table>
+  <tr><th style="width:40%">پیام / نشانه</th><th>راه‌حل</th></tr>
+  <tr><td><code>Please tell me who you are</code></td><td>بخش ۰ را انجام بده</td></tr>
+  <tr><td>ترمینال بعد از <code>git log</code> هنگ کرد</td><td>کلید <code>q</code> را بزن</td></tr>
+  <tr><td><code>LF will be replaced by CRLF</code></td><td>خطا نیست. ویندوز و بقیه‌ی دنیا سر پایان خط توافق ندارند؛ git خودش ترجمه می‌کند.</td></tr>
+  <tr><td>هزاران فایل در <code>git status</code></td><td><code>.gitignore</code> را بساز، بعد <code>git add .</code></td></tr>
+  <tr><td><code>.gitignore</code> ساختم ولی venv هنوز دیده می‌شود</td><td>احتمالاً اسمش <code>.gitignore.txt</code> شده. در VS Code بسازش، نه Notepad.</td></tr>
+  <tr><td><code>nothing to commit, working tree clean</code></td><td>فایل را ذخیره نکرده‌ای — <code>Ctrl + S</code></td></tr>
+</table>
+
+<div class="foot">
+  <b>قانون ۳ دوره: کاری که commit نشده، انجام نشده.</b> از این پس هر جلسه حداقل ۲ commit معنادار.
+</div>
+
+</body>
+</html>

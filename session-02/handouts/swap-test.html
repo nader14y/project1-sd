@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>آزمون تعویض — جلسه‌ی ۲</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:11mm; line-height:1.55; font-size:13.5px; }
+  .head { text-align:center; border-bottom:3px solid #111; padding-bottom:9px; margin-bottom:6px; }
+  .head h1 { font-size:26px; font-weight:900; }
+  .head .s { font-size:12.5px; color:#555; margin-top:5px; }
+  .teams { display:flex; gap:16px; margin:12px 0 16px; font-size:12.5px; color:#555; }
+  .teams span { flex:1; border-bottom:1.5px dotted #999; padding-bottom:3px; }
+
+  h2 { font-size:15.5px; font-weight:900; margin:15px 0 7px; }
+  .rule { border:2px solid #111; border-radius:9px; padding:9px 12px; margin-bottom:14px;
+          font-size:13px; font-weight:700; text-align:center; }
+
+  ol { list-style:none; counter-reset:s; }
+  ol li { counter-increment:s; position:relative; padding:8px 40px 8px 6px; margin-bottom:6px;
+          border:1.5px solid #ccc; border-radius:9px; }
+  ol li::before { content:counter(s); position:absolute; right:8px; top:7px; width:23px; height:23px;
+                  border-radius:6px; background:#111; color:#fff; font-weight:900; font-size:13px;
+                  display:grid; place-items:center; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-radius:7px;
+        padding:8px 11px; font-size:12.5px; line-height:1.8; margin-top:6px; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:12px; }
+
+  table { width:100%; border-collapse:collapse; margin-top:6px; }
+  th { font-size:12px; font-weight:900; background:#111; color:#fff; padding:6px 9px; text-align:right; }
+  td { border:1px solid #ccc; padding:6px 9px; font-size:12.5px; }
+  td.box { width:56px; text-align:center; font-size:15px; }
+  .sign { display:flex; gap:16px; margin-top:16px; font-size:12.5px; color:#555; }
+  .sign span { flex:1; border-bottom:1.5px solid #333; padding-bottom:22px; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>🔄 آزمون تعویض</h1>
+  <div class="s">پروژه‌ی تیم شما روی لپ‌تاپ یک تیم دیگر، فقط با <code>requirements.txt</code>، باید اجرا شود.</div>
+</div>
+
+<div class="teams">
+  <span>تیم دهنده:</span>
+  <span>تیم گیرنده:</span>
+</div>
+
+<div class="rule">
+  ⛔ قاعده‌ی طلایی: تیم صاحب پروژه <b>حق حرف‌زدن ندارد</b> — نه راهنمایی، نه «آهان یادم رفت». فقط تماشا و یادداشت.
+</div>
+
+<h2>تیم دهنده — آماده‌سازی</h2>
+<ol>
+  <li>پوشه‌ی <code>C:\dev\quiz-battle</code> را کپی کنید در <code>C:\dev\swap</code></li>
+  <li><b>در کپی</b>، پوشه‌ی <code>venv</code> را پاک کنید — <code>Shift + Delete</code>
+      <div style="font-size:12px;color:#555;margin-top:4px">چرا؟ چون سنگین است و از روی
+      <code>requirements.txt</code> دوباره ساخته می‌شود. چیزی که بازسازی‌شدنی است را دست‌به‌دست نمی‌کنند.</div>
+  </li>
+  <li>مطمئن شوید در پوشه هم <code>game.py</code> هست و هم <code>requirements.txt</code></li>
+  <li>پوشه را به تیم گیرنده بدهید (فلش، پوشه‌ی اشتراکی، یا فقط جای لپ‌تاپ‌ها را عوض کنید)</li>
+</ol>
+
+<h2>تیم گیرنده — راه‌اندازی</h2>
+<ol>
+  <li>پوشه را در <code>C:\dev\</code> بگذارید و ترمینال را همان‌جا باز کنید</li>
+  <li>این چهار دستور، و نه هیچ دستور دیگری:
+<pre>python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python game.py</pre>
+  </li>
+  <li>یک بازی کامل انجام دهید — از سؤال اول تا امتیاز آخر</li>
+</ol>
+
+<h2>نتیجه</h2>
+<table>
+  <tr><th style="width:56px">✓ / ✗</th><th>چه چیزی چک شد</th></tr>
+  <tr><td class="box">☐</td><td>پوشه‌ی <code>venv</code> در تحویلی نبود</td></tr>
+  <tr><td class="box">☐</td><td><code>requirements.txt</code> وجود داشت و خوانده شد</td></tr>
+  <tr><td class="box">☐</td><td><code>pip install -r</code> بدون خطا تمام شد</td></tr>
+  <tr><td class="box">☐</td><td>بازی اجرا شد</td></tr>
+  <tr><td class="box">☐</td><td>پیام‌های بازی <b>رنگی</b> بود</td></tr>
+  <tr><td class="box">☐</td><td>یک بازی کامل تا آخر انجام شد</td></tr>
+</table>
+
+<h2>اگر جایی گیر کرد، اینجا بنویسید (این ارزشمندترین بخش برگه است)</h2>
+<table>
+  <tr><th style="width:45%">چه خطایی دیدیم</th><th>علتش چه بود</th></tr>
+  <tr><td style="height:30px"></td><td></td></tr>
+  <tr><td style="height:30px"></td><td></td></tr>
+  <tr><td style="height:30px"></td><td></td></tr>
+</table>
+
+<div class="sign">
+  <span>امضای تیم دهنده:</span>
+  <span>امضای تیم گیرنده:</span>
+</div>
+
+</body>
+</html>

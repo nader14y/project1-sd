@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+*.pyc
+
+# داده‌ی کاربر — کد نیست
+leaderboard.json
+game.log
+
+# خروجی ساخت — از روی کد دوباره ساخته می‌شود
+build/
+dist/
+*.spec
+.pytest_cache/

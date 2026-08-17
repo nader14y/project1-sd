@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>برگه‌ی VS Code و ترمینال</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:9mm; line-height:1.45; font-size:12px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:7px; margin-bottom:9px; }
+  .head h1 { font-size:22px; font-weight:900; }
+  .head .m { font-size:11px; color:#555; }
+
+  h2 { font-size:14px; font-weight:900; margin:11px 0 5px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  h2 .tag { font-size:9.5px; font-weight:900; background:#111; color:#fff;
+            border-radius:5px; padding:2px 7px; white-space:nowrap; }
+
+  .rule { border:2.5px solid #111; border-radius:9px; padding:7px 12px; margin-bottom:9px;
+          font-size:13px; font-weight:900; text-align:center; }
+
+  .signs { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+  .signs > div { border:1.5px solid #ccc; border-radius:8px; padding:7px 9px; }
+  .signs .s { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr;
+              font-size:13px; font-weight:900; margin-bottom:2px; }
+  .signs .d { font-size:10.5px; color:#444; line-height:1.45; }
+
+  table { width:100%; border-collapse:collapse; margin-top:4px; }
+  th { font-size:10.5px; font-weight:900; background:#111; color:#fff; padding:5px 7px; text-align:right; }
+  td { border:1px solid #ccc; padding:4px 7px; font-size:10.8px; vertical-align:top; line-height:1.5; }
+  td.k { width:118px; font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr;
+         font-weight:900; white-space:nowrap; font-size:10.5px; }
+  td.star { width:22px; text-align:center; font-size:11px; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 3px; font-size:10.3px; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-right:4px solid #111;
+        border-radius:7px; padding:7px 10px; font-size:10.8px; line-height:1.65; margin:4px 0; }
+  .why { font-size:10.8px; color:#555; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .foot { margin-top:9px; text-align:center; font-size:10.5px; color:#888; }
+  .page2 { page-break-before:always; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ صفحه‌ی ۱ ══════════════ -->
+
+<div class="head">
+  <h1>🧰 برگه‌ی VS Code و ترمینال — ۱</h1>
+  <div class="m">Quiz Battle · ⭐ = همین امروز یاد بگیر</div>
+</div>
+
+<div class="rule">همیشه پوشه را باز کن، نه فایل &nbsp;·&nbsp; <code>File → Open Folder → C:\dev\quiz-battle</code></div>
+
+<h2>سه نشانه‌ای که همیشه باید ببینی</h2>
+<div class="signs">
+  <div>
+    <div class="s">● کنار اسم فایل</div>
+    <div class="d"><b>ذخیره نشده!</b> پایتون فایل روی دیسک را اجرا می‌کند، نه چیزی که تو می‌بینی. <code>Ctrl+S</code></div>
+  </div>
+  <div>
+    <div class="s">(venv)</div>
+    <div class="d"><b>جعبه‌ابزار فعال است.</b> اگر نبود، <code>rich</code> پیدا نمی‌شود. <code>venv\Scripts\activate</code></div>
+  </div>
+  <div>
+    <div class="s">C:\dev\quiz-battle&gt;</div>
+    <div class="d"><b>کجا هستی.</b> اگر مسیر عوضی بود، <code>python game.py</code> فایل را پیدا نمی‌کند.</div>
+  </div>
+</div>
+
+<h2><span class="tag">⭐ هشت‌تای ضروری</span> اگر فقط هشت تا یاد بگیری، این‌ها</h2>
+<table>
+  <tr><th class="star">⭐</th><th class="k">کلید</th><th>چه می‌کند</th></tr>
+  <tr><td class="star">⭐</td><td class="k">Ctrl + S</td><td>ذخیره — نقطه‌ی سفید را می‌برد</td></tr>
+  <tr><td class="star">⭐</td><td class="k">Ctrl + `</td><td>ترمینال را باز/بسته می‌کند</td></tr>
+  <tr><td class="star">⭐</td><td class="k">↑ (در ترمینال)</td><td><b>دستور قبلی.</b> دیگر <code>venv\Scripts\activate</code> را تایپ نکن</td></tr>
+  <tr><td class="star">⭐</td><td class="k">Tab (در ترمینال)</td><td><code>python ga</code> + Tab → <code>python game.py</code></td></tr>
+  <tr><td class="star">⭐</td><td class="k">Ctrl + C (ترمینال)</td><td>برنامه‌ی در حال اجرا را متوقف می‌کند</td></tr>
+  <tr><td class="star">⭐</td><td class="k">Ctrl + Z</td><td>برگرداندن آخرین تغییر (<code>Ctrl+Y</code> = دوباره جلو)</td></tr>
+  <tr><td class="star">⭐</td><td class="k">Ctrl + /</td><td>خط را کامنت می‌کند — برای امتحان‌کردن «اگر این خط نباشد چه؟»</td></tr>
+  <tr><td class="star">⭐</td><td class="k">Ctrl + G</td><td>پریدن به شماره‌ی خطی که خطا گفته</td></tr>
+</table>
+
+<h2>ترمینال — دستورها و کلیدها</h2>
+<div class="two">
+  <table>
+    <tr><th class="k">دستور</th><th>چه می‌کند</th></tr>
+    <tr><td class="k">dir</td><td>فایل‌های این پوشه را نشان می‌دهد</td></tr>
+    <tr><td class="k">cd نام‌پوشه</td><td>رفتن داخل یک پوشه</td></tr>
+    <tr><td class="k">cd ..</td><td>یک پوشه به عقب</td></tr>
+    <tr><td class="k">cls</td><td>پاک‌کردن صفحه‌ی ترمینال</td></tr>
+    <tr><td class="k">code .</td><td>باز کردن این پوشه در VS Code</td></tr>
+  </table>
+  <table>
+    <tr><th class="k">کلید</th><th>چه می‌کند</th></tr>
+    <tr><td class="k">↑ / ↓</td><td>گشتن در دستورهای قبلی</td></tr>
+    <tr><td class="k">F7</td><td>لیست کامل دستورهای قبلی (فقط cmd)</td></tr>
+    <tr><td class="k">Esc</td><td>پاک‌کردن خطی که تایپ کرده‌ای</td></tr>
+    <tr><td class="k">Ctrl + Shift + `</td><td>یک ترمینال دوم باز می‌کند</td></tr>
+    <tr><td class="k">Drag &amp; Drop</td><td>پوشه را بکش داخل ترمینال → مسیرش تایپ می‌شود</td></tr>
+  </table>
+</div>
+<div class="why" style="margin-top:4px">
+  ⚠️ <b>یک تله:</b> اگر در ترمینال متنی <b>انتخاب</b> شده باشد، <code>Ctrl+C</code> کپی می‌کند و
+  برنامه را متوقف نمی‌کند. اول یک‌جا کلیک کن تا انتخاب برداشته شود، بعد <code>Ctrl+C</code>.
+</div>
+
+<h2>خواندن پیام خطا — دو سؤال، همین</h2>
+<pre>  File "game.py", line 26          ← کجا؟   (روی این خط کلیک کن!)
+    print("✅ درست!")
+    ^^^^^
+IndentationError: expected an indented block   ← چه شد؟</pre>
+<div class="why">
+  <b>آخرین خط می‌گوید چه شد. خط <code>File</code> می‌گوید کجا.</b>
+  در ترمینال VS Code اسم فایل و شماره‌ی خط <b>قابل کلیک</b> است.
+  پیام خطا دشمن نیست؛ <b>آدرس</b> است.
+</div>
+
+<h2>🔧 اگر گیر کردی</h2>
+<table>
+  <tr><th style="width:42%">نشانه</th><th>راه‌حل</th></tr>
+  <tr><td>تغییرم اعمال نمی‌شود</td><td>نقطه‌ی سفید کنار اسم فایل → <code>Ctrl+S</code></td></tr>
+  <tr><td>ترمینال در پوشه‌ی اشتباه باز می‌شود</td><td>فایل را باز کرده‌ای نه پوشه → <code>File → Open Folder</code></td></tr>
+  <tr><td><code>No module named 'rich'</code></td><td><code>(venv)</code> نیست → <code>venv\Scripts\activate</code></td></tr>
+  <tr><td>دکمه‌ی ▶ می‌گوید <code>No module named 'rich'</code></td><td><code>Ctrl+Shift+P</code> → <code>Python: Select Interpreter</code> → گزینه‌ی دارای <code>venv</code></td></tr>
+  <tr><td>ترمینال بعد از <code>git log</code> هنگ کرد</td><td>کلید <code>q</code></td></tr>
+  <tr><td>تب فایلم را بستم!</td><td><code>Ctrl+Shift+T</code> برش می‌گرداند</td></tr>
+</table>
+
+<div class="foot">🏁 هر جلسه با «مسابقه‌ی راه‌اندازی» شروع می‌شود. هدف: زیر ۳۰ ثانیه، بدون فکر کردن.</div>
+
+
+<!-- ══════════════ صفحه‌ی ۲ ══════════════ -->
+<div class="page2">
+
+<div class="head">
+  <h1>🧰 برگه‌ی VS Code و ترمینال — ۲</h1>
+  <div class="m">میان‌بُرهای بیشتر · هفته‌ای دو تا یاد بگیر، نه همه را یک‌جا</div>
+</div>
+
+<h2><span class="tag">نوشتن کد</span> این‌ها بیشترین وقت را برمی‌گردانند</h2>
+<table>
+  <tr><th class="k">کلید</th><th>چه می‌کند</th><th style="width:38%">کِی به درد می‌خورد</th></tr>
+  <tr><td class="k">Shift + Alt + ↓</td><td>خط را کپی می‌کند زیر خودش</td><td>اضافه‌کردن سؤال جدید به لیست سؤال‌ها</td></tr>
+  <tr><td class="k">Alt + ↑ / ↓</td><td>خط را بالا و پایین جابه‌جا می‌کند</td><td>وقتی ترتیب دو خط را اشتباه نوشته‌ای</td></tr>
+  <tr><td class="k">Ctrl + Shift + K</td><td>کل خط را پاک می‌کند</td><td>سریع‌تر از Home، Shift+End، Delete</td></tr>
+  <tr><td class="k">Ctrl + C / Ctrl + X</td><td>بدون انتخاب‌کردن، <b>کل خط</b> را کپی/کات می‌کند</td><td>لازم نیست اول خط را انتخاب کنی</td></tr>
+  <tr><td class="k">Tab / Shift + Tab</td><td>تورفتگی را زیاد/کم می‌کند — <b>روی چند خط انتخاب‌شده هم کار می‌کند</b></td><td>وقتی یک بلوک را داخل <code>if</code> یا <code>for</code> می‌بری</td></tr>
+  <tr><td class="k">Ctrl + Enter</td><td>یک خط خالی زیر خط فعلی باز می‌کند (بدون رفتن به آخر خط)</td><td>وسط کد، یک خط جدید می‌خواهی</td></tr>
+  <tr><td class="k">Ctrl + Backspace</td><td>یک <b>کلمه</b>ی کامل را پاک می‌کند</td><td>وقتی اسم متغیر را اشتباه نوشته‌ای</td></tr>
+  <tr><td class="k">Ctrl + Space</td><td>پیشنهادهای پایتون را نشان می‌دهد</td><td>یادت نیست اسم متد چه بود؟ چند حرف بنویس و Ctrl+Space</td></tr>
+</table>
+
+<h2><span class="tag">حرکت</span> بدون ماوس، خیلی سریع‌تر</h2>
+<div class="two">
+  <table>
+    <tr><th class="k">کلید</th><th>چه می‌کند</th></tr>
+    <tr><td class="k">Home / End</td><td>اول / آخر خط</td></tr>
+    <tr><td class="k">Ctrl + Home / End</td><td>اول / آخر <b>فایل</b></td></tr>
+    <tr><td class="k">Ctrl + ← / →</td><td>کلمه‌به‌کلمه جلو و عقب</td></tr>
+    <tr><td class="k">Shift + هر فلشی</td><td>همان حرکت، ولی <b>انتخاب</b> می‌کند</td></tr>
+  </table>
+  <table>
+    <tr><th class="k">کلید</th><th>چه می‌کند</th></tr>
+    <tr><td class="k">Ctrl + F</td><td>پیدا کردن یک متن</td></tr>
+    <tr><td class="k">Enter / F3</td><td>مورد بعدی را پیدا کن</td></tr>
+    <tr><td class="k">Ctrl + H</td><td>پیدا کن و <b>عوض کن</b></td></tr>
+    <tr><td class="k">Ctrl + L</td><td>کل خط فعلی را انتخاب می‌کند</td></tr>
+  </table>
+</div>
+
+<h2><span class="tag">پنجره‌ها</span> جابه‌جایی بین فایل‌ها و پنل‌ها</h2>
+<table>
+  <tr><th class="k">کلید</th><th>چه می‌کند</th></tr>
+  <tr><td class="k">Ctrl + P</td><td><b>باز کردن سریع فایل</b> — چند حرف از اسمش را بنویس و Enter (از جلسه‌ی ۵ که چند فایل داریم، طلاست)</td></tr>
+  <tr><td class="k">Ctrl + Shift + P</td><td>جعبه‌ی فرمان — هر کاری که یادت نیست کجاست، اینجا اسمش را بنویس</td></tr>
+  <tr><td class="k">Ctrl + Tab</td><td>رفتن بین فایل‌های باز</td></tr>
+  <tr><td class="k">Ctrl + W</td><td>بستن تب &nbsp;·&nbsp; <code>Ctrl + Shift + T</code> = برگرداندن تب بسته‌شده</td></tr>
+  <tr><td class="k">Ctrl + B</td><td>نوار کنار را مخفی/نمایان می‌کند (صفحه بزرگ‌تر می‌شود)</td></tr>
+  <tr><td class="k">Ctrl + Shift + E</td><td>پنل فایل‌ها (Explorer)</td></tr>
+  <tr><td class="k">Ctrl + Shift + G</td><td>پنل git (Source Control) — دیدن اینکه چه چیزی عوض شده</td></tr>
+  <tr><td class="k">Ctrl + = / Ctrl + -</td><td>بزرگ / کوچک کردن فونت (وقتی چشمت خسته شد)</td></tr>
+  <tr><td class="k">Alt + Z</td><td>خطوط بلند را می‌شکند تا همه‌اش دیده شود</td></tr>
+</table>
+
+<h2><span class="tag">باحال</span> این‌ها را نشان بده، بقیه حسودی می‌کنند 😎</h2>
+<table>
+  <tr><th class="k">کلید</th><th>چه می‌کند</th></tr>
+  <tr><td class="k">Ctrl + D</td><td>همان کلمه را در جای بعدی هم انتخاب می‌کند — دوباره بزن، دوباره. حالا <b>روی همه‌شان هم‌زمان تایپ می‌کنی</b></td></tr>
+  <tr><td class="k">Ctrl + Shift + L</td><td><b>همه‌ی</b> جاهایی که آن کلمه هست را یک‌جا انتخاب می‌کند</td></tr>
+  <tr><td class="k">Alt + Click</td><td>یک مکان‌نمای دوم (و سوم و چهارم…) اضافه می‌کند</td></tr>
+  <tr><td class="k">F2</td><td>اسم یک متغیر را <b>در کل فایل</b> یک‌جا عوض می‌کند (نه فقط اینجا)</td></tr>
+  <tr><td class="k">Escape</td><td>از همه‌ی مکان‌نماهای اضافه خارج شو</td></tr>
+</table>
+
+<h2><span class="tag">ویندوز</span> بیرون از VS Code</h2>
+<table>
+  <tr><th class="k">کلید</th><th>چه می‌کند</th></tr>
+  <tr><td class="k">Win + Shift + S</td><td><b>اسکرین‌شات از یک تکه‌ی صفحه</b> — برای تمرین خانه که اسکرین‌شات می‌خواهد</td></tr>
+  <tr><td class="k">Win + ← / →</td><td>پنجره را نصف صفحه می‌کند — VS Code یک طرف، مرورگر طرف دیگر</td></tr>
+  <tr><td class="k">Alt + Tab</td><td>جابه‌جایی بین پنجره‌ها</td></tr>
+  <tr><td class="k">Win + E</td><td>باز کردن پنجره‌ی فایل‌ها (File Explorer)</td></tr>
+  <tr><td class="k">F2</td><td>تغییر نام فایل (در File Explorer)</td></tr>
+  <tr><td class="k">Ctrl + Shift + Esc</td><td>Task Manager — وقتی چیزی واقعاً هنگ کرد</td></tr>
+</table>
+
+<div class="foot">
+  <b>هفته‌ای دو تا.</b> کسی چهل میان‌بُر را یک‌شبه یاد نمی‌گیرد — ولی اگر هر هفته دو تا را
+  <b>واقعاً</b> استفاده کنی، تا آخر دوره همه‌شان مال توست.
+</div>
+
+</div>
+</body>
+</html>

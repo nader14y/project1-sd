@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>برگه‌ی دستورها — ویندوز</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding: 10mm; line-height: 1.5; font-size: 13px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:8px; margin-bottom:12px; }
+  .head h1 { font-size:24px; font-weight:900; }
+  .head .m { font-size:12px; color:#555; }
+  h2 { font-size:15px; font-weight:900; margin:14px 0 7px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  h2 .n { background:#111; color:#fff; width:21px; height:21px; border-radius:6px;
+          display:grid; place-items:center; font-size:12px; }
+
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-right:4px solid #111;
+        border-radius:7px; padding:8px 11px; font-size:12.5px; line-height:1.75; margin:5px 0; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:12px; }
+  .why { font-size:12px; color:#555; padding-right:3px; }
+
+  table { width:100%; border-collapse:collapse; margin-top:5px; }
+  th { font-size:11.5px; font-weight:900; background:#111; color:#fff; padding:6px 8px; text-align:right; }
+  td { border:1px solid #ccc; padding:5px 8px; font-size:11.5px; vertical-align:top; line-height:1.55; }
+  td code { font-size:11px; }
+
+  .ok  { border:2px solid #111; border-radius:8px; padding:8px 11px; margin-top:10px; font-size:12.5px; }
+  .ok b { font-weight:900; }
+  .warn { border:2px dashed #111; border-radius:8px; padding:8px 11px; margin-top:10px; font-size:12px; }
+  .foot { margin-top:12px; text-align:center; font-size:11px; color:#888; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>🪟 برگه‌ی دستورها — ویندوز</h1>
+  <div class="m">Quiz Battle · جلسه‌ی ۲ · این برگه روی میزت بماند</div>
+</div>
+
+<h2><span class="n">۰</span> قبل از هر چیز: جای پروژه و ترمینال</h2>
+<div class="why">
+  پروژه باید در <code>C:\dev\quiz-battle</code> باشد — <b>نه</b> روی Desktop و <b>نه</b> داخل OneDrive.
+  (OneDrive پوشه‌ی venv را sync می‌کند و همه‌چیز خراب می‌شود.) مسیر انگلیسی، بدون فاصله.
+</div>
+<div class="why" style="margin-top:5px">
+  در VS Code ترمینال را باز کن (<code>Ctrl + `</code>) و مطمئن شو <b>Command Prompt</b> است نه PowerShell:
+  فلش کنار علامت <code>+</code> ← Select Default Profile ← Command Prompt ← ترمینال را ببند و باز کن.
+</div>
+
+<h2><span class="n">۱</span> ساخت جعبه‌ابزار پروژه (venv)</h2>
+<pre>cd C:\dev\quiz-battle
+python -m venv venv</pre>
+<div class="why">یک‌بار برای همیشه. پوشه‌ی <code>venv</code> ساخته می‌شود.</div>
+
+<h2><span class="n">۲</span> فعال‌کردن جعبه‌ابزار — <b>هر بار</b> که ترمینال را باز می‌کنی</h2>
+<pre>venv\Scripts\activate</pre>
+<div class="ok">
+  <b>نشانه‌ی موفقیت:</b> ابتدای خط ترمینال <code>(venv)</code> می‌آید:
+  <br><code>(venv) C:\dev\quiz-battle&gt;</code>
+  <br>👉 <b>تا وقتی این را نمی‌بینی، هیچ دستور pip نزن.</b>
+</div>
+
+<h2><span class="n">۳</span> اثبات: پایتون عوض شد</h2>
+<pre>where python</pre>
+<div class="why">
+  الان اول لیست باید <code>C:\dev\quiz-battle\venv\Scripts\python.exe</code> باشد.
+  یعنی <code>python</code> دیگر پایتونِ داخل پروژه است.
+</div>
+
+<h2><span class="n">۴</span> نصب کتابخانه</h2>
+<pre>pip install rich</pre>
+<div class="why">فقط با <code>(venv)</code> فعال. بیرون از venv نصب نکن.</div>
+
+<h2><span class="n">۵</span> ساختن لیست خرید پروژه</h2>
+<pre>pip freeze &gt; requirements.txt</pre>
+<div class="warn">
+  <b>⚠️ چک انکودینگ:</b> فایل <code>requirements.txt</code> را در VS Code باز کن و
+  گوشه‌ی <b>پایین-راست</b> را ببین: باید بنویسد <code>UTF-8</code>.
+  اگر نوشت <code>UTF-16 LE</code>، ترمینالت PowerShell بوده — فایل را پاک کن،
+  ترمینال را Command Prompt کن و دستور را دوباره بزن.
+</div>
+
+<h2><span class="n">۶</span> راه‌اندازی پروژه روی یک کامپیوتر جدید</h2>
+<pre>python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python game.py</pre>
+<div class="why">
+  چهار خط، و پروژه بالا می‌آید. پوشه‌ی <code>venv</code> را هیچ‌وقت به کسی نمی‌دهی —
+  چون از روی <code>requirements.txt</code> دوباره ساخته می‌شود.
+</div>
+
+<h2><span class="n">۷</span> خروج از جعبه‌ابزار</h2>
+<pre>deactivate</pre>
+
+<h2>🔧 اگر گیر کردی</h2>
+<table>
+  <tr><th style="width:38%">پیام / نشانه</th><th>راه‌حل</th></tr>
+  <tr>
+    <td><code>ModuleNotFoundError: No module named 'rich'</code></td>
+    <td>۹۵٪ مواقع: <code>(venv)</code> فعال نیست. بزن <code>venv\Scripts\activate</code> و دوباره اجرا کن.</td>
+  </tr>
+  <tr>
+    <td><code>'python' is not recognized</code> یا Microsoft Store باز شد</td>
+    <td>به‌جای <code>python</code> بزن <code>py</code> — مثلاً <code>py -m venv venv</code></td>
+  </tr>
+  <tr>
+    <td><code>running scripts is disabled on this system</code></td>
+    <td>ترمینالت PowerShell است. Command Prompt کن (بخش ۰).</td>
+  </tr>
+  <tr>
+    <td>در PowerShell <code>activate</code> هیچ کاری نکرد</td>
+    <td><code>.\venv\Scripts\Activate.ps1</code></td>
+  </tr>
+  <tr>
+    <td><code>(venv)</code> نیامد ولی خطا هم نداد</td>
+    <td>ترمینال را ببند و باز کن، بعد دوباره activate</td>
+  </tr>
+  <tr>
+    <td><code>Access is denied</code> روی پوشه‌ی venv</td>
+    <td>پروژه داخل OneDrive/Desktop است. کل پوشه را به <code>C:\dev</code> منتقل کن.</td>
+  </tr>
+  <tr>
+    <td>ایموجی به شکل مربع دیده می‌شود</td>
+    <td>باگ کد نیست، فونت ترمینال است. رهایش کن.</td>
+  </tr>
+</table>
+
+<div class="foot">هر خطایی که دیدی، اول از خودت بپرس: «آیا <code>(venv)</code> در ترمینالم هست؟»</div>
+
+</body>
+</html>

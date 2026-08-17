@@ -1,0 +1,212 @@
+[
+  {
+    "text": "پایتخت ژاپن کدام است؟",
+    "options": ["توکیو", "کیوتو", "اوساکا", "سئول"],
+    "correct": "A",
+    "power_up": null,
+    "category": "geography"
+  },
+  {
+    "text": "بزرگ‌ترین سیاره‌ی منظومه‌ی شمسی کدام است؟",
+    "options": ["زمین", "زحل", "مشتری", "نپتون"],
+    "correct": "C",
+    "power_up": "double",
+    "category": "science"
+  },
+  {
+    "text": "خروجی len('سلام') در پایتون چند است؟",
+    "options": ["۳", "۴", "۵", "خطا می‌دهد"],
+    "correct": "B",
+    "power_up": null,
+    "category": "python"
+  },
+  {
+    "text": "بلندترین قله‌ی جهان کدام است؟",
+    "options": ["کی‌۲", "اورست", "دنالی", "آناپورنا"],
+    "correct": "B",
+    "power_up": null,
+    "category": "geography"
+  },
+  {
+    "text": "نماد شیمیایی طلا چیست؟",
+    "options": ["Ag", "Au", "Fe", "Gd"],
+    "correct": "B",
+    "power_up": "steal",
+    "category": "science"
+  },
+  {
+    "text": "کدام سیاره به «سیاره‌ی سرخ» معروف است؟",
+    "options": ["زهره", "مریخ", "عطارد", "مشتری"],
+    "correct": "B",
+    "power_up": null,
+    "category": "science"
+  },
+  {
+    "text": "شاهنامه اثر کیست؟",
+    "options": ["حافظ", "سعدی", "فردوسی", "مولوی"],
+    "correct": "C",
+    "power_up": null,
+    "category": "literature"
+  },
+  {
+    "text": "تخت جمشید نزدیک کدام شهر ایران قرار دارد؟",
+    "options": ["شیراز", "اصفهان", "یزد", "همدان"],
+    "correct": "A",
+    "power_up": "shield",
+    "category": "history"
+  },
+  {
+    "text": "آب در فشار معمولی در چند درجه‌ی سلسیوس می‌جوشد؟",
+    "options": ["۹۰", "۱۰۰", "۱۲۰", "۸۰"],
+    "correct": "B",
+    "power_up": null,
+    "category": "science"
+  },
+  {
+    "text": "در پایتون برای تعریف یک تابع از کدام کلمه استفاده می‌کنیم؟",
+    "options": ["func", "define", "def", "function"],
+    "correct": "C",
+    "power_up": null,
+    "category": "python"
+  },
+  {
+    "text": "خروجی 7 // 2 در پایتون چند است؟",
+    "options": ["۳٫۵", "۳", "۴", "۱"],
+    "correct": "B",
+    "power_up": "double",
+    "category": "python"
+  },
+  {
+    "text": "بزرگ‌ترین اقیانوس جهان کدام است؟",
+    "options": ["اطلس", "هند", "آرام", "منجمد شمالی"],
+    "correct": "C",
+    "power_up": null,
+    "category": "geography"
+  },
+  {
+    "text": "یک تیم فوتبال داخل زمین چند بازیکن دارد؟",
+    "options": ["۹", "۱۰", "۱۱", "۱۲"],
+    "correct": "C",
+    "power_up": null,
+    "category": "sport"
+  },
+  {
+    "text": "نقاش تابلوی «مونالیزا» کیست؟",
+    "options": ["ون‌گوگ", "پیکاسو", "لئوناردو داوینچی", "رامبراند"],
+    "correct": "C",
+    "power_up": "steal",
+    "category": "art"
+  },
+  {
+    "text": "گیاهان هنگام فتوسنتز کدام گاز را از هوا می‌گیرند؟",
+    "options": ["اکسیژن", "نیتروژن", "کربن‌دی‌اکسید", "هیدروژن"],
+    "correct": "C",
+    "power_up": null,
+    "category": "science"
+  },
+  {
+    "text": "در پایتون برای افزودن یک عضو به انتهای لیست از کدام متد استفاده می‌کنیم؟",
+    "options": ["add", "append", "insert", "push"],
+    "correct": "B",
+    "power_up": null,
+    "category": "python"
+  },
+  {
+    "text": "بلندترین قله‌ی ایران کدام است؟",
+    "options": ["سبلان", "دماوند", "علم‌کوه", "زردکوه"],
+    "correct": "B",
+    "power_up": "shield",
+    "category": "geography"
+  },
+  {
+    "text": "اهرام جیزه در کدام کشور قرار دارد؟",
+    "options": ["مکزیک", "مصر", "یونان", "عراق"],
+    "correct": "B",
+    "power_up": null,
+    "category": "history"
+  },
+  {
+    "text": "خروجی type(3.0) در پایتون چیست؟",
+    "options": ["int", "float", "str", "bool"],
+    "correct": "B",
+    "power_up": null,
+    "category": "python"
+  },
+  {
+    "text": "جام جهانی فوتبال هر چند سال یک‌بار برگزار می‌شود؟",
+    "options": ["۲", "۳", "۴", "۵"],
+    "correct": "C",
+    "power_up": "double",
+    "category": "sport"
+  },
+  {
+    "text": "کدام اندام بدن، خون را در بدن پمپ می‌کند؟",
+    "options": ["کبد", "کلیه", "قلب", "شش"],
+    "correct": "C",
+    "power_up": null,
+    "category": "science"
+  },
+  {
+    "text": "خروجی 'ab' * 3 در پایتون چیست؟",
+    "options": ["ababab", "abababab", "خطا می‌دهد", "ab3"],
+    "correct": "A",
+    "power_up": null,
+    "category": "python"
+  },
+  {
+    "text": "پایتخت استرالیا کدام شهر است؟",
+    "options": ["سیدنی", "ملبورن", "کانبرا", "پرت"],
+    "correct": "C",
+    "power_up": "steal",
+    "category": "geography"
+  },
+  {
+    "text": "کدام گزینه نام معتبری برای یک متغیر در پایتون نیست؟",
+    "options": ["my_var", "_x", "2fast", "x2"],
+    "correct": "C",
+    "power_up": null,
+    "category": "python"
+  },
+  {
+    "text": "مثنوی معنوی اثر کیست؟",
+    "options": ["مولوی", "خیام", "نظامی", "عطار"],
+    "correct": "A",
+    "power_up": null,
+    "category": "literature"
+  },
+  {
+    "text": "سریع‌ترین چیز در جهان کدام است؟",
+    "options": ["صوت", "نور", "باد", "گلوله"],
+    "correct": "B",
+    "power_up": "shield",
+    "category": "science"
+  },
+  {
+    "text": "خروجی 10 % 3 در پایتون چند است؟",
+    "options": ["۱", "۳", "۰", "۳٫۳۳"],
+    "correct": "A",
+    "power_up": null,
+    "category": "python"
+  },
+  {
+    "text": "بدن یک انسان بزرگسال چند استخوان دارد؟",
+    "options": ["۲۰۶", "۳۰۰", "۱۵۰", "۴۱۲"],
+    "correct": "A",
+    "power_up": null,
+    "category": "science"
+  },
+  {
+    "text": "کدام گزینه در پایتون یک لیست می‌سازد؟",
+    "options": ["(1, 2)", "{1, 2}", "[1, 2]", "<1, 2>"],
+    "correct": "C",
+    "power_up": "double",
+    "category": "python"
+  },
+  {
+    "text": "خروجی bool('') در پایتون چیست؟",
+    "options": ["True", "False", "None", "خطا می‌دهد"],
+    "correct": "B",
+    "power_up": null,
+    "category": "python"
+  }
+]

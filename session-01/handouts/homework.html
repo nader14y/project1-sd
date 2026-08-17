@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تمرین خانه — جلسه‌ی ۱</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Vazirmatn','IRANSans',Tahoma,sans-serif;
+    color: #111; background: #fff; padding: 12mm; line-height: 1.6; font-size: 14px;
+  }
+  .head { display: flex; justify-content: space-between; align-items: flex-end;
+          border-bottom: 3px solid #111; padding-bottom: 9px; margin-bottom: 8px; }
+  .head h1 { font-size: 25px; font-weight: 900; }
+  .head .meta { font-size: 12.5px; color: #555; }
+  .name { display: flex; gap: 20px; margin-bottom: 16px; font-size: 13px; color: #555; }
+  .name span { flex: 1; border-bottom: 1.5px dotted #999; padding-bottom: 3px; }
+
+  h2 { font-size: 16px; font-weight: 900; margin: 16px 0 8px; }
+  ol.tasks { list-style: none; counter-reset: t; }
+  ol.tasks > li {
+    counter-increment: t; position: relative;
+    padding: 10px 44px 10px 8px; margin-bottom: 8px;
+    border: 1.5px solid #ccc; border-radius: 10px;
+  }
+  ol.tasks > li::before {
+    content: counter(t); position: absolute; right: 9px; top: 9px;
+    width: 25px; height: 25px; border-radius: 7px; background: #111; color: #fff;
+    font-weight: 900; font-size: 14px; display: grid; place-items: center;
+  }
+  ol.tasks b { font-weight: 900; }
+  .hint { font-size: 12.5px; color: #555; margin-top: 5px; }
+  code { font-family: 'SF Mono', Menlo, Consolas, monospace; direction: ltr;
+         display: inline-block; background: #f2f2f2; border-radius: 4px; padding: 1px 5px; font-size: 12.5px; }
+  pre { font-family: 'SF Mono', Menlo, Consolas, monospace; direction: ltr; text-align: left;
+        background: #f6f6f6; border: 1.5px solid #ddd; border-radius: 9px;
+        padding: 10px 12px; font-size: 12px; line-height: 1.6; margin-top: 7px; }
+
+  .box { border: 2px solid #111; border-radius: 10px; padding: 11px 14px; margin-top: 16px; }
+  .box .t { font-weight: 900; font-size: 14.5px; margin-bottom: 5px; }
+  .check { list-style: none; font-size: 13.5px; }
+  .check li { padding: 3px 0; }
+  .check li::before { content: "☐ "; font-size: 15px; }
+  .foot { margin-top: 16px; padding-top: 9px; border-top: 1.5px dashed #bbb;
+          font-size: 12.5px; color: #666; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>تمرین خانه — جلسه‌ی ۱</h1>
+  <div class="meta">Quiz Battle · تحویل: ابتدای جلسه‌ی ۲</div>
+</div>
+<div class="name"><span>نام:</span><span>تیم:</span></div>
+
+<h2>سه کار</h2>
+<ol class="tasks">
+  <li>
+    کوییز را به <b>۵ سؤال</b> برسانید.
+    <div class="hint">سؤال‌ها را خودتان انتخاب کنید — از درس‌های مدرسه، فیلم، فوتبال، هرچه.
+      فقط حواستان باشد جوابِ درستی که می‌نویسید <b>واقعاً</b> درست باشد.</div>
+  </li>
+  <li>
+    آخر بازی، <b>درصد پاسخ درست</b> را هم نشان دهید.
+    <div class="hint">مثلاً: <code>درست: 3 از 5  (60٪)</code></div>
+    <div class="hint">راهنمایی: به یک شمارنده‌ی جدید نیاز دارید که هر بار جواب درست بود، یکی زیاد شود.</div>
+  </li>
+  <li>
+    یک شمارنده اضافه کنید: <b>«سؤال ۲ از ۵»</b>.
+    <div class="hint">راهنمایی: عدد ۵ را دستی ننویسید — پایتون خودش می‌تواند بشمارد که لیست چند تا عضو دارد.</div>
+<pre>total = len(questions)
+print(f"سؤال {i} از {total}: {text}")</pre>
+  </li>
+</ol>
+
+<div class="box">
+  <div class="t">قبل از تحویل، چک کنید</div>
+  <ul class="check">
+    <li>برنامه بدون خطا اجرا می‌شود</li>
+    <li>هر ۵ سؤال پشت سر هم می‌آید و امتیاز درست جمع می‌شود</li>
+    <li>جواب با حرف کوچک (<code>a</code>) هم قبول می‌شود</li>
+    <li>حداقل یک بار کامل بازی کرده‌اید و درصدِ آخر درست بود</li>
+  </ul>
+</div>
+
+<div class="box">
+  <div class="t">⭐ اگر حوصله داشتید (اختیاری)</div>
+  <div class="hint" style="margin-top:0">
+    کاری کنید بعد از هر جواب درست، امتیاز فعلی هم چاپ شود: <code>✅ درست! +۱۰ (امتیاز: ۲۰)</code>
+  </div>
+</div>
+
+<div class="foot">
+  <b>یک کار جدا و مهم:</b> تا جلسه‌ی بعد یک <b>حساب GitHub</b> بسازید.
+  فقط حساب، هیچ کار دیگری لازم نیست — از جلسه‌ی ۷ استفاده‌اش می‌کنیم.
+</div>
+
+</body>
+</html>

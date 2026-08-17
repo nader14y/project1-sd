@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>پوستر قوانین Quiz Battle</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Vazirmatn','IRANSans',Tahoma,sans-serif;
+    color: #111; background: #fff;
+    padding: 14mm 12mm; line-height: 1.55;
+  }
+  .head { text-align: center; border-bottom: 4px solid #111; padding-bottom: 10px; margin-bottom: 18px; }
+  .head h1 { font-size: 34px; font-weight: 900; letter-spacing: -.5px; }
+  .head .sub { font-size: 15px; color: #555; margin-top: 6px; font-weight: 500; }
+  h2 { font-size: 19px; font-weight: 900; margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+  h2::after { content: ""; flex: 1; height: 2px; background: #ddd; }
+
+  ol.rules { list-style: none; counter-reset: r; }
+  ol.rules li {
+    counter-increment: r; position: relative;
+    padding: 9px 46px 9px 8px; margin-bottom: 6px;
+    border: 1.5px solid #ddd; border-radius: 10px; font-size: 15px;
+  }
+  ol.rules li::before {
+    content: counter(r); position: absolute; right: 9px; top: 8px;
+    width: 27px; height: 27px; border-radius: 8px; background: #111; color: #fff;
+    font-weight: 900; font-size: 15px; display: grid; place-items: center;
+  }
+  ol.rules b { font-weight: 900; }
+
+  .power { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+  .power > div { border: 1.5px solid #ddd; border-radius: 10px; padding: 10px; text-align: center; }
+  .power .e { font-size: 26px; }
+  .power .n { font-weight: 900; font-size: 16px; margin: 3px 0; }
+  .power .d { font-size: 12.5px; color: #444; line-height: 1.5; }
+
+  pre.flow {
+    font-family: 'SF Mono', Menlo, Consolas, monospace; direction: ltr;
+    font-size: 11px; line-height: 1.5; background: #f6f6f6;
+    border: 1.5px solid #ddd; border-radius: 10px; padding: 12px; overflow: hidden;
+  }
+
+  .law {
+    margin-top: 18px; border: 3px solid #111; border-radius: 12px;
+    padding: 12px 16px; display: flex; align-items: center; gap: 14px;
+  }
+  .law .k { font-size: 12px; font-weight: 900; color: #fff; background: #111;
+            border-radius: 6px; padding: 4px 9px; white-space: nowrap; }
+  .law .t { font-size: 19px; font-weight: 900; }
+  .foot { margin-top: 14px; text-align: center; font-size: 12px; color: #777; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>⚔ &nbsp;Quiz Battle&nbsp; ⚔</h1>
+  <div class="sub">قرارداد محصول — این ۵ قانون، تعریف رسمی بازی است. همه‌ی تیم‌ها این هسته را می‌سازند.</div>
+</div>
+
+<h2>۵ قانون بازی</h2>
+<ol class="rules">
+  <li>هر راند، <b>هر دو بازیکن به همان سؤال</b> جواب می‌دهند؛ نتیجه بعد از جواب هر دو اعلام می‌شود
+      — تا نفر دوم از جواب نفر اول سرنخ نگیرد.</li>
+  <li>جواب درست = <b>۱۰ امتیاز</b>. بین درست‌جواب‌ها، <b>سریع‌تر ۳ امتیاز</b> بونوس سرعت می‌گیرد.</li>
+  <li>حدود <b>یکی از هر سه سؤال</b> یک قدرت ویژه دارد. قدرت سوم = <b>قابلیت امضای هر تیم</b>.</li>
+  <li>هر مسابقه دقیقاً <b>۵ راند</b>؛ هر جواب <b>۳۰ ثانیه</b> مهلت — جواب دیرتر، صفر حساب می‌شود.</li>
+  <li>بعد از راند پنجم، <b>همان‌جا برنده اعلام می‌شود</b>. فقط رده‌بندی کل بین اجراها می‌ماند؛
+      وضعیت خودِ مسابقه عمداً فقط در حافظه است.</li>
+</ol>
+
+<h2>قدرت‌های ویژه</h2>
+<div class="power">
+  <div><div class="e">⚡</div><div class="n">دوبل</div><div class="d">امتیاز این سؤال دو برابر می‌شود</div></div>
+  <div><div class="e">🎯</div><div class="n">سرقت</div><div class="d">جواب درست، ۵ امتیاز از حریف کم می‌کند — هرگز زیر صفر</div></div>
+  <div><div class="e">✳️</div><div class="n">قابلیت امضا</div><div class="d">قدرت اختصاصی تیم شما — خودتان انتخابش کردید</div></div>
+</div>
+
+<h2>جریان یک مسابقه</h2>
+<pre class="flow">
+ منو ──start──&gt; two player names ──&gt; ROUND 1..5:
+                                       | show question (+ power-up)
+                                       | player 1 answers  (timer)
+                                       | player 2 answers  (timer)
+                                       | round result + scoreboard
+                                       v
+                            winner + leaderboard update ──&gt; menu (rematch?)
+</pre>
+
+<div class="law">
+  <div class="k">قانون ۱ دوره</div>
+  <div class="t">هر جلسه با پروژه‌ی سالم تمام می‌شود.</div>
+</div>
+
+<div class="foot">این پوستر تا پایان دوره روی دیوار می‌ماند — هر جلسه یک قانون تازه به آن اضافه می‌شود.</div>
+
+</body>
+</html>

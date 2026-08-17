@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تمرین خانه — جلسه‌ی ۲</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:11mm; line-height:1.55; font-size:13px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:8px; margin-bottom:7px; }
+  .head h1 { font-size:24px; font-weight:900; }
+  .head .m { font-size:12px; color:#555; }
+  .name { display:flex; gap:18px; margin-bottom:12px; font-size:12px; color:#555; }
+  .name span { flex:1; border-bottom:1.5px dotted #999; padding-bottom:3px; }
+
+  h2 { font-size:15px; font-weight:900; margin:13px 0 7px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  ol.tasks { list-style:none; counter-reset:t; }
+  ol.tasks > li { counter-increment:t; position:relative; padding:8px 40px 8px 6px; margin-bottom:7px;
+                  border:1.5px solid #ccc; border-radius:9px; }
+  ol.tasks > li::before { content:counter(t); position:absolute; right:8px; top:7px;
+     width:23px; height:23px; border-radius:6px; background:#111; color:#fff;
+     font-weight:900; font-size:12.5px; display:grid; place-items:center; }
+  b { font-weight:900; }
+  .hint { font-size:11.5px; color:#555; margin-top:4px; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11.5px; line-height:1.75; margin-top:5px; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:9px 12px; margin-top:11px; }
+  .box .t { font-weight:900; font-size:13.5px; margin-bottom:4px; }
+  .check { list-style:none; font-size:12.5px; }
+  .check li { padding:2px 0; }
+  .check li::before { content:"☐ "; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>تمرین خانه — جلسه‌ی ۲</h1>
+  <div class="m">Quiz Battle · تحویل: ابتدای جلسه‌ی ۳</div>
+</div>
+<div class="name"><span>نام:</span><span>تیم:</span></div>
+
+<h2>بخش الف — منوی شروع رنگی</h2>
+<ol class="tasks">
+  <li>
+    قبل از شروع بازی، یک <b>منو</b> نشان بده:
+<pre>⚔  Quiz Battle  ⚔
+۱) بازی جدید
+۲) خروج</pre>
+    <div class="hint">منو رنگی باشد — مثلاً گزینه‌ی بازی سبز و گزینه‌ی خروج قرمز.</div>
+  </li>
+  <li>
+    بازی <b>فقط با انتخاب ۱</b> شروع شود. با ۲ خداحافظی کند و تمام شود.
+    <div class="hint">اگر کاربر چیز دیگری زد، برنامه نباید بمیرد — یک پیام زرد بدهد و دوباره منو را نشان دهد.</div>
+  </li>
+  <li>
+    ⭐ اگر توانستی: بعد از تمام‌شدن بازی، <b>برگردد به منو</b> تا بشود دوباره بازی کرد.
+  </li>
+</ol>
+
+<h2>بخش ب — عضله‌ی commit 💪</h2>
+<ol class="tasks">
+  <li>
+    کار بالا را در <b>حداقل ۵ commit جدا</b> انجام بده — نه یک commit بزرگ آخر شب.
+    <div class="hint">
+      هر تغییر کوچکِ کارکننده = یک commit. مثلاً:
+      «منو را نشان بده» → commit، «خروج را اضافه کن» → commit، «ورودی اشتباه را مدیریت کن» → commit.
+    </div>
+<pre>git add .
+git commit -m "Add colored start menu"</pre>
+  </li>
+  <li>
+    آخرش <b>اسکرین‌شات</b> این دستور را بگیر و بیاور:
+<pre>git log --oneline</pre>
+    <div class="hint">یادت باشد: صفحه با کلید <code>q</code> بسته می‌شود، ترمینال هنگ نکرده.</div>
+  </li>
+  <li>
+    یک‌بار <b>عمداً</b> فایلت را خراب کن، ذخیره کن، و با این دستور برش گردان:
+<pre>git restore game.py</pre>
+    <div class="hint">این را انجام بده حتی اگر لازمش نداری — دستت باید عادت کند.</div>
+  </li>
+</ol>
+
+<div class="box">
+  <div class="t">قبل از تحویل، چک کن</div>
+  <ul class="check">
+    <li>منو رنگی است و با ۲ برنامه تمام می‌شود</li>
+    <li>ورودی اشتباه، برنامه را نمی‌کشد</li>
+    <li><code>git log --oneline</code> حداقل ۵ خط با پیام معنادار نشان می‌دهد</li>
+    <li>در <code>git status</code> هیچ اثری از پوشه‌ی <code>venv</code> نیست</li>
+    <li>پروژه در <code>C:\dev\...</code> است، نه Desktop و نه OneDrive</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐ اختیاری — عضله‌ی راه‌اندازی</div>
+  <div class="hint" style="margin-top:0">
+    یک پوشه‌ی کاملاً جدید بساز، فقط <code>game.py</code> و <code>requirements.txt</code> را
+    داخلش کپی کن، و پروژه را از صفر راه بینداز:
+  </div>
+<pre>python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python game.py</pre>
+  <div class="hint">هفته‌های بعد این چهار خط را ده‌ها بار می‌زنی. بگذار دستت عادت کند.</div>
+</div>
+
+<div class="box">
+  <div class="t">🔮 برای جلسه‌ی بعد</div>
+  <div class="hint" style="margin-top:0">
+    هفته‌ی بعد <b>سنگین‌ترین و مهم‌ترین جلسه‌ی فنی دوره</b> است: بازی از تک‌نفره تبدیل
+    می‌شود به <b>دونفره</b>. آخر آن جلسه، اولین مسابقه‌ی واقعی‌ات را با هم‌تیمی‌ات بازی می‌کنی.
+    پس پروژه‌ات باید سالم و commit شده باشد.
+  </div>
+</div>
+
+</body>
+</html>

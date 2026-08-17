@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>مسابقه‌ی راه‌اندازی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:11mm; line-height:1.55; font-size:13.5px; }
+  .head { text-align:center; border-bottom:3px solid #111; padding-bottom:9px; margin-bottom:8px; }
+  .head h1 { font-size:29px; font-weight:900; }
+  .head .s { font-size:13px; color:#555; margin-top:5px; }
+  .name { display:flex; gap:18px; margin:12px 0 14px; font-size:12.5px; color:#555; }
+  .name span { flex:1; border-bottom:1.5px dotted #999; padding-bottom:3px; }
+
+  h2 { font-size:16px; font-weight:900; margin:15px 0 8px; }
+
+  ol.steps { list-style:none; counter-reset:s; }
+  ol.steps li { counter-increment:s; position:relative; padding:9px 44px 9px 8px; margin-bottom:7px;
+                border:1.5px solid #ccc; border-radius:9px; }
+  ol.steps li::before { content:counter(s); position:absolute; right:9px; top:8px;
+    width:26px; height:26px; border-radius:7px; background:#111; color:#fff;
+    font-weight:900; font-size:14px; display:grid; place-items:center; }
+  ol.steps b { font-weight:900; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:1px 5px; font-size:12.5px; }
+  .tip { font-size:12px; color:#444; margin-top:4px; background:#f7f7f7;
+         border-right:3px solid #111; border-radius:0 6px 6px 0; padding:4px 8px; }
+
+  table { width:100%; border-collapse:collapse; margin-top:6px; }
+  th { font-size:12.5px; font-weight:900; background:#111; color:#fff; padding:7px 10px; text-align:right; }
+  td { border:1.5px solid #ccc; padding:9px 10px; font-size:13px; }
+  td.t { height:38px; }
+  .goal { font-weight:900; }
+
+  .box { border:2.5px solid #111; border-radius:9px; padding:10px 13px; margin-top:14px; }
+  .box .t2 { font-weight:900; font-size:14px; margin-bottom:4px; }
+  .why { font-size:12.5px; color:#444; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>🏁 مسابقه‌ی راه‌اندازی</h1>
+  <div class="s">از VS Code بسته، تا بازی در حال اجرا. با کرنومتر.</div>
+</div>
+
+<div class="name"><span>نام:</span><span>تیم:</span></div>
+
+<h2>شش قدم</h2>
+<ol class="steps">
+  <li>VS Code را باز کن</li>
+  <li><b><code>File → Open Folder</code></b> → <code>C:\dev\quiz-battle</code>
+      <div class="tip">پوشه، نه فایل! چک: بالای نوار کنار باید بنویسد <code>QUIZ-BATTLE</code></div></li>
+  <li>ترمینال را باز کن: <b><code>Ctrl + `</code></b></li>
+  <li><code>venv\Scripts\activate</code>
+      <div class="tip">💡 <b>فلش بالا ↑</b> را امتحان کن — اگر قبلاً این دستور را زده باشی، خودش می‌آید.</div></li>
+  <li><code>python game.py</code>
+      <div class="tip">💡 <code>python ga</code> بنویس و <b>Tab</b> بزن — بقیه‌اش را خودش کامل می‌کند.</div></li>
+  <li>یک سؤال جواب بده، بعد <b><code>Ctrl + C</code></b> برای توقف</li>
+</ol>
+
+<h2>زمان‌های من</h2>
+<table>
+  <tr><th style="width:70px">دور</th><th>چطور</th><th style="width:110px">زمان من</th><th style="width:100px">هدف</th></tr>
+  <tr><td>۱</td><td>با هم — مربی قدم‌ها را می‌گوید</td><td class="t"></td><td>—</td></tr>
+  <tr><td>۲</td><td>خودم، با کرنومتر</td><td class="t"></td><td class="goal">زیر ۶۰ ثانیه</td></tr>
+  <tr><td>۳</td><td>مسابقه‌ی تیمی</td><td class="t"></td><td class="goal">زیر ۳۰ ثانیه</td></tr>
+</table>
+
+<div class="box">
+  <div class="t2">⏱ این تمرین، گرم‌کردن هر جلسه است</div>
+  <div class="why">
+    از این هفته به بعد، هر جلسه با همین شش قدم شروع می‌شود. هدف این نیست که سریع تایپ کنی —
+    هدف این است که یک روز <b>بدون فکر کردن</b> انجامش بدهی، مثل بستن بند کفش.
+    وقتی این شش قدم خودکار شد، تمام وقت کلاس صرف چیزی می‌شود که واقعاً یاد می‌گیری.
+  </div>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t2">🔧 اگر جایی گیر کردی، ثبتش کن</div>
+  <table style="margin-top:6px">
+    <tr><th style="width:45%">کدام قدم؟</th><th>چه شد</th></tr>
+    <tr><td class="t"></td><td></td></tr>
+    <tr><td class="t"></td><td></td></tr>
+  </table>
+</div>
+
+</body>
+</html>
