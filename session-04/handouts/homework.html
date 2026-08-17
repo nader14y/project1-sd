@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تمرین خانه — جلسه‌ی ۴</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:11mm; line-height:1.55; font-size:13px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:8px; margin-bottom:7px; }
+  .head h1 { font-size:24px; font-weight:900; }
+  .head .m { font-size:12px; color:#555; }
+  .name { display:flex; gap:18px; margin-bottom:12px; font-size:12px; color:#555; }
+  .name span { flex:1; border-bottom:1.5px dotted #999; padding-bottom:3px; }
+
+  h2 { font-size:15px; font-weight:900; margin:13px 0 7px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  ol.tasks { list-style:none; counter-reset:t; }
+  ol.tasks > li { counter-increment:t; position:relative; padding:8px 40px 8px 6px; margin-bottom:7px;
+                  border:1.5px solid #ccc; border-radius:9px; }
+  ol.tasks > li::before { content:counter(t); position:absolute; right:8px; top:7px;
+     width:23px; height:23px; border-radius:6px; background:#111; color:#fff;
+     font-weight:900; font-size:12.5px; display:grid; place-items:center; }
+  b { font-weight:900; }
+  .hint { font-size:11.5px; color:#555; margin-top:4px; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11.5px; line-height:1.7; margin-top:5px; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:9px 12px; margin-top:11px; }
+  .box .t { font-weight:900; font-size:13.5px; margin-bottom:4px; }
+  .check { list-style:none; font-size:12.5px; }
+  .check li { padding:2px 0; }
+  .check li::before { content:"☐ "; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>تمرین خانه — جلسه‌ی ۴</h1>
+  <div class="m">Quiz Battle · تحویل: ابتدای جلسه‌ی ۵</div>
+</div>
+<div class="name"><span>نام:</span><span>تیم:</span></div>
+
+<h2>بخش الف — 🎯 قدرت ویژه‌ی سرقت</h2>
+<ol class="tasks">
+  <li>
+    به <code>Question</code> اجازه بده قدرت ویژه‌ی <code>"steal"</code> هم داشته باشد.
+    <div class="hint">اگر امروز ⚡ دوبل را زدیم، ویژگی <code>power_up</code> از قبل هست.</div>
+  </li>
+  <li>
+    در <code>resolve_round</code>، اگر سؤال <code>"steal"</code> بود:
+    <b>هر جواب درست، ۵ امتیاز از حریف کم می‌کند</b> — ولی <b>هرگز زیر صفر</b>.
+<pre>STEAL = 5
+
+if question.power_up == "steal":
+    for player in correct_players:
+        rival = ...            # حریفِ این بازیکن کیست؟
+        self.scores[rival] = max(0, self.scores[rival] - STEAL)</pre>
+    <div class="hint">
+      راهنمایی ۱: برای پیدا کردن حریف، یک متد کوچک به <code>Match</code> اضافه کن:
+      <code>rival_of(player)</code>.<br>
+      راهنمایی ۲: <code>max(0, x)</code> یعنی «هرچه شد، از صفر کمتر نشو».
+    </div>
+  </li>
+  <li>
+    یک سؤال سرقت به لیست <code>game.py</code> اضافه کن و <b>امتحانش کن</b>.
+    <div class="hint">مطمئن شو امتیاز حریف زیر صفر نمی‌رود — عمداً امتحانش کن!</div>
+  </li>
+</ol>
+
+<h2>بخش ب — 🤔 دو سؤال طراحی (روی همین برگه بنویس)</h2>
+<ol class="tasks">
+  <li>
+    اگر <b>هر دو بازیکن</b> جواب سؤال سرقت را درست بدهند، چه اتفاقی می‌افتد؟
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:20px;margin-top:6px"></div>
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:20px"></div>
+    <div class="hint">به نظر تو <b>منصفانه</b> است؟ اگر نه، قاعده‌اش را چطور عوض می‌کردی؟</div>
+  </li>
+  <li>
+    بازی را یک‌بار طوری بازی کن که <b>مساوی</b> شود. بازی چه می‌گوید؟ زشت است؟
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:20px;margin-top:6px"></div>
+  </li>
+</ol>
+
+<h2>بخش ج — عضله‌ی commit</h2>
+<ol class="tasks">
+  <li>
+    کار بالا را در <b>حداقل ۳ commit جدا</b> انجام بده.
+<pre>git add engine.py
+git commit -m "Add steal power-up to resolve_round"</pre>
+  </li>
+</ol>
+
+<div class="box">
+  <div class="t">قبل از تحویل، چک کن</div>
+  <ul class="check">
+    <li>بازی بدون خطا اجرا می‌شود و یک مسابقه‌ی کامل بازی کرده‌ام</li>
+    <li>سرقت کار می‌کند و امتیاز <b>هرگز</b> زیر صفر نمی‌رود</li>
+    <li>در <code>engine.py</code> هیچ <code>print</code> و <code>input</code>ی نیست</li>
+    <li>هر دو سؤال طراحی را روی برگه جواب داده‌ام</li>
+    <li><code>git log --oneline</code> حداقل ۳ commit تازه نشان می‌دهد</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐ اختیاری — برای کسی که حوصله دارد</div>
+  <div class="hint" style="margin-top:0">
+    بعد از هر راند، یک <b>نوار امتیاز</b> نشان بده که طولش به امتیاز بستگی دارد:<br>
+    <code>علی  ████████ 23</code> &nbsp;·&nbsp; راهنمایی: <code>"█" * (score // 3)</code>
+  </div>
+</div>
+
+<div class="box">
+  <div class="t">🔮 برای جلسه‌ی بعد</div>
+  <div class="hint" style="margin-top:0">
+    یادت هست جلسه‌ی ۱ پرسیدم «خواهر کوچکت که برنامه‌نویس نیست چطور به بازی‌ات سؤال اضافه کند؟»
+    <b>جلسه‌ی بعد حلش می‌کنیم.</b> سؤال‌ها از دل کد بیرون می‌آیند و رده‌بندی بین اجراها می‌ماند.
+  </div>
+</div>
+
+</body>
+</html>

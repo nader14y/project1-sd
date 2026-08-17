@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>برگه‌ی طراحی — جلسه‌ی ۴</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:11mm; line-height:1.5; font-size:13px; }
+  .head { text-align:center; border-bottom:3px solid #111; padding-bottom:9px; margin-bottom:7px; }
+  .head h1 { font-size:27px; font-weight:900; }
+  .head .s { font-size:12.5px; color:#555; margin-top:5px; }
+  .name { display:flex; gap:18px; margin:11px 0 13px; font-size:12px; color:#555; }
+  .name span { flex:1; border-bottom:1.5px dotted #999; padding-bottom:3px; }
+
+  .rule { border:2.5px solid #111; border-radius:9px; padding:9px 13px; margin-bottom:13px;
+          font-size:14.5px; font-weight:900; text-align:center; }
+
+  h2 { font-size:15.5px; font-weight:900; margin:14px 0 6px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  h2 .c { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr;
+          background:#111; color:#fff; border-radius:5px; padding:2px 8px; font-size:13px; }
+
+  table.cls { width:100%; border-collapse:collapse; }
+  table.cls th { font-size:12.5px; font-weight:900; background:#f0f0f0; color:#111;
+                 padding:6px 9px; text-align:right; border:1.5px solid #999; width:50%; }
+  table.cls td { border:1.5px solid #999; padding:6px 9px; vertical-align:top; height:96px; }
+  table.cls .hint { font-size:11px; color:#888; }
+
+  .q { border:1.5px solid #ccc; border-radius:9px; padding:9px 12px; margin-top:12px; }
+  .q .t { font-weight:900; font-size:13.5px; margin-bottom:5px; }
+  .q .lines { margin-top:6px; }
+  .q .lines div { border-bottom:1.5px dotted #aaa; height:22px; }
+
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-radius:7px;
+        padding:8px 11px; font-size:11.5px; line-height:1.7; margin-top:7px; }
+  .foot { margin-top:13px; text-align:center; font-size:11.5px; color:#777; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>✏️ برگه‌ی طراحی</h1>
+  <div class="s">قبل از کد، روی کاغذ. امروز ۱۵ دقیقه دست به کیبورد نمی‌زنیم.</div>
+</div>
+
+<div class="name"><span>نام:</span><span>تیم:</span></div>
+
+<div class="rule">هر کلاس یک شغل.<br>اگر شغلش در یک جمله نگنجید، دو کلاس است.</div>
+
+<h2><span class="c">Question</span> یک سؤال</h2>
+<table class="cls">
+  <tr><th>چه می‌داند؟ <span class="hint">(ویژگی‌ها)</span></th>
+      <th>چه می‌کند؟ <span class="hint">(متدها)</span></th></tr>
+  <tr><td></td><td></td></tr>
+</table>
+
+<h2><span class="c">Match</span> یک مسابقه</h2>
+<table class="cls">
+  <tr><th>چه می‌داند؟ <span class="hint">(ویژگی‌ها)</span></th>
+      <th>چه می‌کند؟ <span class="hint">(متدها)</span></th></tr>
+  <tr><td></td><td></td></tr>
+</table>
+
+<div class="q">
+  <div class="t">🤔 چالش: بونوس سرعت را کدام کلاس باید حساب کند — <code>Question</code> یا <code>Match</code>؟ چرا؟</div>
+  <div class="lines"><div></div><div></div></div>
+</div>
+
+<h2>دو قانون معماری دوره</h2>
+<div class="rule" style="font-size:13.5px;text-align:right;line-height:1.7">
+  ۱) موتور بازی <b>print</b> و <b>input</b> ندارد. هرگز.<br>
+  ۲) موتور هیچ‌وقت خودش زمان را نمی‌خواند؛ زمان از بیرون به آن داده می‌شود.
+</div>
+
+<pre>engine.py   🧠 مغز    →  قواعد، امتیاز، برنده        (بدون print و input)
+game.py     👄 دهان   →  نمایش، ورودی، رنگ، کرنومتر</pre>
+
+<div class="q" style="border-style:dashed">
+  <div class="t">📌 چرا قانون ۲؟</div>
+  <div style="font-size:12px;color:#444">
+    مربی امروز جوابش را نمی‌دهد. <b>جلسه‌ی ۶ خودت می‌فهمی</b> — و آن روز می‌گویی «آهان!».
+    این خط را نگه دار و آن جلسه برگرد سراغش.
+  </div>
+</div>
+
+<div class="foot">🎉 پایان امروز: اولین مسابقه‌ی واقعی دونفره‌ات با هم‌تیمی‌ات.</div>
+
+</body>
+</html>
