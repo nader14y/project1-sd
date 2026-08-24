@@ -18,7 +18,6 @@ class Question:
         # TODO: از "ABCD".index(self.correct) استفاده کن
         pass
 
-
 class Match:
     def __init__(self, player1, player2, questions):
         # TODO: اگر نام دو بازیکن یکی بود، خطا بده:
