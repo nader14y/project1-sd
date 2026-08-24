@@ -30,8 +30,6 @@ class Question:
 
 
 class Match:
-    """یک مسابقه‌ی ۵ راندی بین دو بازیکن."""
-
     def __init__(self, player1, player2, questions):
         if player1 == player2:
             raise ValueError("نام دو بازیکن نمی‌تواند یکی باشد")
@@ -50,13 +48,20 @@ class Match:
     def submit(self, player, choice, elapsed):
         """جواب یک بازیکن را ثبت می‌کند. elapsed = چند ثانیه طول کشید."""
         self.answers[player] = (choice, elapsed)
+        
+    def is_over(self):
+        return self.round >= ROUNDS
+
+    def winner(self):
+        """برنده، یا None اگر مساوی شده باشد."""
+        player1, player2 = self.players
+        if self.scores[player1] == self.scores[player2]:
+            return None
+        if self.scores[player1] > self.scores[player2]:
+            return player1
+        return player2
 
     def resolve_round(self):
-        """راند را حل می‌کند: امتیازدهی + بونوس سرعت.
-
-        ⚠️ اینجا هیچ print نمی‌کنیم — فقط نتیجه را برمی‌گردانیم.
-           جمله‌سازی و رنگ، کار فایل game.py است.
-        """
         question = self.questions[self.round - 1]
         results = {}
         correct_players = []
@@ -86,18 +91,6 @@ class Match:
             self.scores[player] += results[player]["points"]
 
         return results
-
-    def is_over(self):
-        return self.round >= ROUNDS
-
-    def winner(self):
-        """برنده، یا None اگر مساوی شده باشد."""
-        player1, player2 = self.players
-        if self.scores[player1] == self.scores[player2]:
-            return None
-        if self.scores[player1] > self.scores[player2]:
-            return player1
-        return player2
 
 
 # ─────────────────────────────────────────────────────────────────────

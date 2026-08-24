@@ -1,11 +1,3 @@
-"""دهان بازی — همه‌ی print و input و رنگ و کرنومتر.  ✅ وضعیت مطلوب پایان جلسه‌ی ۴
-
-📌 اسم فایل سر کلاس: game.py  (همان اسمی که سه هفته است اجرا می‌کنند)
-
-⚠️ کرنومتر اینجاست، نه در موتور. زمان را همین فایل اندازه می‌گیرد و
-   به موتور می‌دهد. جلسه‌ی ۷ می‌فهمند چرا این تصمیم طلاست.
-"""
-
 import time
 
 from rich.console import Console
@@ -93,7 +85,7 @@ def show_final(match):
 
 # ───────────────────────────────────────────── حلقه‌ی اصلی بازی
 
-console.print("[bold cyan]⚔  Quiz Battle  ⚔[/bold cyan]\n")
+console.print("[bold cyan]Quiz Battle[/bold cyan]\n")
 name1 = input("نام بازیکن اول: ").strip()
 name2 = input("نام بازیکن دوم: ").strip()
 
