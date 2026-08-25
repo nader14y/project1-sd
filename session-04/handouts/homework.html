@@ -49,22 +49,34 @@
 <h2>بخش الف — 🎯 قدرت ویژه‌ی سرقت</h2>
 <ol class="tasks">
   <li>
-    به <code>Question</code> اجازه بده قدرت ویژه‌ی <code>"steal"</code> هم داشته باشد.
-    <div class="hint">اگر امروز ⚡ دوبل را زدیم، ویژگی <code>power_up</code> از قبل هست.</div>
+    به <code>Question</code> اجازه بده قدرت ویژه‌ی <code>"steal"</code> هم داشته باشد —
+    با جنسِ داده‌اش، و با پنجره‌ی خواندنی‌اش.
+<pre>def __init__(self, text: str, options: list[str], correct: str,
+             power_up: str | None = None) -> None:
+    ...
+    self._power_up = power_up
+
+@property
+def power_up(self) -> str | None:
+    return self._power_up</pre>
+    <div class="hint">اگر امروز ⚡ دوبل را زدیم، این تکه از قبل هست.</div>
   </li>
   <li>
     در <code>resolve_round</code>، اگر سؤال <code>"steal"</code> بود:
     <b>هر جواب درست، ۵ امتیاز از حریف کم می‌کند</b> — ولی <b>هرگز زیر صفر</b>.
-<pre>STEAL = 5
+<pre>STEAL: int = 5
 
 if question.power_up == "steal":
     for player in correct_players:
         rival = ...            # حریفِ این بازیکن کیست؟
-        self.scores[rival] = max(0, self.scores[rival] - STEAL)</pre>
+        self._scores[rival] = max(0, self._scores[rival] - STEAL)</pre>
     <div class="hint">
-      راهنمایی ۱: برای پیدا کردن حریف، یک متد کوچک به <code>Match</code> اضافه کن:
-      <code>rival_of(player)</code>.<br>
-      راهنمایی ۲: <code>max(0, x)</code> یعنی «هرچه شد، از صفر کمتر نشو».
+      راهنمایی ۱: برای پیدا کردن حریف، یک متد کوچک به <code>Match</code> اضافه کن —
+      با جنسِ داده: <code>def rival_of(self, player: str) -&gt; str:</code><br>
+      راهنمایی ۲: <code>max(0, x)</code> یعنی «هرچه شد، از صفر کمتر نشو».<br>
+      راهنمایی ۳ (مهم): <code>self._scores</code> با <code>_</code> است و این کد
+      <b>داخل خودِ کلاس</b> نوشته می‌شود. اگر از بیرون (در <code>game.py</code>)
+      بنویسی <code>match._scores</code>، قانون امروز را شکسته‌ای.
     </div>
   </li>
   <li>
@@ -102,6 +114,9 @@ git commit -m "Add steal power-up to resolve_round"</pre>
     <li>بازی بدون خطا اجرا می‌شود و یک مسابقه‌ی کامل بازی کرده‌ام</li>
     <li>سرقت کار می‌کند و امتیاز <b>هرگز</b> زیر صفر نمی‌رود</li>
     <li>در <code>engine.py</code> هیچ <code>print</code> و <code>input</code>ی نیست</li>
+    <li>در <code>game.py</code> هیچ‌جا <code>match._scores</code> یا <code>match._answers</code> ندارم —
+        فقط <code>score_of</code> و <code>answer_of</code></li>
+    <li>هر متدی که نوشته‌ام، جنسِ ورودی و خروجی‌اش را دارد (<code>: str</code> و <code>-&gt; int</code>)</li>
     <li>هر دو سؤال طراحی را روی برگه جواب داده‌ام</li>
     <li><code>git log --oneline</code> حداقل ۳ commit تازه نشان می‌دهد</li>
   </ul>
@@ -111,7 +126,8 @@ git commit -m "Add steal power-up to resolve_round"</pre>
   <div class="t">⭐ اختیاری — برای کسی که حوصله دارد</div>
   <div class="hint" style="margin-top:0">
     بعد از هر راند، یک <b>نوار امتیاز</b> نشان بده که طولش به امتیاز بستگی دارد:<br>
-    <code>علی  ████████ 23</code> &nbsp;·&nbsp; راهنمایی: <code>"█" * (score // 3)</code>
+    <code>علی  ████████ 23</code> &nbsp;·&nbsp; راهنمایی: <code>"█" * (match.score_of(player) // 3)</code><br>
+    و تابعش را با جنسِ داده بنویس: <code>def score_bar(score: int) -&gt; str:</code>
   </div>
 </div>
 

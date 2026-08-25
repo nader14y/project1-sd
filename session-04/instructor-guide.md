@@ -462,11 +462,11 @@ AttributeError: property 'round' of 'Match' object has no setter
 ```python
 import time
 from rich.console import Console
-from engine import Match, Question, ROUNDS, TIME_LIMIT
+from engine import Match, Question, RoundResult, ROUNDS, TIME_LIMIT
 
 console = Console()
 
-questions = [
+questions: list[Question] = [
     Question("پایتخت ژاپن کدام است؟", ["توکیو", "کیوتو", "اوساکا", "سئول"], "A"),
     ...  # ۵ سؤال — اینجا Shift+Alt+↓ به کارشان می‌آید
 ]
@@ -477,7 +477,7 @@ questions = [
 ## ۲) تابع `ask` — کرنومتر (۵ دقیقه، مهم‌ترین تابع امروز)
 
 ```python
-def ask(player, question, round_no):
+def ask(player: str, question: Question, round_no: int) -> tuple[str, float]:
     console.clear()
     console.print(f"[bold cyan]راند {round_no} از {ROUNDS}[/bold cyan]")
     console.print(f"\n[bold yellow]نوبت {player}[/bold yellow] — ⏱ {TIME_LIMIT} ثانیه فرصت داری!")
@@ -499,7 +499,7 @@ def ask(player, question, round_no):
 ## ۳) پاک‌کردن صفحه بین دو نوبت (۳ دقیقه)
 
 ```python
-def hand_over(player):
+def hand_over(player: str) -> None:
     console.clear()
     console.print(f"\n[bold magenta]نوبت {player} است.[/bold magenta]")
     console.print("بازیکن قبلی لطفاً نگاه نکند 🙈")
@@ -533,6 +533,23 @@ show_final(match)
 
 توابع `show_round_result` و `show_final` را از فایل مرجع بگیرند
 (نمایش است، مفهوم تازه ندارد — **اینجا کپی‌پیست آزاد**).
+
+⚠️ **ولی یک چیز را حتماً نشان بدهید** — دو خط از داخل `show_round_result`:
+
+```python
+        choice, elapsed = match.answer_of(player)          # نه match._answers
+        console.print(f"  {player}: [bold]{match.score_of(player)}[/bold]")   # نه match._scores
+```
+
+> «دهان از **پنجره** نگاه می‌کند، از پنجره حرف می‌زند. هیچ‌جای این فایل داخلِ مسابقه
+> دست نمی‌برد. یک `_` در کل `game.py` نداریم.»
+
+چک سریع روی ویندوز (۱۰ ثانیه، و **دیدنی** است):
+
+```bat
+findstr /n "match._" game.py
+```
+باید **خالی** باشد. اگر چیزی برگشت، همان‌جا با هم درستش کنید.
 
 ## دقیقه‌ی ۷۵ تا ۸۰ — 🎉 اولین مسابقه‌ی دونفره
 
@@ -601,6 +618,8 @@ git commit -m "Add two-player game loop with timer"
 - [ ] هر تیم **دو فایل** دارد: `engine.py` و `game.py`
 - [ ] در `engine.py` **هیچ `print` و `input`ی نیست** — چک کنید:
       `findstr /n "print( input(" engine.py` باید خالی باشد
+- [ ] در `game.py` هیچ `match._` نیست — چک کنید: `findstr /n "match._" game.py` خالی باشد
+- [ ] ویژگی‌های درونیِ هر دو کلاس با `_` شروع می‌شوند، و متدها جنسِ ورودی/خروجی دارند
 - [ ] یک مسابقه‌ی کامل ۵ راندی دونفره بازی شده
 - [ ] بونوس سرعت کار می‌کند (سریع‌تر ۱۳ می‌گیرد، کندتر ۱۰)
 - [ ] صفحه بین دو نوبت پاک می‌شود
@@ -643,6 +662,21 @@ git commit -m "Add two-player game loop with timer"
 
 جواب کوتاهِ نقدی که *امروز* قابل نشان‌دادن است: «وقتی امتیاز غلط شد، می‌دانی کدام فایل را
 باز کنی.» بقیه‌ی فایده‌ها وعده‌ی جلسه‌های ۷، ۸ و ۱۱ است. → **[پیوست الف](#-پیوست-الف--چرا-چند-فایل-شد-راهنمای-کامل-مربی)، بخش ۱.۲ و حرکت ۶.**
+
+**«این `: str` و `-> bool`ها چی‌اند؟ لازم‌اند؟ برنامه بدونشان هم کار می‌کند!»**
+> «راست می‌گویی، پایتون بدونشان هم اجرا می‌کند. این‌ها برای **کامپیوتر** نیست، برای
+> **آدم** است — و برای VS Code. یک کار بکن: نقطه را بعد از `match.` بزن و ببین چند
+> پیشنهاد می‌دهد. آن پیشنهادها را از همین‌ها می‌سازد.» *(بگذارید امتحان کنند، ۱۰ ثانیه است)*
+
+**«چرا `_` گذاشتیم؟ سختش کردیم! `match.scores` راحت‌تر بود.»**
+> «راحت‌تر بود، آره. تا روزی که حریفت یک خط بنویسد `match.scores["خودش"] = 1000`.
+> `_` قفلِ در است.» و اگر پرسید «مگر نمی‌شود قفل را شکست؟» → «می‌شود. ولی قفل
+> برای این نیست که دزد نتواند؛ برای این است که **بدانی داری کار غلطی می‌کنی**.»
+
+**«چرا `RoundResult` ساختیم؟ dict که کار می‌کرد.»**
+> «کار می‌کرد. `results["علی"]["pionts"]` را تایپ کن ببین چه می‌شود…» *(هیچ هشداری
+> نمی‌گیرند تا وسط بازی)* «حالا `result.pionts` را تایپ کن.» *(ویرایشگر همان لحظه
+> زیرش خط می‌کشد)* «فرقش همین است.»
 
 **«`self` یعنی چی؟»**
 > «یعنی *خودِ این یکی*. صد سؤال داریم؛ `self.text` می‌گوید متنِ **همین** سؤال.»

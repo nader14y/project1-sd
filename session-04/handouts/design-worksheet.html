@@ -53,17 +53,39 @@
 
 <h2><span class="c">Question</span> یک سؤال</h2>
 <table class="cls">
-  <tr><th>چه می‌داند؟ <span class="hint">(ویژگی‌ها)</span></th>
+  <tr><th style="width:37%">چه می‌داند؟ <span class="hint">(ویژگی‌ها)</span></th>
+      <th style="width:26%">جنسش چیست؟ <span class="hint">(نوع داده)</span></th>
       <th>چه می‌کند؟ <span class="hint">(متدها)</span></th></tr>
-  <tr><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td></tr>
 </table>
 
 <h2><span class="c">Match</span> یک مسابقه</h2>
 <table class="cls">
-  <tr><th>چه می‌داند؟ <span class="hint">(ویژگی‌ها)</span></th>
+  <tr><th style="width:37%">چه می‌داند؟ <span class="hint">(ویژگی‌ها)</span></th>
+      <th style="width:26%">جنسش چیست؟ <span class="hint">(نوع داده)</span></th>
       <th>چه می‌کند؟ <span class="hint">(متدها)</span></th></tr>
-  <tr><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td></tr>
 </table>
+
+<div class="q" style="border-style:solid">
+  <div class="t">🧰 جعبه‌ابزار جنسِ داده — ستون وسط را از این پر کن</div>
+  <table class="cls" style="margin-top:6px">
+    <tr><th>اگر این است…</th><th>جنسش این است</th><th>اگر این است…</th><th>جنسش این است</th></tr>
+    <tr><td>یک نوشته</td><td><code>str</code></td><td>لیستی از نوشته‌ها</td><td><code>list[str]</code></td></tr>
+    <tr><td>عدد صحیح</td><td><code>int</code></td><td>عدد اعشاری (ثانیه)</td><td><code>float</code></td></tr>
+    <tr><td>بله یا خیر</td><td><code>bool</code></td><td>یک نام… یا هیچ‌کس</td><td><code>str | None</code></td></tr>
+  </table>
+</div>
+
+<div class="q">
+  <div class="t">🔒 قانون امروز: <code>_</code> یعنی «از بیرون دست نزن»</div>
+  <div style="font-size:12px;line-height:1.7;margin-top:4px">
+    اگر <code>scores</code> از بیرون باز بود، من می‌توانستم بنویسم
+    <code>match.scores["من"] = 1000</code>. اسم این کار چیست؟ ______________<br>
+    پس درونی‌ها را <code>_scores</code> می‌نویسیم و برای خواندن، یک <b>پنجره</b> می‌گذاریم:
+    <code>match.score_of("علی")</code> ✅ می‌شود پرسید &nbsp;·&nbsp; ❌ نمی‌شود عوض کرد
+  </div>
+</div>
 
 <div class="q">
   <div class="t">🤔 چالش: بونوس سرعت را کدام کلاس باید حساب کند — <code>Question</code> یا <code>Match</code>؟ چرا؟</div>
