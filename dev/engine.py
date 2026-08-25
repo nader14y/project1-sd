@@ -1,6 +1,3 @@
-from dev.game import questions
-
-
 ROUNDS = 5          # هر مسابقه چند راند
 TIME_LIMIT = 30     # مهلت هر جواب، به ثانیه
 POINTS = 10         # امتیاز جواب درست
