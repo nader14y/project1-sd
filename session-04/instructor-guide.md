@@ -566,25 +566,38 @@ findstr /n "match._" game.py
 
 # ۸۰ تا ۸۵ — 🎁 بخش کششی: ⚡ سؤال دوبل
 
-فقط اگر وقت ماند. سه تغییر کوچک:
+فقط اگر وقت ماند. چهار تغییر کوچک:
 
 ```python
-# engine.py — Question
-    def __init__(self, text, options, correct, power_up=None):
+# ۱) engine.py — Question: یک ویژگی تازه + پنجره‌اش
+    def __init__(self, text: str, options: list[str], correct: str,
+                 power_up: str | None = None) -> None:
         ...
-        self.power_up = power_up        # None یا "double"
+        self._power_up: str | None = power_up      # None یا "double"
 
-# engine.py — resolve_round، بین مرحله‌ی ۲ و ۳
+    @property
+    def power_up(self) -> str | None:
+        return self._power_up
+
+# ۲) engine.py — RoundResult: یک کارِ تازه
+    def double(self) -> None:
+        self._points *= 2
+
+# ۳) engine.py — resolve_round، بین مرحله‌ی ۲ و ۳
         if question.power_up == "double":
             for player in correct_players:
-                results[player]["points"] *= 2
+                results[player].double()
 
-# game.py — به یکی از سؤال‌ها بدهید
+# ۴) game.py — به یکی از سؤال‌ها بدهید
     Question("بزرگ‌ترین سیاره؟", [...], "C", "double"),
 ```
 
-> «سه خط. **همین.** چون موتور تمیز است، اضافه‌کردن قابلیت آسان می‌شود.
-> اگر همه‌چیز قاتی بود، الان باید ده جا را دست می‌زدید.»
+> «چهار تکه، هیچ‌کدام بیشتر از دو خط. **همین.** چون موتور تمیز است، اضافه‌کردن
+> قابلیت آسان می‌شود. اگر همه‌چیز قاتی بود، الان باید ده جا را دست می‌زدید.»
+
+🎓 **و یک جمله‌ی طلایی که همین‌جا بگویید** (۱۵ ثانیه، ارزشش زیاد است):
+> «دقت کردید؟ هیچ‌کس از **بیرون** به `points` دست نزد. ما به `RoundResult` یک **کار تازه**
+> یاد دادیم و خودش انجامش داد. اسمِ این، همان کپسوله‌سازیِ امروز است.»
 
 🎯 سرقت → تمرین خانه. 🛡️ قابلیت امضای تیم → جلسه‌ی ۶.
 **اگر مثل جلسه‌ی ۳ زود تمام شد، سرقت را هم همین‌جا بزنید.**

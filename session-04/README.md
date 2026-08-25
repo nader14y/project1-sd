@@ -79,6 +79,7 @@
 | [engine_skeleton.py](live-code/engine_skeleton.py) | **اسکلت با `TODO`** — این را به بچه‌ها می‌دهید، اسمش `engine.py`. تمام `@property`ها از قبل نوشته شده |
 | [engine_complete.py](live-code/engine_complete.py) | 🧠 موتور کامل — مرجع شما + راهنمای ⚡ دوبل در انتهایش |
 | [game_complete.py](live-code/game_complete.py) | 👄 لایه‌ی نمایش کامل — توابع نمایش را از این کپی می‌کنند |
+| [_instructor_check.py](live-code/_instructor_check.py) | 🧑‍🏫 چکِ ۲ ثانیه‌ایِ خودتان قبل از کلاس — ⚠️ **روی فلش نگذارید** (جلسه‌ی ۷) |
 
 هر دو فایل کامل اجرا و تست شده‌اند: یک مسابقه‌ی کامل ۵ راندی، بونوس سرعت درست،
 هر سه نمایشِ تقلب (`AttributeError` می‌دهند)، پنج نگهبانِ `ValueError`، دستور ⚡ دوبل،
