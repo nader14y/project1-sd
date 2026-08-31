@@ -1,11 +1,8 @@
 import time
-
 from rich.console import Console  # pyright: ignore[reportMissingImports]
-
-from engine import Match, Question, POINTS, ROUNDS, TIME_LIMIT
+from engine import Match, Question, ROUNDS, TIME_LIMIT
 
 console = Console()
-
 
 questions = [
     Question("پایتخت ژاپن کدام است؟", ["توکیو", "کیوتو", "اوساکا", "سئول"], "A"),
