@@ -17,23 +17,23 @@ questions = [
 
 
 def show_menu():
-    console.print("\n[bold cyan]⚔  Quiz Battle  ⚔[/bold cyan]")
-    console.print("[bold green]۱)[/bold green] بازی جدید")
-    console.print("[bold red]۲)[/bold red] خروج")
+    console.print("\n⚔  Quiz Battle  ⚔", style="bold cyan")
+    console.print("۱) بازی جدید", style="bold green")
+    console.print("۲) خروج", style="bold red")
 
 
 def prompt_choice(player_name, question):
-    console.print(f"\n[bold cyan]{player_name}[/bold cyan]")
-    console.print(f"[bold]{question.text}[/bold]")
+    console.print(f"\n{player_name}", style="bold cyan")
+    console.print(question.text, style="bold")
     for letter, option in zip("ABCD", question.options):
-        console.print(f"  [bold]{letter})[/bold] {option}")
+        console.print(f"  {letter}) {option}", style="bold")
 
     start = time.perf_counter()
     choice = input("جواب تو (A-D): ").strip().upper()
     elapsed = time.perf_counter() - start
 
     if choice not in "ABCD":
-        console.print("[yellow]لطفاً فقط یکی از گزینه‌های A تا D را وارد کن.[/yellow]")
+        console.print("لطفاً فقط یکی از گزینه‌های A تا D را وارد کن.", style="yellow")
         return prompt_choice(player_name, question)
 
     return choice, elapsed
@@ -47,7 +47,7 @@ def play_match(player1_name="بازیکن 1", player2_name="بازیکن 2"):
         if question is None:
             break
 
-        console.print(f"\n[bold yellow]راند {match.round} از {ROUNDS}[/bold yellow]")
+        console.print(f"\nراند {match.round} از {ROUNDS}", style="bold yellow")
 
         player1_choice, player1_elapsed = prompt_choice(player1_name, question)
         player2_choice, player2_elapsed = prompt_choice(player2_name, question)
@@ -56,31 +56,31 @@ def play_match(player1_name="بازیکن 1", player2_name="بازیکن 2"):
         match.submit(player2_name, player2_choice, player2_elapsed)
         match.resolve_round()
 
-        console.print(f"\n[bold]امتیاز فعلی:[/bold]")
+        console.print("\nامتیاز فعلی:", style="bold")
         for player in match.players:
-            console.print(f"  {player}: [green]{match.scores[player]}[/green]")
+            console.print(f"  {player}: {match.scores[player]}", style="green")
 
         for player in match.players:
             if player not in match.answers:
                 continue
             choice, elapsed = match.answers[player]
             if elapsed > TIME_LIMIT:
-                console.print(f"  {player}: [red]زمان تمام شد[/red]")
+                console.print(f"  {player}: زمان تمام شد", style="red")
                 continue
             if question.is_correct(choice):
-                console.print(f"  {player}: [green]درست[/green] ({choice})")
+                console.print(f"  {player}: درست ({choice})", style="green")
             else:
-                console.print(f"  {player}: [red]اشتباه[/red] — جواب درست: {question.correct_text()}")
+                console.print(f"  {player}: اشتباه — جواب درست: {question.correct_text()}", style="red")
 
     winner = match.winner()
     if winner is None:
-        console.print("\n[bold yellow]بازی به تساوی پایان یافت![/bold yellow]")
+        console.print("\nبازی به تساوی پایان یافت!", style="bold yellow")
     else:
-        console.print(f"\n[bold green]برنده: {winner}[/bold green]")
+        console.print(f"\nبرنده: {winner}", style="bold green")
 
-    console.print(f"[bold]امتیاز نهایی:[/bold]")
+    console.print("امتیاز نهایی:", style="bold")
     for player in match.players:
-        console.print(f"  {player}: [bold]{match.scores[player]}[/bold]")
+        console.print(f"  {player}: {match.scores[player]}", style="bold")
 
     return match
 

@@ -12,9 +12,9 @@ questions = [
 
 
 def show_menu():
-    console.print("\n[bold cyan]⚔  Quiz Battle  ⚔[/bold cyan]")
-    console.print("[bold green]۱)[/bold green] بازی جدید")
-    console.print("[bold red]۲)[/bold red] خروج")
+    console.print("\n⚔  Quiz Battle  ⚔", style="bold cyan")
+    console.print("۱) بازی جدید", style="bold green")
+    console.print("۲) خروج", style="bold red")
 
 
 def play():
@@ -23,9 +23,10 @@ def play():
     correct_count = 0
 
     for i, (text, options, correct) in enumerate(questions, start=1):
-        console.print(f"\n[bold cyan]سؤال {i} از {total}:[/bold cyan] {text}")
+        console.print(f"\nسؤال {i} از {total}:", style="bold cyan")
+        console.print(text, style="bold")
         for letter, opt in zip("ABCD", options):
-            console.print(f"  [bold]{letter})[/bold] {opt}")
+            console.print(f"  {letter}) {opt}", style="bold")
 
         answer = input("جواب تو (A-D): ").strip().upper()
 
@@ -37,9 +38,9 @@ def play():
             console.print(f" غلط! جواب درست: {correct}", style="bold red")
 
     percent = correct_count / total * 100
-    console.print("\n بازی تمام شد!", style="bold yellow")
-    console.print(f"   امتیاز تو: [bold green]{score}[/bold green]")
-    console.print(f"   درست: {correct_count} از {total}  ([bold]{percent:.0f}٪[/bold])")
+    console.print("\nبازی تمام شد!", style="bold yellow")
+    console.print(f"   امتیاز تو: {score}", style="bold green")
+    console.print(f"   درست: {correct_count} از {total}  ({percent:.0f}٪)", style="bold")
 
 
 while True:
