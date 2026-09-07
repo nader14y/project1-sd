@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تمرین خانه — جلسه‌ی ۶</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:11mm; line-height:1.55; font-size:13px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:8px; margin-bottom:7px; }
+  .head h1 { font-size:24px; font-weight:900; }
+  .head .m { font-size:12px; color:#555; }
+  .name { display:flex; gap:18px; margin-bottom:12px; font-size:12px; color:#555; }
+  .name span { flex:1; border-bottom:1.5px dotted #999; padding-bottom:3px; }
+  h2 { font-size:15px; font-weight:900; margin:13px 0 7px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  ol.tasks { list-style:none; counter-reset:t; }
+  ol.tasks > li { counter-increment:t; position:relative; padding:8px 40px 8px 6px; margin-bottom:7px;
+                  border:1.5px solid #ccc; border-radius:9px; }
+  ol.tasks > li::before { content:counter(t); position:absolute; right:8px; top:7px;
+     width:23px; height:23px; border-radius:6px; background:#111; color:#fff;
+     font-weight:900; font-size:12.5px; display:grid; place-items:center; }
+  b { font-weight:900; }
+  .hint { font-size:11.5px; color:#555; margin-top:4px; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11.5px; line-height:1.7; margin-top:5px; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:9px 12px; margin-top:11px; }
+  .box .t { font-weight:900; font-size:13.5px; margin-bottom:4px; }
+  .check { list-style:none; font-size:12.5px; }
+  .check li { padding:2px 0; }
+  .check li::before { content:"☐ "; font-size:14px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; margin-top:5px; }
+  th,td { border:1.2px solid #ccc; padding:4px 7px; text-align:right; }
+  th { background:#f2f2f2; font-weight:900; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>تمرین خانه — جلسه‌ی ۶</h1>
+  <div class="m">Quiz Battle · تحویل: ابتدای جلسه‌ی ۷</div>
+</div>
+<div class="name"><span>نام:</span><span>تیم:</span></div>
+
+<h2>بخش الف — ۱۰ سؤال، دستِ خودت</h2>
+<ol class="tasks">
+  <li>
+    <b>۱۰ سؤال تازه</b> به <code>questions.json</code> اضافه کن — و هیچ فایل پایتونی را لمس نکن.
+    <table>
+      <tr><th>شرط</th><th>چرا</th></tr>
+      <tr><td>حداقل <b>۳ سؤال</b> با <code>power_up</code></td><td>وگرنه بازی بی‌نمک است</td></tr>
+      <tr><td>حداقل <b>۳ دسته‌ی مختلف</b> در <code>category</code></td><td>جلسه‌ی ۸ به کارت می‌آید</td></tr>
+      <tr><td>حداقل <b>۲ سؤال از درس‌های مدرسه</b></td><td>بازی را برای هم‌سن‌وسال‌ها جذاب می‌کند</td></tr>
+    </table>
+    <div class="hint">
+      قالب دقیق روی <b>کارت قالب JSON</b> است. بعد از هر سؤال، <code>Shift+Alt+F</code> بزن —
+      اگر مرتب نشد، یعنی جایی خراب است.
+    </div>
+  </li>
+  <li>
+    <b>یکی از سؤال‌ها را عمداً خراب کن</b> (یک ویرگول اضافه)، بازی را اجرا کن، و
+    <b>متن خطا را اینجا بنویس</b>:
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:20px;margin-top:6px"></div>
+    <div class="hint">بعد درستش کن. اگر گم شدی: <code>git restore questions.json</code></div>
+  </li>
+</ol>
+
+<h2>بخش ب — 🏅 منوی رده‌بندی</h2>
+<ol class="tasks">
+  <li>
+    الان رده‌بندی فقط <b>آخر مسابقه</b> دیده می‌شود. یک <b>منو</b> به اول بازی اضافه کن:
+<pre>۱) بازی جدید
+۲) رده‌بندی
+۳) خروج</pre>
+    <div class="hint">
+      گزینه‌ی ۲ فقط <code>show_leaderboard(board)</code> را صدا می‌زند — تابعش از قبل نوشته شده.
+      این کد در <b>کدام فایل</b> می‌رود؟ 🧠 مغز، 👄 دهان، یا 📒 دفتردار؟
+      <b>قبل از نوشتن، جواب بده:</b> ______________
+    </div>
+  </li>
+  <li>
+    رده‌بندی را <b>شماره‌دار و مرتب</b> نشان بده، و کنار نفر اول یک 🥇 بگذار.
+    <div class="hint">راهنمایی: <code>enumerate(board.top(5), start=1)</code> از قبل شماره می‌دهد.</div>
+  </li>
+</ol>
+
+<h2>بخش ج — 🤔 دو سؤال طراحی (روی همین برگه)</h2>
+<ol class="tasks">
+  <li>
+    یک چیز نام ببر که <b>باید</b> ذخیره شود و ما ذخیره‌اش نمی‌کنیم. چرا باید؟
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:20px;margin-top:6px"></div>
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:20px"></div>
+  </li>
+  <li>
+    <code>leaderboard.json</code> را دستی عوض کردی و بردهایت شد ۱۰۰. حالا فکر کن این بازی
+    روی گوشیِ <b>ده هزار نفر</b> باشد. <b>مشکل کجاست، و چه راه‌حلی داری؟</b>
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:20px;margin-top:6px"></div>
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:20px"></div>
+  </li>
+</ol>
+
+<h2>بخش د — git</h2>
+<ol class="tasks">
+  <li>
+    کار بالا را در <b>حداقل ۳ commit جدا</b> انجام بده و <code>push</code> کن.
+<pre>git add questions.json
+git commit -m "Add 10 questions across 3 categories"
+git push</pre>
+    <div class="hint">
+      و <code>git status</code> بزن: مطمئن شو <code>leaderboard.json</code> در لیست
+      <b>نیست</b> — چون در <code>.gitignore</code> است.
+    </div>
+  </li>
+</ol>
+
+<div class="box">
+  <div class="t">قبل از تحویل، چک کن</div>
+  <ul class="check">
+    <li>بانک سؤالم <b>۱۵ سؤال یا بیشتر</b> دارد و بازی بدون خطا اجرا می‌شود</li>
+    <li>منو کار می‌کند و گزینه‌ی رده‌بندی، رده‌بندی را نشان می‌دهد</li>
+    <li>برنامه را بستم و باز کردم — <b>رده‌بندی ماند</b></li>
+    <li><code>leaderboard.json</code> را باز کردم و اسم‌ها <b>فارسی</b> بودند، نه <code>ع</code></li>
+    <li><code>git status</code> تمیز است و <code>push</code> شده</li>
+    <li>هر سه سؤال طراحی را روی برگه جواب داده‌ام</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐ اختیاری — برای کسی که حوصله دارد</div>
+  <div class="hint" style="margin-top:0">
+    به <code>QuestionBank</code> یک متد بده که فقط سؤال‌های یک دسته را برگرداند:<br>
+    <code>def pick_from(self, category: str, n: int = 5) -&gt; list[Question]:</code><br>
+    بعد در منو بپرس «کدام دسته؟» — و بازی <b>موضوعی</b> شود.
+  </div>
+</div>
+
+<div class="box">
+  <div class="t">🔮 برای جلسه‌ی بعد</div>
+  <div class="hint" style="margin-top:0">
+    یک سؤال با خودت ببر: <b>از کجا می‌دانی همین الان بونوس سرعت درست کار می‌کند؟</b>
+    هر بار باید یک مسابقه‌ی کامل بازی کنی تا مطمئن شوی چیزی نشکسته؟
+    جلسه‌ی بعد، کامپیوتر این کار را <b>در یک ثانیه</b> برایت می‌کند.
+  </div>
+</div>
+
+</body>
+</html>

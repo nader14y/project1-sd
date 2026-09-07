@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>کارت قالب JSON — جلسه‌ی ۶</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:10mm; line-height:1.5; font-size:12.5px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:7px; margin-bottom:9px; }
+  .head h1 { font-size:22px; font-weight:900; }
+  .head .m { font-size:11.5px; color:#555; }
+  h2 { font-size:14px; font-weight:900; margin:12px 0 6px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f6f6f6; border:1.5px solid #ddd; border-radius:7px;
+        padding:8px 10px; font-size:11.5px; line-height:1.65; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11.5px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; margin-top:5px; }
+  th,td { border:1.2px solid #ccc; padding:4px 7px; text-align:right; vertical-align:top; }
+  th { background:#f2f2f2; font-weight:900; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:8px 11px; margin-top:10px; }
+  .box .t { font-weight:900; font-size:13px; margin-bottom:4px; }
+  .warn { border:2px solid #111; background:#fffbe6; border-radius:9px; padding:8px 11px; margin-top:10px; }
+  .bad { color:#b00; font-weight:900; }
+  .good { color:#070; font-weight:900; }
+  ul { margin:4px 18px 0 0; }
+  li { padding:1.5px 0; }
+  .two { display:flex; gap:9px; }
+  .two > div { flex:1; }
+  .rule { border:2.5px solid #111; border-radius:10px; padding:8px 12px; margin-top:11px;
+          text-align:center; font-weight:900; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>کارت قالب JSON</h1>
+  <div class="m">جلسه‌ی ۶ · Quiz Battle · <b>قراردادِ کلِ کلاس</b></div>
+</div>
+
+<h2>📄 قالب رسمی <code>questions.json</code></h2>
+<pre>[
+  {
+    "text": "پایتخت ژاپن کدام است؟",
+    "options": ["توکیو", "کیوتو", "اوساکا", "سئول"],
+    "correct": "A",
+    "power_up": null,
+    "category": "جغرافیا"
+  },
+  {
+    "text": "خروجی len('سلام') چیست؟",
+    "options": ["3", "4", "5", "خطا"],
+    "correct": "B",
+    "power_up": "double",
+    "category": "پایتون"
+  }
+]</pre>
+
+<div class="two">
+<div>
+<h2>هر کلید چیست</h2>
+<table>
+  <tr><th>کلید</th><th>چه می‌گیرد</th></tr>
+  <tr><td><code>text</code></td><td>متن سؤال — رشته</td></tr>
+  <tr><td><code>options</code></td><td><b>دقیقاً ۴</b> گزینه، به ترتیب A تا D</td></tr>
+  <tr><td><code>correct</code></td><td>یکی از <code>"A"</code> <code>"B"</code> <code>"C"</code> <code>"D"</code></td></tr>
+  <tr><td><code>power_up</code></td><td><code>null</code> یا <code>"double"</code> یا <code>"steal"</code></td></tr>
+  <tr><td><code>category</code></td><td>دسته — هر چه می‌خواهی</td></tr>
+</table>
+</div>
+<div>
+<h2>JSON با پایتون فرق دارد</h2>
+<table>
+  <tr><th>در پایتون</th><th>در JSON</th></tr>
+  <tr><td><code>None</code></td><td><code>null</code></td></tr>
+  <tr><td><code>True</code> / <code>False</code></td><td><code>true</code> / <code>false</code></td></tr>
+  <tr><td><code>'تک‌گیومه'</code> مجاز</td><td>فقط <code>"دوگیومه"</code></td></tr>
+  <tr><td>ویرگولِ آخر مجاز</td><td class="bad">ممنوع</td></tr>
+  <tr><td># کامنت</td><td class="bad">کامنت ندارد</td></tr>
+</table>
+</div>
+</div>
+
+<h2>🐞 پنج خطای رایج — و شکل دقیقشان</h2>
+<table>
+  <tr><th style="width:31%">خطایی که می‌بینی</th><th>یعنی چه</th><th style="width:24%">چطور پیدا کنی</th></tr>
+  <tr>
+    <td><code>Expecting ',' delimiter</code></td>
+    <td>بین دو قلم، ویرگول جا افتاده</td>
+    <td rowspan="5"><b><code>Shift+Alt+F</code></b><br>بزن. جایی که مرتب
+        <b>نشد</b>، همان‌جاست.<br><br>و خطا را <b>از پایین
+        به بالا</b> بخوان — شماره‌ی خط، آخرِ پیام است.</td>
+  </tr>
+  <tr>
+    <td><code>Expecting property name<br>enclosed in double quotes</code></td>
+    <td>یا <code>'</code> نوشته‌ای به‌جای <code>"</code>،<br>یا بعد از <b>آخرین</b> قلم ویرگول گذاشته‌ای</td>
+  </tr>
+  <tr>
+    <td><code>Expecting value</code></td>
+    <td><code>None</code> نوشته‌ای به‌جای <code>null</code></td>
+  </tr>
+  <tr>
+    <td><code>Unterminated string</code></td>
+    <td>یک <code>"</code> را نبسته‌ای</td>
+  </tr>
+  <tr>
+    <td><code>Extra data</code></td>
+    <td><code>]</code> پایانی جا افتاده یا زیادی است</td>
+  </tr>
+</table>
+
+<div class="warn">
+  <div class="t">⚠️ قانونِ بی‌استثنا — هر جا فایل باز می‌کنیم</div>
+  <pre style="margin-top:5px">open(path, encoding="utf-8")                       # خواندن
+json.dump(data, f, ensure_ascii=False, indent=2)   # نوشتن</pre>
+  <ul>
+    <li><code>encoding="utf-8"</code> نباشد → روی ویندوز فارسی خراب می‌شود</li>
+    <li><code>ensure_ascii=False</code> نباشد → اسمت می‌شود <code>علی</code></li>
+    <li><code>indent=2</code> نباشد → کل فایل یک خط می‌شود و <code>git diff</code> بی‌فایده</li>
+  </ul>
+</div>
+
+<div class="box">
+  <div class="t">🔀 و همین تمایز، در git</div>
+  <table>
+    <tr><th>فایل</th><th>در git؟</th><th>چرا</th></tr>
+    <tr><td><code>questions.json</code></td><td class="good">✅ داخل</td>
+        <td><b>محتوای محصول</b> است، مثل کد. بازیِ من و تو باید یکی باشد</td></tr>
+    <tr><td><code>leaderboard.json</code></td><td class="bad">❌ بیرون</td>
+        <td><b>داده‌ی بازیکن‌ها</b>ست. برد‌های من چه ربطی به پروژه‌ی تو دارد؟</td></tr>
+  </table>
+</div>
+
+<div class="rule">قانون ۶: فقط داده‌ای ذخیره می‌شود که از دست‌رفتنش <u>فاجعه</u> باشد.</div>
+
+<div class="box" style="border-style:dashed;margin-top:9px">
+  <div class="t">🧠 و یک جمله که کل جلسه در آن است</div>
+  RAM <b>تخته‌وایت‌برد</b> است — برنامه که بسته شود، پاک می‌شود.<br>
+  دیسک <b>دفتر</b> است — هر چه در آن نوشته باشی، می‌ماند.
+</div>
+
+</body>
+</html>
