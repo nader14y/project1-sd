@@ -23,6 +23,7 @@ class Match:
             raise ValueError("Unique Name per Player!")
 
         self.players = [player1, player2]
+        self.questions = questions
         self.scores = {player1: 0, player2: 0}
         self.round = 0
         self.answers = {}
@@ -58,7 +59,7 @@ class Match:
                 self.scores[player] += POINTS
 
     def is_over(self):
-        return self.round >= ROUNDS
+        return self.round >= len(self.questions)
 
     def winner(self):
         player1, player2 = self.players
