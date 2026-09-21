@@ -1,18 +1,9 @@
 import time
-
 from rich.console import Console  # pyright: ignore[reportMissingImports]
-
-from engine import TIME_LIMIT, Match, Question, ROUNDS
+from engine import Match, ROUNDS
+from storage import QuestionBank, ScoreBoard
 
 console = Console()
-
-questions = [
-    Question("پایتخت ژاپن کدام است؟", ["توکیو", "کیوتو", "اوساکا", "سئول"], "A"),
-    Question("خروجی len('سلام') چیست؟", ["3", "4", "5", "خطا"], "B"),
-    Question("بزرگ‌ترین سیاره‌ی منظومه‌ی شمسی؟", ["زمین", "زحل", "مشتری", "نپتون"], "C"),
-    Question("نماد شیمیایی طلا چیست؟", ["Ag", "Au", "Fe", "Gd"], "B"),
-    Question("شاهنامه اثر کیست؟", ["حافظ", "سعدی", "فردوسی", "مولوی"], "C"),
-]
 
 
 def show_menu():
@@ -21,53 +12,61 @@ def show_menu():
     console.print("۲) خروج", style="bold red")
 
 
-def ask(player, question, round_no):
-    console.print(f"\nراند {round_no} از {ROUNDS}", style="bold cyan")
-    console.print(f"نوبت {player} — ⏱ {TIME_LIMIT} ثانیه فرصت داری!", style="bold yellow")
+def show_leaderboard(board):
+    console.print("\n🏅 رده‌بندی کل", style="bold cyan")
+
+    if board.is_empty():
+        console.print("  هنوز هیچ مسابقه‌ای ثبت نشده.")
+        return
+
+    for rank, (name, stat) in enumerate(board.top(5), start=1):
+        console.print(f"  {rank}) {name} — {stat['wins']} برد، {stat['points']} امتیاز")
+
+
+def prompt_choice(player_name, question):
+    console.print(f"\n{player_name}", style="bold cyan")
     console.print(question.text, style="bold")
     for letter, option in zip("ABCD", question.options):
         console.print(f"  {letter}) {option}", style="bold")
 
-    start = time.perf_counter()
-    choice = input("جواب تو (A-D): ").strip().upper()
-    elapsed = time.perf_counter() - start
-    return choice, elapsed
+    while True:
+        start = time.perf_counter()
+        choice = input("جواب تو (A-D): ").strip().upper()
+        elapsed = time.perf_counter() - start
+
+        if choice in ("A", "B", "C", "D"):
+            return choice, elapsed
+
+        console.print("لطفاً فقط یکی از گزینه‌های A تا D را وارد کن.", style="yellow")
 
 
-def hand_over(player):
-    console.print(f"\nنوبت {player} است.", style="bold magenta")
-    console.print("بازیکن قبلی لطفاً نگاه نکند.")
-    input("وقتی آماده بودی Enter را بزن… ")
+def play_match(questions, player1_name="بازیکن 1", player2_name="بازیکن 2"):
+    match = Match(player1_name, player2_name, questions)
 
+    while not match.is_over():
+        question = match.start_round()
+        console.print(f"\nراند {match.round} از {ROUNDS}", style="bold yellow")
 
-def show_round_result(match, question):
-    console.print(f"\nنتیجه‌ی راند {match.round}", style="bold")
-    console.print(f"جواب درست: {question.correct}) {question.correct_text()}", style="bold green")
+        for player in match.players:
+            choice, elapsed = prompt_choice(player, question)
+            match.submit(player, choice, elapsed)
 
-    for player in match.players:
-        if player not in match.answers:
-            console.print(f"  {player}: جواب نداد", style="red")
-            continue
+        results = match.resolve_round()
 
-        choice, elapsed = match.answers[player]
-        if elapsed > TIME_LIMIT:
-            mark = "زمان تمام شد"
-            style = "bold red"
-        elif question.is_correct(choice):
-            mark = "درست"
-            style = "bold green"
-        else:
-            mark = "غلط"
-            style = "bold red"
+        for player, result in results.items():
+            if result.status == "too_late":
+                console.print(f"  {player}: زمان تمام شد", style="red")
+            elif result.status == "correct":
+                console.print(f"  {player}: درست (+{result.points})", style="green")
+            else:
+                console.print(
+                    f"  {player}: اشتباه — جواب درست: {question.correct_text()}", style="red"
+                )
 
-        console.print(f"  {player}: {choice}  {mark}  ({elapsed:.1f} ثانیه)", style=style)
+        console.print("\nامتیاز فعلی:", style="bold")
+        for player in match.players:
+            console.print(f"  {player}: {match.score_of(player)}", style="green")
 
-    console.print("\nتابلوی امتیاز:", style="bold cyan")
-    for player in match.players:
-        console.print(f"  {player}: {match.scores[player]}", style="green")
-
-
-def show_final(match):
     winner = match.winner()
     if winner is None:
         console.print("\nبازی به تساوی پایان یافت!", style="bold yellow")
@@ -76,51 +75,37 @@ def show_final(match):
 
     console.print("امتیاز نهایی:", style="bold")
     for player in match.players:
-        console.print(f"  {player}: {match.scores[player]}", style="bold")
+        console.print(f"  {player}: {match.score_of(player)}", style="bold")
 
-
-def ask_player_names():
-    while True:
-        name1 = input("نام بازیکن اول: ").strip() or "بازیکن 1"
-        name2 = input("نام بازیکن دوم: ").strip() or "بازیکن 2"
-        if name1 != name2:
-            return name1, name2
-        console.print("نام دو بازیکن باید متفاوت باشد.", style="bold yellow")
-
-
-def play_match(player1, player2, bank=None):
-    match = Match(player1, player2, bank or questions)
-
-    while not match.is_over():
-        question = match.start_round()
-        if question is None:
-            break
-
-        for index, player in enumerate(match.players):
-            if index == 1:
-                hand_over(player)
-            choice, elapsed = ask(player, question, match.round)
-            match.submit(player, choice, elapsed)
-
-        match.resolve_round()
-        show_round_result(match, question)
-
-    show_final(match)
     return match
 
 
-def play():
-    player1, player2 = ask_player_names()
-    return play_match(player1, player2)
+# Ask for Player names and then play match
+def play(bank, board):
+    player1_name = input("نام بازیکن اول: ").strip() or "بازیکن 1"
+    player2_name = input("نام بازیکن دوم: ").strip() or "بازیکن 2"
+
+    match = play_match(bank.pick(ROUNDS), player1_name, player2_name)
+
+    board.record(
+        match.winner(),
+        match.players[0], match.score_of(match.players[0]),
+        match.players[1], match.score_of(match.players[1]),
+    )
+    show_leaderboard(board)
 
 
 def main():
+    bank = QuestionBank()
+    board = ScoreBoard()
+    show_leaderboard(board)
+
     while True:
         show_menu()
         choice = input("انتخاب تو (۱ یا ۲): ").strip()
 
         if choice in ("1", "۱"):
-            play()
+            play(bank, board)
         elif choice in ("2", "۲"):
             console.print("خداحافظ!", style="bold cyan")
             break
