@@ -89,7 +89,7 @@ class Match:
             fastest = min(correct_players, key=lambda p: self.answers[p][1])
             results[fastest].points += SPEED_BONUS
 
-        # ۳) ⚡ سؤال دوبل: امتیاز درست‌جواب‌ها دو برابر
+        # ۳) سؤال دوبل: امتیاز درست‌جواب‌ها دو برابر
         if question.power_up == "double":
             for player in correct_players:
                 results[player].points *= 2

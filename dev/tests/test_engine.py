@@ -4,7 +4,6 @@ from engine import Match, Question, ROUNDS, POINTS, SPEED_BONUS, TIME_LIMIT
 
 
 def make_questions(power_up: str | None = None) -> list[Question]:
-    """۵ سؤال یک‌شکل که جوابشان A است — تا تست‌ها کوتاه بمانند."""
     return [Question("۲+۲؟", ["4", "5", "6", "7"], "A", power_up) for _ in range(ROUNDS)]
 
 
@@ -88,7 +87,7 @@ def test_late_but_correct_still_gets_nothing():
 # def test_double_power_up_doubles_the_points():
 #     """قاعده‌ی تیمِ ما: اول بونوس سرعت، بعد دوبل → (۱۰+۳)×۲ = ۲۶
 
-#     🎓 این تست، **تصمیمِ تیم** را سند می‌کند. اگر تیمی قاعده‌ی دیگری بخواهد
+#     این تست، **تصمیمِ تیم** را سند می‌کند. اگر تیمی قاعده‌ی دیگری بخواهد
 #        — مثلاً ۱۰×۲+۳ — هم کد و هم همین تست عوض می‌شود. تست، قانونِ نوشته‌شده است.
 #     """
 #     m = make_match("double")
