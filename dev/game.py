@@ -2,6 +2,9 @@ import time
 from rich.console import Console  # pyright: ignore[reportMissingImports]
 from engine import Match, ROUNDS
 from storage import QuestionBank, ScoreBoard
+from app_log import AppLog
+import traceback
+AppLog.setup()
 
 console = Console()
 
@@ -96,21 +99,33 @@ def play(bank, board):
 
 
 def main():
+    logger = AppLog.get("Game")
+    logger.info("Game started")
     bank = QuestionBank()
+    logger.info("Question bank initialized")
     board = ScoreBoard()
+    logger.info("Score board initialized")
     show_leaderboard(board)
+    logger.info("Initial leaderboard displayed")
 
     while True:
         show_menu()
-        choice = input("انتخاب تو (۱ یا ۲): ").strip()
-
-        if choice in ("1", "۱"):
-            play(bank, board)
-        elif choice in ("2", "۲"):
-            console.print("خداحافظ!", style="bold cyan")
-            break
-        else:
-            console.print(" فقط ۱ یا ۲ را وارد کن.", style="bold yellow")
+        try:
+            choice = input("انتخاب تو (۱ یا ۲): ").strip()
+            logger.info(f"User choice: {choice}")
+            if choice in ("1", "۱"):
+                logger.info("Starting a new match")
+                play(bank, board)
+                logger.info("Match finished")
+            elif choice in ("2", "۲"):
+                console.print("خداحافظ!", style="bold cyan")
+                break
+            else:
+                console.print(" فقط ۱ یا ۲ را وارد کن.", style="bold yellow")
+        except Exception as e:
+            logger.error(f"Something went wrong - {str(traceback.format_exc())}")
+            
+        
 
 
 if __name__ == "__main__":
