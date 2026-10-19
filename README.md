@@ -31,6 +31,17 @@ python game.py
 pytest
 ```
 
+## Build an executable
+
+Build a standalone program that runs without Python. Run the script inside the venv, on the system you are building for (PyInstaller cannot build a Windows `.exe` on a Mac, or the reverse).
+
+- **Windows:** double-click `build.bat`, or run it in a terminal.
+- **Mac:** `./build.sh`
+
+The program is created in `dist/` (`QuizBattle.exe` on Windows, `QuizBattle` on Mac). To share it, put `questions.json` in the same folder as the program. The program creates `leaderboard.json` next to itself, and writes `quiz_game.log` in the folder it is started from.
+
+On a Mac, the first time you open the program, right-click it and choose **Open**, because it is not signed. A program built on an Apple Silicon Mac does not run on an Intel Mac.
+
 ## Files
 
 | File | Purpose |
@@ -41,6 +52,7 @@ pytest
 | `app_log.py` | Logging setup (writes to `quiz_game.log`) |
 | `questions.json` | Question bank |
 | `tests/` | pytest tests for the engine and storage |
+| `build.bat` / `build.sh` | Build the executable on Windows / Mac |
 
 ## Adding questions
 
