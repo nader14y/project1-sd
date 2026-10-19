@@ -117,11 +117,12 @@ except FileNotFoundError as error:
     console.print("فایل questions.json باید کنار برنامه باشد.", style="yellow")
     logger.error("Question bank not found: %s", error)
     input("\nEnter برای بستن… ")      # وگرنه پنجره‌ی exe فوری بسته می‌شود
-    
+    exit()
 except ValueError as error:
     console.print("فایل را باز کن و درستش کن (Shift+Alt+F).", style="yellow")
     logger.error("Question bank is broken: %s", error)
     input("\nEnter برای بستن… ")
+    exit()
 
 
 logger.info("Question bank initialized")
