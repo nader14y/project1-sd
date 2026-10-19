@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>دو تمرین JSON — بعد از جلسه‌ی ۶</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:10mm; line-height:1.55; font-size:12.5px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:7px; margin-bottom:8px; }
+  .head h1 { font-size:22px; font-weight:900; }
+  .head .m { font-size:11.5px; color:#555; }
+  .name { display:flex; gap:18px; margin-bottom:10px; font-size:11.5px; color:#555; }
+  .name span { flex:1; border-bottom:1.5px dotted #999; padding-bottom:3px; }
+  h2 { font-size:15px; font-weight:900; margin:14px 0 6px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  h3 { font-size:13px; font-weight:900; margin:9px 0 4px; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f6f6f6; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11px; line-height:1.65; margin-top:5px; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11px; }
+  .box { border:2px solid #111; border-radius:9px; padding:8px 11px; margin-top:9px; }
+  .box .t { font-weight:900; font-size:13px; margin-bottom:4px; }
+  .goal { background:#f4f4f4; border-right:4px solid #111; padding:5px 9px; margin:5px 0 7px;
+          font-size:12px; }
+  ol { margin:4px 18px 0 0; } ul { margin:3px 18px 0 0; }
+  li { padding:1.5px 0; }
+  .check { list-style:none; margin:3px 0 0; font-size:12px; }
+  .check li::before { content:"☐ "; font-size:14px; }
+  .page2 { page-break-before: always; }
+  b { font-weight:900; }
+  .hint { font-size:11px; color:#555; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>دو تمرین JSON</h1>
+  <div class="m">Quiz Battle · تمرین اضافه، بعد از جلسه‌ی ۶</div>
+</div>
+<div class="name"><span>نام:</span><span>تیم:</span></div>
+
+<div class="goal">
+  <b>چرا این دو تمرین؟</b> در جلسه‌ی ۶ فقط یاد گرفتیم JSON را <b>بخوانیم</b>.
+  این دو تمرین، آن طرف ماجرا را کامل می‌کنند: <b>نوشتن</b> در فایل، و <b>گشتن</b> در داده.
+  هر دو، فایل مستقل‌اند و هیچ‌کدام بازی را دست نمی‌زنند.
+</div>
+
+<h2>➕ تمرین ۱ — ابزارِ اضافه‌کردن سؤال</h2>
+
+<div class="goal">
+  <b>هدف:</b> چرخه‌ی <b>«بخوان ← عوض کن ← بنویس»</b> — همان کاری که هر برنامه‌ای
+  با فایل‌هایش می‌کند.<br>
+  <b>و یک وعده:</b> جلسه‌ی ۱ پرسیدم «خواهر کوچکت چطور سؤال اضافه کند؟» — با این
+  ابزار، دیگر لازم نیست حتی فایل JSON را باز کند.
+</div>
+
+<p>فایل تازه‌ای بساز به اسم <code>add_question.py</code> که وقتی اجرا می‌شود،
+سؤال‌ها را می‌پرسد و به <code>questions.json</code> اضافه می‌کند:</p>
+
+<pre>&gt; python add_question.py
+بانک سؤال الان 15 سؤال دارد.
+
+متن سؤال: بلندترین کوه ایران؟
+گزینه‌ی A: دماوند
+گزینه‌ی B: سبلان
+گزینه‌ی C: علم‌کوه
+گزینه‌ی D: زردکوه
+جواب درست (A-D): a
+قدرت ویژه (double / steal / خالی):
+دسته: جغرافیا
+
+✅ ذخیره شد. بانک سؤال حالا 16 سؤال دارد.</pre>
+
+<h3>مرحله‌به‌مرحله</h3>
+<ol>
+  <li>فایل را بخوان و در یک متغیر بریز:
+      <code>questions = json.load(f)</code> — با <code>encoding="utf-8"</code></li>
+  <li>با <code>input()</code> پنج چیز بپرس: متن، چهار گزینه (یکی‌یکی)، جواب درست، قدرت ویژه، دسته.
+      <div class="hint">برای چهار گزینه، حلقه بزن: <code>for letter in "ABCD":</code></div></li>
+  <li>یک <b>دیکشنری</b> با همان کلیدهای قالب رسمی بساز و
+      <code>questions.append(...)</code> کن</li>
+  <li>همه‌ی لیست را دوباره بنویس:
+      <code>json.dump(questions, f, ensure_ascii=False, indent=2)</code></li>
+</ol>
+
+<div class="box">
+  <div class="t">⚠️ سه تله‌ی این تمرین</div>
+  <ul>
+    <li>اگر قدرت ویژه خالی بود، باید <code>None</code> ذخیره شود (که در فایل می‌شود
+        <code>null</code>) — نه رشته‌ی خالی <code>""</code></li>
+    <li>جواب درست را <code>.strip().upper()</code> کن؛ کسی که <code>a</code> تایپ می‌کند
+        منظورش <code>A</code> است</li>
+    <li>فایل را با <code>"w"</code> باز می‌کنی؛ <b>کلِ</b> لیست را می‌نویسی، نه فقط سؤال تازه را.
+        <code>"w"</code> اول همه‌چیز را پاک می‌کند</li>
+  </ul>
+</div>
+
+<div class="box">
+  <div class="t">✅ از کجا بفهمم درست شد</div>
+  <ul class="check">
+    <li>ابزار را زدم، یک سؤال اضافه کردم، و <b>بازی</b> آن سؤال را نشان داد</li>
+    <li><code>questions.json</code> را باز کردم: فارسی‌ها فارسی‌اند و فایل خوانا (تورفته) است</li>
+    <li>ابزار را <b>سه بار</b> زدم و هر سه سؤال سرِ جایشان هستند (سؤال قبلی پاک نشده)</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐ اختیاری</div>
+  اگر جوابِ درست چیزی جز A تا D بود، دوباره بپرس تا درست وارد کند
+  (<code>while</code>). و در آخر، همان سؤال را به خودش نشان بده تا تأیید کند.
+</div>
+
+<div class="page2"></div>
+
+<div class="head">
+  <h1>تمرین ۲ — بازرس بانک سؤال</h1>
+  <div class="m">Quiz Battle · صفحه‌ی ۲</div>
+</div>
+
+<div class="goal">
+  <b>هدف:</b> <b>گشتن</b> در داده‌ی JSON، شمردن، و پیدا کردن خرابی.<br>
+  <b>و یک پل به جلسه‌ی ۷:</b> این ابزار برای <b>داده</b> همان کاری را می‌کند که
+  <code>pytest</code> برای <b>کد</b> می‌کند — به‌جای تو، چک می‌کند.
+</div>
+
+<p>فایلی بساز به اسم <code>check_bank.py</code> که <code>questions.json</code> را می‌خواند
+و یک گزارش می‌دهد:</p>
+
+<pre>&gt; python check_bank.py
+📊 بانک سؤال: 16 سؤال
+
+دسته‌ها:
+  جغرافیا: 5
+  علوم: 4
+  پایتون: 4
+  ادبیات: 3
+
+سؤال با قدرت ویژه: 5 از 16
+
+❌ 3 مشکل پیدا شد:
+  • سؤال 7: 3 گزینه دارد، باید ۴ باشد
+  • سؤال 11: جواب درستش «E» است، باید A تا D باشد
+  • سؤال 14: تکراری است — «پایتخت ژاپن کدام است؟»</pre>
+
+<h3>چه چیزهایی را باید چک کند</h3>
+<ol>
+  <li><b>تعداد کل</b> سؤال‌ها</li>
+  <li><b>شمارش هر دسته</b> — یک دیکشنریِ شمارنده بساز:
+      <code>by_category[cat] = by_category.get(cat, 0) + 1</code></li>
+  <li><b>چند سؤال قدرت ویژه دارند</b></li>
+  <li>❌ سؤالی که تعداد گزینه‌هایش ۴ نیست</li>
+  <li>❌ سؤالی که <code>correct</code> آن A تا D نیست</li>
+  <li>❌ سؤالِ <b>تکراری</b> (متنش قبلاً آمده)</li>
+  <li>❌ سؤالی که <code>power_up</code> آن نه <code>null</code> است، نه
+      <code>"double"</code>، نه <code>"steal"</code></li>
+</ol>
+
+<div class="box">
+  <div class="t">💡 دو راهنمایی</div>
+  <ul>
+    <li><b>شماره‌ی سؤال را در پیام بنویس.</b> «یک سؤال خراب است» بی‌فایده است؛
+        «سؤال ۷ خراب است» قابل‌استفاده. راهنمایی:
+        <code>for number, q in enumerate(questions, start=1):</code></li>
+    <li>برای پیدا کردن تکراری، یک لیست خالی بساز و هر متنی را که دیدی در آن بریز؛
+        بعد چک کن <code>if text in seen:</code></li>
+  </ul>
+</div>
+
+<div class="box">
+  <div class="t">✅ از کجا بفهمم درست شد</div>
+  <ul class="check">
+    <li>روی بانکِ سالم اجرا کردم → گفت «هیچ مشکلی پیدا نشد»</li>
+    <li>عمداً یک گزینه از یک سؤال حذف کردم → <b>همان شماره</b> را گزارش داد</li>
+    <li>عمداً <code>"correct": "E"</code> گذاشتم → گرفتش</li>
+    <li>یک سؤال را عیناً کپی کردم → تکراری بودنش را گفت</li>
+    <li>بعد از همه‌ی این‌ها: <code>git restore questions.json</code> و بانک سالم برگشت</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐ اختیاری — برای کسی که حوصله دارد</div>
+  در آخر گزارش بنویس کدام دسته <b>کمترین</b> سؤال را دارد و پیشنهاد بده چند سؤال
+  اضافه شود تا همه‌ی دسته‌ها برابر شوند.
+</div>
+
+<div class="box">
+  <div class="t">🤔 و یک سؤال که جوابش را روی همین برگه بنویس</div>
+  هر دو ابزار امروز <code>print</code> و <code>input</code> دارند — ولی قانون ۴ می‌گوید
+  موتور بازی حق ندارد. <b>چرا این‌ها اشکالی ندارد؟</b>
+  <div style="border-bottom:1.5px dotted #aaa;height:19px;margin-top:6px"></div>
+  <div style="border-bottom:1.5px dotted #aaa;height:19px"></div>
+</div>
+
+
+<div class="page2"></div>
+
+<div class="head">
+  <h1>🏚 تمرین جانبی ۱ — خانه‌ی ارواح</h1>
+  <div class="m">صفحه‌ی ۳ · ربطی به Quiz Battle ندارد</div>
+</div>
+
+<div class="goal">
+  <b>هدف:</b> تا حالا JSONت یک <b>لیستِ صاف</b> بوده. اینجا هر اتاق، کلیدِ اتاق‌های
+  دیگر را در خودش دارد — یعنی داده‌ای که به داده‌ی دیگر <b>ارجاع</b> می‌دهد. این دیگر
+  لیست نیست، <b>نقشه</b> است.
+</div>
+
+<p>یک ماجراجویی متنی بنویس که نقشه‌ی <code>house.json</code> را بازی کند:</p>
+
+<pre>{
+  "start": "hall",
+  "rooms": {
+    "hall": {
+      "name": "راهروی ورودی",
+      "text": "یک راهروی تاریک. یک شمع روی میز سوسو می‌زند.",
+      "exits": { "شمال": "kitchen", "بالا": "landing" }
+    },
+    "kitchen": {
+      "name": "آشپزخانه",
+      "text": "قابلمه‌ای روی اجاق هنوز گرم است. یعنی کسی همین الان اینجا بوده؟",
+      "item": "کلید زنگ‌زده",
+      "exits": { "جنوب": "hall", "شرق": "cellar" }
+    },
+    "attic": { "needs": "کلید زنگ‌زده", "end": true, "exits": {} }
+  }
+}</pre>
+
+<h3>برنامه باید چه کند</h3>
+<ol>
+  <li>از اتاقِ <code>start</code> شروع کند</li>
+  <li><code>name</code> و <code>text</code> اتاق را نشان دهد</li>
+  <li>اگر اتاق <code>item</code> داشت، در کوله بگذارد
+      <span class="hint">(<code>room.get("item")</code> — اگر نداشت <code>None</code>)</span></li>
+  <li>راه‌ها را نشان دهد و بپرسد «کجا بروم؟»</li>
+  <li>اگر اتاقِ مقصد <code>needs</code> داشت و آن شیء در کوله نبود → <b>قفل است</b></li>
+  <li>اگر اتاق <code>end</code> داشت → بازی تمام</li>
+</ol>
+
+<div class="box">
+  <div class="t">⭐ نکته‌ی اصلی این تمرین</div>
+  وقتی تمام شد، فایل پایتونت را نگاه کن: <b>اسم هیچ اتاقی در آن نیست.</b>
+  کل خانه، داستان، درها و اشیا در JSON زندگی می‌کنند.<br><br>
+  یعنی <b>همین یک برنامه، نقشه‌ی هر کسی را بازی می‌کند</b> — مدرسه‌تان، خانه‌تان،
+  هر چه بسازی. نقشه‌ات را به بغل‌دستی بده و مال او را بگیر و بازی کن.
+</div>
+
+<div class="box">
+  <div class="t">✅ از کجا بفهمم درست شد</div>
+  <ul class="check">
+    <li>نقشه را تا اتاق پایانی رفتم و بازی تمام شد</li>
+    <li>بدون کلید سراغ درِ قفل رفتم → نگذاشت. با کلید → گذاشت</li>
+    <li>یک راهِ بی‌معنی تایپ کردم → برنامه نمُرد، فقط گفت «از این طرف راهی نیست»</li>
+    <li>یک اتاق تازه به JSON اضافه کردم و <b>بدون دست‌زدن به کد</b> رفتم داخلش</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐⭐ بخش پیشرفته — بازرسِ نقشه (این را حتماً امتحان کن)</div>
+  قبل از اینکه نقشه‌ات را به دوستت بدهی، یک <code>check_house.py</code> بنویس که چک کند:
+  <ul>
+    <li>هر دری به اتاقی می‌رود که <b>واقعاً وجود دارد</b>؟</li>
+    <li>اتاقی هست که ساخته‌ای ولی <b>هیچ راهی به آن نیست</b>؟</li>
+    <li>اصلاً اتاقی با <code>end</code> داری، یا بازی هیچ‌وقت تمام نمی‌شود؟</li>
+  </ul>
+  <pre style="margin-top:5px">❌ 2 مشکل:
+  • اتاق «hall»: درِ «غرب» به اتاقِ ناموجودِ «garden» می‌رود
+  • اتاق «ghost» ساخته شده ولی هیچ راهی به آن نیست</pre>
+  <div class="hint">راهنمایی برای مورد دوم: از <code>start</code> شروع کن، هر اتاقی که
+  می‌بینی در یک لیست بریز، و از داخل همان لیست جلو برو.</div>
+</div>
+
+<div class="page2"></div>
+
+<div class="head">
+  <h1>💬 تمرین جانبی ۲ — کارآگاهِ گروه</h1>
+  <div class="m">صفحه‌ی ۴ · ربطی به Quiz Battle ندارد</div>
+</div>
+
+<div class="goal">
+  <b>هدف:</b> <b>گروه‌بندی</b> — یعنی یک مشت داده‌ی به‌هم‌ریخته را از دو زاویه‌ی
+  مختلف دسته کنی: هر <b>نفر</b>، و هر <b>ساعت</b>.
+</div>
+
+<p>یک روزِ کاملِ چتِ یک گروه در <code>chat.json</code> است — ۳۶ پیام:</p>
+
+<pre>[
+  { "from": "سارا", "time": "19:20", "text": "بچه‌ها یادتون نره فردا امتحان علوم داریم" },
+  { "from": "پویا", "time": "19:22", "text": "چیییی؟ 😱" }
+]</pre>
+
+<p>یک <code>chat_detective.py</code> بنویس که گزارشش را دربیاورد:</p>
+
+<pre>💬 36 پیام از 4 نفر
+
+پرحرف‌ترین‌ها:
+  1) سارا   ███████████ 11 پیام (31٪) · میانگین 18 حرف
+  2) پویا   ██████████ 10 پیام (28٪) · میانگین 14 حرف
+
+شلوغ‌ترین ساعت: 20:00 تا 20:59 با 13 پیام
+سؤال‌ها: 6 تا از 36 پیام (17٪)
+
+🤫 کم‌حرف‌ترین: امیر با فقط 7 پیام</pre>
+
+<h3>باید حساب کنی</h3>
+<ol>
+  <li>هر نفر چند پیام داده — و <b>چند درصدِ</b> کل گروه است</li>
+  <li><b>شلوغ‌ترین ساعت</b> کدام بوده</li>
+  <li>چند تا از پیام‌ها <b>سؤال</b> بوده‌اند (به «؟» ختم می‌شوند)</li>
+  <li>بلندترین پیام مال چه کسی بود و چه ساعتی</li>
+  <li>میانگین طول پیامِ هر نفر</li>
+</ol>
+
+<div class="box">
+  <div class="t">🔑 تله‌ی اصلیِ این تمرین</div>
+  <b>ساعت، یک فیلد جدا نیست!</b> فقط <code>"time": "20:07"</code> داری.
+  باید خودت بیرونش بکشی:
+  <pre style="margin-top:5px">hour = message["time"].split(":")[0]     # "20:07" → "20"</pre>
+  و این درسِ بزرگ‌ترش این است: <b>داده همیشه به شکلی که می‌خواهی نیست — باید بسازیش.</b>
+</div>
+
+<div class="box">
+  <div class="t">💡 دو راهنمایی</div>
+  <ul>
+    <li>برای شمردن، یک دیکشنریِ شمارنده بساز:
+        <code>count[key] = count.get(key, 0) + 1</code> — یک‌بار برای نفرها، یک‌بار برای ساعت‌ها</li>
+    <li>برای مرتب‌کردن از زیاد به کم:
+        <code>sorted(count.items(), key=lambda item: item[1], reverse=True)</code></li>
+    <li>نوار <code>"█" * count</code> — همان ترفند تمرین جلسه‌ی ۴، حالا روی داده‌ی واقعی</li>
+  </ul>
+</div>
+
+<div class="box">
+  <div class="t">✅ از کجا بفهمم درست شد</div>
+  <ul class="check">
+    <li>جمعِ درصدها حدود ۱۰۰ می‌شود</li>
+    <li>جمعِ پیام‌های همه‌ی نفرها دقیقاً ۳۶ می‌شود</li>
+    <li>یک پیام را دستی از فایل حذف کردم و همه‌ی عددها تغییر کردند</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐ اختیاری</div>
+  یک نمودار ساعتیِ متنی بکش — برای هر ساعت یک خط با تعداد ستاره:
+  <pre style="margin-top:5px">16:00  ******
+19:00  *****
+20:00  *************
+21:00  *******</pre>
+</div>
+
+<div class="box">
+  <div class="t">🤔 و یک سؤال، روی همین برگه</div>
+  دوست داری همین برنامه را روی چتِ <b>گروهِ واقعیِ خودتان</b> اجرا کنی.
+  چه چیزی در این کار <b>اشکال دارد</b>، و قبلش باید از چه کسانی اجازه بگیری؟
+  <div style="border-bottom:1.5px dotted #aaa;height:19px;margin-top:6px"></div>
+  <div style="border-bottom:1.5px dotted #aaa;height:19px"></div>
+</div>
+
+</body>
+</html>

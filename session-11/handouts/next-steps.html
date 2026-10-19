@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>مسیر ادامه — بعد از Quiz Battle</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:10mm; line-height:1.55; font-size:12.5px; }
+  .head { border-bottom:3px solid #111; padding-bottom:8px; margin-bottom:10px; }
+  .head h1 { font-size:24px; font-weight:900; }
+  .head .m { font-size:12px; color:#555; margin-top:2px; }
+  h2 { font-size:15px; font-weight:900; margin:14px 0 6px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  h3 { font-size:13px; font-weight:900; margin:9px 0 3px; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11px; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f6f6f6; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11px; line-height:1.65; margin-top:4px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; margin-top:5px; }
+  th,td { border:1.2px solid #ccc; padding:4px 7px; text-align:right; vertical-align:top; }
+  th { background:#f2f2f2; font-weight:900; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:9px 12px; margin-top:10px; }
+  .box .t { font-weight:900; font-size:13.5px; margin-bottom:4px; }
+  .path { border:1.5px solid #ccc; border-radius:9px; padding:8px 11px; margin-top:7px; }
+  .path .t { font-weight:900; font-size:13.5px; }
+  .path .why { font-size:11.5px; color:#555; }
+  .big { border:2.5px solid #111; border-radius:10px; padding:9px 12px; margin-top:11px;
+         text-align:center; font-weight:900; font-size:14px; }
+  ul { margin:3px 18px 0 0; } ol { margin:3px 18px 0 0; }
+  li { padding:1.5px 0; }
+  .page2 { page-break-before: always; }
+  .hint { font-size:11.5px; color:#555; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>🚀 مسیر ادامه</h1>
+  <div class="m">بعد از Quiz Battle · این برگه را نگه دار، یک‌بار خواندنش کافی نیست</div>
+</div>
+
+<div class="box" style="margin-top:0">
+  <div class="t">قبل از هر چیز — چیزی که الان داری</div>
+  یک <b>محصول</b>. نه یک تمرین. یک فایل اجرایی که به هر کسی بدهی، کار می‌کند؛
+  با داده‌ی قابل‌ویرایش، رده‌بندی ماندگار، ۲۵ تست خودکار، و کدی که وقتی چیزی خراب
+  می‌شود پیام آدمیزاد می‌دهد.<br>
+  و <b>روی GitHub است</b> — اولین چیز واقعی تو روی اینترنت.
+  <span class="hint">سه سال دیگر که برای کارآموزی جایی می‌روی، همین لینک را نشان می‌دهی.</span>
+</div>
+
+<h2>🎯 سه مسیر — <u>یکی</u> را انتخاب کن</h2>
+
+<div class="hint" style="margin-bottom:5px">
+  کسی که هر هفته یک زبان عوض می‌کند، هیچ‌کدام را یاد نمی‌گیرد.
+  یکی را انتخاب کن و <b>سی روز</b> رویش بمان.
+</div>
+
+<div class="path">
+  <div class="t">۱️⃣ همین بازی را بزرگ‌تر کن <span class="hint">— کم‌ریسک‌ترین</span></div>
+  <div class="why">چیزی تازه یاد نمی‌گیری، ولی <b>همه‌چیزِ این دوره را محکم می‌کنی</b>.
+  اگر مطمئن نیستی کدام مسیر، از اینجا شروع کن.</div>
+  <ul>
+    <li>بازی <b>سه‌نفره</b> کن — <code>self._players</code> یک لیست است، چقدر سخت است؟</li>
+    <li>قدرت ویژه‌ی تازه: 🛡️ سپر، ⏱️ زمان اضافه، 🔄 تعویض سؤال</li>
+    <li>حالت <b>تک‌نفره در برابر کامپیوتر</b></li>
+    <li>دسته‌بندی: «فقط سؤال‌های علوم»</li>
+    <li>برای هر کدام، <b>اول تست بنویس</b> — عادتی که یاد گرفتی</li>
+  </ul>
+</div>
+
+<div class="path">
+  <div class="t">۲️⃣ گرافیک و بازی‌سازی <span class="hint">— pygame</span></div>
+  <div class="why">بازی از ترمینال بیرون می‌آید: پنجره، تصویر، صدا، موشواره.</div>
+  <ul>
+    <li><code>pip install pygame</code> و اولین پنجره‌ات را باز کن</li>
+    <li>⭐ <b>و اینجا سودِ قانون ۴ را می‌بینی:</b> <code>engine.py</code> هیچ
+        <code>print</code> و <code>input</code> ندارد — پس <b>دست‌نخورده</b> می‌ماند
+        و فقط «دهان» را عوض می‌کنی. همان بازی، با صورت تازه.</li>
+    <li>بعدش: Flappy Bird، مار، یا یک بازی پلتفرمر ساده</li>
+  </ul>
+</div>
+
+<div class="path">
+  <div class="t">۳️⃣ وب <span class="hint">— Flask، بعد HTML و CSS</span></div>
+  <div class="why">بازی روی اینترنت، و دوستت از گوشی‌اش بازی می‌کند.</div>
+  <ul>
+    <li><code>pip install flask</code> — با ۱۵ خط، اولین صفحه‌ی وبت بالا می‌آید</li>
+    <li>باز هم <code>engine.py</code> دست‌نخورده می‌ماند</li>
+    <li>و <code>questions.json</code>؟ دقیقاً همان قالبی است که سرورها رد و بدل می‌کنند</li>
+    <li>بعدش HTML و CSS، و بعد JavaScript</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">و یک مسیر چهارم که مال همه است: <b>اتوماسیون</b></div>
+  هر کارِ تکراری و حوصله‌سربری که با کامپیوتر می‌کنی، احتمالاً پایتون می‌تواند
+  جایت انجامش بدهد: مرتب‌کردن فایل‌ها، تغییر نام دسته‌جمعی عکس‌ها، خلاصه‌کردن
+  یک فایل اکسل. <b>کتاب <i>Automate the Boring Stuff with Python</i> رایگان آنلاین است.</b>
+</div>
+
+<div class="page2"></div>
+
+<div class="head">
+  <h1>🎒 چیزهایی که با خودت می‌بری</h1>
+  <div class="m">صفحه‌ی ۲ · این‌ها مالِ پایتون نیستند</div>
+</div>
+
+<h2>۹ قانونی که یاد گرفتی</h2>
+<table>
+  <tr><th style="width:7%">#</th><th>قانون</th></tr>
+  <tr><td>۱</td><td>هر جلسه با پروژه‌ی سالم تمام می‌شود.</td></tr>
+  <tr><td>۲</td><td>هر پروژه جعبه‌ابزار خودش را دارد (<code>venv</code> + <code>requirements</code>).</td></tr>
+  <tr><td>۳</td><td>کاری که commit نشده، انجام نشده.</td></tr>
+  <tr><td>۴</td><td>موتور <code>print</code> و <code>input</code> ندارد؛ زمان از بیرون تزریق می‌شود.</td></tr>
+  <tr><td>۵</td><td>هر جلسه با <code>push</code> تمام می‌شود.</td></tr>
+  <tr><td>۶</td><td>فقط داده‌ای ذخیره می‌شود که از دست‌رفتنش فاجعه باشد.</td></tr>
+  <tr><td>۷</td><td>قبل از commit، <code>pytest</code> سبز.</td></tr>
+  <tr><td>۸</td><td>هر <code>except</code> نوع‌دار است و واکنش دارد.</td></tr>
+  <tr><td>۹</td><td>خروجیِ ساخت، کد نیست.</td></tr>
+</table>
+<div class="big">هیچ‌کدام درباره‌ی پایتون نیست.<br>
+<span style="font-weight:400;font-size:12.5px">پایتون را فراموش می‌کنی — این‌ها می‌مانند.</span></div>
+
+<h2>🧰 چیزهایی که نیمه‌تمام ماند</h2>
+<div class="hint">وقت نشد بگوییم، ولی وجود دارند. وقتی لازمشان شدی، سراغشان برو:</div>
+<table>
+  <tr><th style="width:30%">موضوع</th><th>کِی لازمت می‌شود</th></tr>
+  <tr><td><code>git branch</code> و <code>merge</code></td>
+      <td>وقتی با یک نفر دیگر روی یک پروژه کار کنی. «خط زمانی موازی»: کار نیمه‌کاره
+          جایی جز <code>main</code> انجام می‌شود</td></tr>
+  <tr><td>Pull Request و کد ریویو</td>
+      <td>همان‌جا — قبل از اینکه کدت وارد پروژه شود، یکی نگاهش می‌کند</td></tr>
+  <tr><td><code>git revert</code></td>
+      <td>وقتی یک commit خراب را باید خنثی کنی (پاک نمی‌شود، خنثی می‌شود)</td></tr>
+  <tr><td>پایگاه داده (<code>sqlite3</code>)</td>
+      <td>وقتی JSON برای حجم داده‌ات کم بیاورد</td></tr>
+  <tr><td>مانیتورینگ (Sentry)</td>
+      <td>وقتی برنامه‌ات روی کامپیوترِ صد نفرِ دیگر است و لاگ دستِ تو نیست</td></tr>
+</table>
+
+<h2>📅 سی روز اول — یک برنامه‌ی واقعی</h2>
+<table>
+  <tr><th style="width:20%">هفته</th><th>کار</th></tr>
+  <tr><td>هفته‌ی ۱</td><td>مسیرت را انتخاب کن و <b>فقط نصبش کن و "سلام دنیا"</b>ی آن را بزن.
+      همین. بیشتر نه.</td></tr>
+  <tr><td>هفته‌ی ۲</td><td>کوچک‌ترین چیزِ کاملی که می‌توانی بساز — چیزی که در ۲ ساعت تمام شود</td></tr>
+  <tr><td>هفته‌ی ۳</td><td>همان را روی GitHub بگذار، با README</td></tr>
+  <tr><td>هفته‌ی ۴</td><td>یک چیز به آن اضافه کن که <b>خودت</b> دلت می‌خواهد</td></tr>
+</table>
+<div class="hint" style="margin-top:4px">
+  ۳۰ دقیقه در روز، هر روز &nbsp;&gt;&nbsp; ۵ ساعت در یک روز جمعه. مغز اینطوری یاد می‌گیرد.
+</div>
+
+<h2>🧭 سه عادت که تفاوت را می‌سازند</h2>
+<ol>
+  <li><b>خطا را بخوان.</b> ۹۰٪ وقت‌ها جواب داخل همان متن قرمز است — از پایین به بالا.
+      <span class="hint">این را از جلسه‌ی ۳ بلدی.</span></li>
+  <li><b>انگلیسی سرچ کن.</b> «python list index out of range» جواب دارد؛
+      فارسی‌اش معمولاً نه. انگلیسیِ فنی را از همین سرچ‌ها یاد می‌گیری.</li>
+  <li><b>کدِ دیگران را بخوان.</b> روی GitHub یک پروژه‌ی کوچک پیدا کن و بخوانش.
+      مثل زبان است: فقط حرف‌زدن کافی نیست، باید بخوانی هم.</li>
+</ol>
+
+<h2>🔗 جاهایی که واقعاً به درد می‌خورند</h2>
+<table>
+  <tr><th style="width:34%">کجا</th><th>برای چه</th></tr>
+  <tr><td><code>docs.python.org/fa</code></td><td>مستند رسمی پایتون، بخشی‌اش فارسی</td></tr>
+  <tr><td><i>Automate the Boring Stuff</i></td><td>رایگان آنلاین — پروژه‌محور و مناسب همین سن</td></tr>
+  <tr><td><code>exercism.org</code></td><td>تمرین با بازخورد از آدم‌های واقعی، رایگان</td></tr>
+  <tr><td><code>adventofcode.com</code></td><td>هر دسامبر، ۲۵ معمای برنامه‌نویسی. سال‌های قبلش هم باز است</td></tr>
+  <tr><td><code>roadmap.sh</code></td><td>نقشه‌ی راهِ تصویری برای هر مسیر</td></tr>
+  <tr><td>GitHub خودت</td><td>هر چیزی که ساختی، بگذار آنجا. <b>این رزومه‌ی توست.</b></td></tr>
+</table>
+
+<div class="box">
+  <div class="t">🎯 و مهم‌ترین نکته‌ی این برگه</div>
+  Quiz Battle را <b>من</b> انتخاب کردم. پروژه‌ی بعدی را <b>خودت</b> انتخاب کن —
+  چیزی که واقعاً دلت می‌خواهد وجود داشته باشد و هنوز وجود ندارد.<br><br>
+  <b>بهترین پروژه، چیزی است که خودت لازمش داری.</b> آن‌وقت وقتی گیر می‌کنی،
+  رهایش نمی‌کنی — چون می‌خواهی‌اش.
+</div>
+
+<div class="big" style="margin-top:12px">
+  ده هفته پیش یک کلاس هم ننوشته بودی.<br>
+  امروز یک محصول در جیبت داری که کار می‌کند. 🚀
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>آموزش جامع pytest از صفر تا حرفه‌ای</title>
+<style>
+:root{
+  --bg:#0b1020;
+  --panel:#121a2e;
+  --panel-2:#17213a;
+  --text:#eef2ff;
+  --muted:#aeb8d0;
+  --line:#26324e;
+  --accent:#7c9cff;
+  --accent-2:#9b7cff;
+  --ok:#4fd1a1;
+  --warn:#ffd166;
+  --danger:#ff7b8b;
+  --code:#09101e;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Tahoma, "Segoe UI", Arial, sans-serif;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(124,156,255,.12), transparent 30%),
+    radial-gradient(circle at 85% 10%, rgba(155,124,255,.12), transparent 28%),
+    var(--bg);
+  color:var(--text);
+  line-height:1.95;
+}
+a{color:inherit;text-decoration:none}
+.container{max-width:1200px;margin:auto;padding:28px}
+.hero{
+  padding:56px 0 34px;
+  display:grid;
+  grid-template-columns:1.6fr .8fr;
+  gap:28px;
+  align-items:stretch;
+}
+.hero-card,.side-card,.section,.toc{
+  background:linear-gradient(180deg, rgba(23,33,58,.96), rgba(18,26,46,.96));
+  border:1px solid var(--line);
+  border-radius:24px;
+  box-shadow:0 24px 60px rgba(0,0,0,.28);
+}
+.hero-card{padding:38px}
+.eyebrow{
+  display:inline-block;
+  font-size:13px;
+  color:#dbe4ff;
+  background:rgba(124,156,255,.12);
+  border:1px solid rgba(124,156,255,.28);
+  border-radius:999px;
+  padding:7px 12px;
+  margin-bottom:14px;
+}
+h1{font-size:42px;line-height:1.35;margin:0 0 14px}
+h2{font-size:28px;margin:0 0 18px}
+h3{font-size:21px;margin:28px 0 10px}
+p{color:var(--muted);margin:10px 0}
+.lead{font-size:18px;max-width:850px}
+.side-card{padding:26px}
+.side-card ul{margin:0;padding-right:18px;color:var(--muted)}
+.side-card strong{color:var(--text)}
+.toc{padding:28px;margin:18px 0 32px}
+.toc-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.toc a{
+  display:block;
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(255,255,255,.025);
+  border:1px solid transparent;
+  color:#cbd6f0;
+}
+.toc a:hover{
+  border-color:rgba(124,156,255,.35);
+  background:rgba(124,156,255,.08)
+}
+.section{
+  padding:30px;
+  margin:20px 0;
+}
+.note,.tip,.warning{
+  border-radius:16px;
+  padding:16px 18px;
+  margin:16px 0;
+  border:1px solid;
+}
+.note{background:rgba(124,156,255,.08);border-color:rgba(124,156,255,.28)}
+.tip{background:rgba(79,209,161,.08);border-color:rgba(79,209,161,.28)}
+.warning{background:rgba(255,209,102,.08);border-color:rgba(255,209,102,.28)}
+code{
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+}
+pre{
+  direction:ltr;
+  text-align:left;
+  background:var(--code);
+  border:1px solid #1b2742;
+  border-radius:16px;
+  padding:18px;
+  overflow:auto;
+  color:#dbe7ff;
+  line-height:1.65;
+  font-size:14px;
+}
+kbd{
+  background:#0d1528;
+  border:1px solid #2c3959;
+  padding:2px 7px;
+  border-radius:7px;
+  font-family:monospace;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:18px 0;
+  overflow:hidden;
+  border-radius:14px;
+}
+th,td{
+  border:1px solid var(--line);
+  padding:13px 14px;
+  text-align:right;
+}
+th{background:#18233d;color:#fff}
+td{color:#c7d1e8}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+.card{
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+}
+.card h3{margin-top:0}
+.badge{
+  display:inline-block;
+  margin-left:8px;
+  padding:4px 9px;
+  font-size:12px;
+  border-radius:999px;
+  color:#dce5ff;
+  background:rgba(155,124,255,.14);
+  border:1px solid rgba(155,124,255,.28)
+}
+.exercise{
+  padding:18px;
+  margin:12px 0;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(255,255,255,.02)
+}
+.exercise b{color:#fff}
+.footer{
+  text-align:center;
+  color:#7f8aa6;
+  padding:35px 10px 50px
+}
+hr{
+  border:0;
+  border-top:1px solid var(--line);
+  margin:28px 0;
+}
+.small{font-size:13px;color:#8d99b5}
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .toc-grid,.grid{grid-template-columns:1fr}
+  h1{font-size:32px}
+  .container{padding:18px}
+  .section,.hero-card,.side-card,.toc{padding:22px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<section class="hero">
+  <div class="hero-card">
+    <div class="eyebrow">Python Testing • pytest</div>
+    <h1>آموزش جامع pytest از صفر تا حرفه‌ای</h1>
+    <p class="lead">
+      این راهنما برای کسی نوشته شده که از تست‌نویسی هیچ پیش‌زمینه‌ای ندارد.
+      از مفهوم Test و assert شروع می‌کنیم و قدم‌به‌قدم به Fixture، Parametrize،
+      Exception Testing، Mock، Monkeypatch، Marker، Coverage و ساختار پروژه واقعی می‌رسیم.
+    </p>
+  </div>
+  <aside class="side-card">
+    <h3>در این راهنما یاد می‌گیری:</h3>
+    <ul>
+      <li><strong>Test</strong> دقیقاً چیست و چرا به آن نیاز داریم</li>
+      <li>pytest چطور تست‌ها را پیدا و اجرا می‌کند</li>
+      <li>Fixture و Dependency Injection</li>
+      <li>Parametrize برای چند ورودی</li>
+      <li>تست Exception و Float</li>
+      <li>Mock و Monkeypatch</li>
+      <li>Unit / Integration / E2E</li>
+      <li>Coverage و CI/CD</li>
+      <li>۱۰ تمرین مرحله‌بندی‌شده</li>
+    </ul>
+  </aside>
+</section>
+
+<nav class="toc">
+  <h2>فهرست مطالب</h2>
+  <div class="toc-grid">
+    <a href="#basics">۱. مفاهیم پایه</a>
+    <a href="#assert">۲. assert و اولین تست</a>
+    <a href="#discovery">۳. پیدا شدن تست‌ها</a>
+    <a href="#commands">۴. دستورات مهم pytest</a>
+    <a href="#exceptions">۵. تست Exception و Float</a>
+    <a href="#fixtures">۶. Fixture</a>
+    <a href="#conftest">۷. conftest.py</a>
+    <a href="#parametrize">۸. Parametrize</a>
+    <a href="#markers">۹. Marker / Skip / XFail</a>
+    <a href="#builtins">۱۰. Built-in Fixtures</a>
+    <a href="#mock">۱۱. Mock و Monkeypatch</a>
+    <a href="#types">۱۲. انواع تست</a>
+    <a href="#best">۱۳. اصول تست حرفه‌ای</a>
+    <a href="#coverage">۱۴. Coverage و CI/CD</a>
+    <a href="#project">۱۵. مثال پروژه واقعی</a>
+    <a href="#exercises">۱۶. ۱۰ تمرین</a>
+  </div>
+</nav>
+
+<section class="section" id="basics">
+<h2>۱. اصلاً Testing چیست؟</h2>
+<p>فرض کن این تابع را نوشته‌ای:</p>
+<pre><code>def add(a, b):
+    return a + b</code></pre>
+
+<p>برای اینکه مطمئن شوی خروجی درست است، می‌توانی دستی چاپش کنی:</p>
+<pre><code>print(add(2, 3))</code></pre>
+
+<p>اما اگر پروژه ۵۰۰ تابع داشته باشد، این روش دیگر قابل اتکا نیست. تست خودکار یعنی انتظارمان را به صورت کد بنویسیم:</p>
+<pre><code>assert add(2, 3) == 5</code></pre>
+
+<div class="note">
+  <b>معنی assert:</b>
+  من انتظار دارم عبارت سمت راست درست باشد؛ اگر نیست، تست باید Fail شود.
+</div>
+
+<h3>pytest چیست؟</h3>
+<p>pytest یک فریم‌ورک تست برای Python است که تست‌ها را پیدا می‌کند، اجرا می‌کند و نتیجه را به صورت Pass/Fail گزارش می‌دهد.</p>
+
+<pre><code>def add(a, b):
+    return a + b
+
+def test_add():
+    assert add(2, 3) == 5</code></pre>
+</section>
+
+<section class="section" id="assert">
+<h2>۲. نصب و اولین تست</h2>
+
+<h3>ساخت محیط مجازی</h3>
+<pre><code>python -m venv .venv</code></pre>
+
+<p>در Linux/macOS:</p>
+<pre><code>source .venv/bin/activate</code></pre>
+
+<p>در Windows:</p>
+<pre><code>.venv\Scripts\activate</code></pre>
+
+<h3>نصب pytest</h3>
+<pre><code>pip install pytest</code></pre>
+
+<h3>ساختار ساده پروژه</h3>
+<pre><code>my_project/
+├── calculator.py
+└── test_calculator.py</code></pre>
+
+<p><code>calculator.py</code>:</p>
+<pre><code>def add(a, b):
+    return a + b</code></pre>
+
+<p><code>test_calculator.py</code>:</p>
+<pre><code>from calculator import add
+
+def test_add():
+    assert add(2, 3) == 5</code></pre>
+
+<p>اجرا:</p>
+<pre><code>pytest</code></pre>
+
+<h3>assert با داده‌های مختلف</h3>
+<div class="grid">
+<div class="card">
+<h3>String</h3>
+<pre><code>assert "Ali" == "Ali"</code></pre>
+</div>
+<div class="card">
+<h3>List</h3>
+<pre><code>assert [1, 2, 3] == [1, 2, 3]</code></pre>
+</div>
+<div class="card">
+<h3>Dictionary</h3>
+<pre><code>assert {"name": "Ali"} == {"name": "Ali"}</code></pre>
+</div>
+<div class="card">
+<h3>Boolean / None</h3>
+<pre><code>assert active is True
+assert value is None</code></pre>
+</div>
+</div>
+
+<h3>مقایسه‌های رایج</h3>
+<pre><code>assert result == 10
+assert result != 10
+assert result &gt; 10
+assert result &lt; 10
+assert "Ali" in users
+assert "Reza" not in users
+assert isinstance(result, list)</code></pre>
+</section>
+
+<section class="section" id="discovery">
+<h2>۳. pytest چطور تست‌ها را پیدا می‌کند؟</h2>
+
+<p>معمولاً فایل‌های تست با یکی از این الگوها نام‌گذاری می‌شوند:</p>
+<pre><code>test_users.py
+test_login.py
+users_test.py</code></pre>
+
+<p>تابع تست نیز باید معمولاً با <code>test_</code> شروع شود:</p>
+<pre><code>def test_add():
+    ...
+
+def test_login():
+    ...</code></pre>
+
+<div class="warning">
+  تابعی مثل <code>check_add()</code> به صورت پیش‌فرض تست شناخته نمی‌شود.
+</div>
+
+<h3>الگوی Arrange / Act / Assert</h3>
+<pre><code>def test_discount():
+    # Arrange
+    price = 100
+    discount = 20
+
+    # Act
+    result = price - discount
+
+    # Assert
+    assert result == 80</code></pre>
+</section>
+
+<section class="section" id="commands">
+<h2>۴. دستورات مهم pytest</h2>
+
+<table>
+<tr><th>دستور</th><th>کاربرد</th></tr>
+<tr><td><code>pytest</code></td><td>اجرای همه تست‌ها</td></tr>
+<tr><td><code>pytest -v</code></td><td>نمایش جزئیات بیشتر</td></tr>
+<tr><td><code>pytest -q</code></td><td>خروجی خلاصه‌تر</td></tr>
+<tr><td><code>pytest -s</code></td><td>نمایش print هنگام اجرا</td></tr>
+<tr><td><code>pytest -x</code></td><td>توقف بعد از اولین Fail</td></tr>
+<tr><td><code>pytest --maxfail=3</code></td><td>توقف بعد از سه Fail</td></tr>
+<tr><td><code>pytest test_users.py</code></td><td>اجرای یک فایل خاص</td></tr>
+<tr><td><code>pytest test_users.py::test_create</code></td><td>اجرای یک تست خاص</td></tr>
+<tr><td><code>pytest -k login</code></td><td>انتخاب بر اساس نام تست</td></tr>
+<tr><td><code>pytest --collect-only</code></td><td>فقط نمایش تست‌های پیدا شده</td></tr>
+</table>
+</section>
+
+<section class="section" id="exceptions">
+<h2>۵. تست Exception و Float</h2>
+
+<h3>تست Exception</h3>
+<pre><code>def divide(a, b):
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
+    return a / b</code></pre>
+
+<pre><code>import pytest
+
+def test_divide_by_zero():
+    with pytest.raises(ValueError):
+        divide(10, 0)</code></pre>
+
+<p>بررسی متن خطا:</p>
+<pre><code>def test_divide_by_zero():
+    with pytest.raises(
+        ValueError,
+        match="Cannot divide by zero"
+    ):
+        divide(10, 0)</code></pre>
+
+<h3>مقایسه اعداد اعشاری</h3>
+<pre><code>import pytest
+
+def test_float():
+    assert 0.1 + 0.2 == pytest.approx(0.3)</code></pre>
+
+<div class="tip">
+  برای Floatها از <code>pytest.approx</code> استفاده کن تا خطاهای طبیعی precision در محاسبات باینری دردسرساز نشوند.
+</div>
+</section>
+
+<section class="section" id="fixtures">
+<h2>۶. Fixture — یکی از مهم‌ترین مفاهیم pytest</h2>
+
+<p>Fixture داده یا dependency مشترک تست‌ها را آماده می‌کند.</p>
+
+<pre><code>import pytest
+
+@pytest.fixture
+def user():
+    return {
+        "name": "Ali",
+        "age": 30,
+        "active": True,
+    }</code></pre>
+
+<p>استفاده:</p>
+<pre><code>def test_user_name(user):
+    assert user["name"] == "Ali"
+
+def test_user_age(user):
+    assert user["age"] == 30</code></pre>
+
+<div class="note">
+  pytest نام پارامتر تست را می‌بیند، Fixture هم‌نام را پیدا می‌کند، آن را اجرا می‌کند و مقدارش را Inject می‌کند.
+</div>
+
+<h3>Fixture به عنوان Dependency Injection</h3>
+<pre><code>@pytest.fixture
+def user():
+    return {"name": "Ali"}
+
+@pytest.fixture
+def order(user):
+    return {
+        "id": 1,
+        "user": user,
+        "price": 200
+    }
+
+def test_order_user(order):
+    assert order["user"]["name"] == "Ali"</code></pre>
+
+<h3>Fixture با yield</h3>
+<pre><code>@pytest.fixture
+def database():
+    print("Connect database")
+
+    db = "connection"
+
+    yield db
+
+    print("Close database")</code></pre>
+
+<p>قبل از <code>yield</code> = Setup، بعد از <code>yield</code> = Teardown.</p>
+
+<h3>Fixture Scope</h3>
+<table>
+<tr><th>Scope</th><th>زمان ایجاد</th></tr>
+<tr><td><code>function</code></td><td>برای هر تست</td></tr>
+<tr><td><code>class</code></td><td>برای هر کلاس تست</td></tr>
+<tr><td><code>module</code></td><td>برای هر فایل</td></tr>
+<tr><td><code>package</code></td><td>برای هر پکیج</td></tr>
+<tr><td><code>session</code></td><td>یک بار برای کل اجرای pytest</td></tr>
+</table>
+
+<h3>Factory Fixture</h3>
+<pre><code>@pytest.fixture
+def make_user():
+    def _make_user(name, age):
+        return {
+            "name": name,
+            "age": age
+        }
+
+    return _make_user
+
+def test_users(make_user):
+    ali = make_user("Ali", 30)
+    sara = make_user("Sara", 25)
+
+    assert ali["name"] == "Ali"
+    assert sara["name"] == "Sara"</code></pre>
+</section>
+
+<section class="section" id="conftest">
+<h2>۷. conftest.py</h2>
+
+<p>Fixtureهای مشترک را معمولاً در <code>conftest.py</code> قرار می‌دهیم.</p>
+
+<pre><code>project/
+└── tests/
+    ├── conftest.py
+    ├── test_users.py
+    ├── test_orders.py
+    └── test_products.py</code></pre>
+
+<p><code>conftest.py</code>:</p>
+<pre><code>import pytest
+
+@pytest.fixture
+def user():
+    return {
+        "name": "Ali",
+        "age": 30
+    }</code></pre>
+
+<p>در تست نیازی به import کردن Fixture نیست:</p>
+<pre><code>def test_user(user):
+    assert user["name"] == "Ali"</code></pre>
+</section>
+
+<section class="section" id="parametrize">
+<h2>۸. Parametrize</h2>
+
+<p>وقتی یک رفتار را با چند ورودی می‌خواهی تست کنی، به جای چند تست تکراری از Parametrize استفاده کن.</p>
+
+<pre><code>import pytest
+
+@pytest.mark.parametrize(
+    "a,b,expected",
+    [
+        (1, 2, 3),
+        (2, 3, 5),
+        (10, 20, 30),
+        (-1, 1, 0),
+        (0, 0, 0),
+    ]
+)
+def test_add(a, b, expected):
+    assert add(a, b) == expected</code></pre>
+
+<h3>نام‌گذاری سناریوها با id</h3>
+<pre><code>@pytest.mark.parametrize(
+    "age,expected",
+    [
+        pytest.param(10, False, id="child"),
+        pytest.param(18, True, id="minimum-adult"),
+        pytest.param(30, True, id="adult"),
+    ]
+)
+def test_is_adult(age, expected):
+    ...</code></pre>
+</section>
+
+<section class="section" id="markers">
+<h2>۹. Marker، Skip و XFail</h2>
+
+<h3>Marker</h3>
+<pre><code>@pytest.mark.slow
+def test_big_operation():
+    ...</code></pre>
+
+<pre><code>pytest -m slow
+pytest -m "not slow"</code></pre>
+
+<h3>ثبت Marker سفارشی</h3>
+<pre><code># pytest.ini
+
+[pytest]
+markers =
+    slow: slow tests
+    integration: integration tests</code></pre>
+
+<h3>Skip</h3>
+<pre><code>@pytest.mark.skip(reason="Feature not implemented")
+def test_payment():
+    ...</code></pre>
+
+<h3>Skipif</h3>
+<pre><code>import sys
+import pytest
+
+@pytest.mark.skipif(
+    sys.platform != "linux",
+    reason="Linux only"
+)
+def test_linux_feature():
+    ...</code></pre>
+
+<h3>XFail</h3>
+<pre><code>@pytest.mark.xfail(reason="Bug #123")
+def test_bug():
+    assert 1 == 2</code></pre>
+
+<div class="note">
+  <b>skip</b> یعنی تست اجرا نشود. <b>xfail</b> یعنی تست اجرا شود ولی Fail شدنش فعلاً قابل انتظار است.
+</div>
+</section>
+
+<section class="section" id="builtins">
+<h2>۱۰. Built-in Fixtures پرکاربرد</h2>
+
+<h3>tmp_path</h3>
+<pre><code>def test_file(tmp_path):
+    file = tmp_path / "hello.txt"
+
+    file.write_text("Hello")
+
+    assert file.read_text() == "Hello"</code></pre>
+
+<h3>capsys</h3>
+<pre><code>def greet():
+    print("Hello Ali")
+
+def test_greet(capsys):
+    greet()
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "Hello Ali\n"</code></pre>
+
+<h3>caplog</h3>
+<pre><code>import logging
+
+def process():
+    logging.warning("Something happened")
+
+def test_logging(caplog):
+    process()
+
+    assert "Something happened" in caplog.text</code></pre>
+
+<h3>autouse Fixture</h3>
+<pre><code>@pytest.fixture(autouse=True)
+def setup():
+    print("Before test")</code></pre>
+
+<div class="warning">
+  از <code>autouse=True</code> زیاد استفاده نکن؛ چون dependency تست را مخفی می‌کند.
+</div>
+</section>
+
+<section class="section" id="mock">
+<h2>۱۱. Mock و Monkeypatch</h2>
+
+<h3>Monkeypatch برای Environment Variable</h3>
+<pre><code>import os
+
+def get_environment():
+    return os.getenv("APP_ENV")
+
+def test_environment(monkeypatch):
+    monkeypatch.setenv(
+        "APP_ENV",
+        "test"
+    )
+
+    assert get_environment() == "test"</code></pre>
+
+<h3>Monkeypatch برای Function</h3>
+<pre><code># service.py
+
+def get_price_from_api():
+    return 100
+
+def calculate_total():
+    return get_price_from_api() * 2</code></pre>
+
+<pre><code>import service
+
+def fake_price():
+    return 50
+
+def test_total(monkeypatch):
+    monkeypatch.setattr(
+        service,
+        "get_price_from_api",
+        fake_price
+    )
+
+    assert service.calculate_total() == 100</code></pre>
+
+<h3>MagicMock</h3>
+<pre><code>from unittest.mock import MagicMock
+
+def test_payment():
+    payment_gateway = MagicMock()
+
+    payment_gateway.charge.return_value = True
+
+    result = payment_gateway.charge(100)
+
+    assert result is True
+    payment_gateway.charge.assert_called_once_with(100)</code></pre>
+
+<h3>مثال واقعی OrderService</h3>
+<pre><code>class OrderService:
+
+    def __init__(self, payment_gateway):
+        self.payment_gateway = payment_gateway
+
+    def checkout(self, amount):
+        result = self.payment_gateway.charge(amount)
+
+        if result:
+            return "success"
+
+        return "failed"</code></pre>
+
+<pre><code>from unittest.mock import MagicMock
+
+def test_checkout_success():
+    gateway = MagicMock()
+    gateway.charge.return_value = True
+
+    service = OrderService(gateway)
+
+    result = service.checkout(200)
+
+    assert result == "success"
+    gateway.charge.assert_called_once_with(200)</code></pre>
+
+<h3>Side Effect</h3>
+<pre><code>gateway.charge.side_effect = TimeoutError()</code></pre>
+
+<div class="tip">
+  در Unit Test معمولاً API خارجی، Email، SMS، Payment Gateway، S3 و سرویس‌های بیرونی را Mock می‌کنیم.
+</div>
+</section>
+
+<section class="section" id="types">
+<h2>۱۲. Unit Test، Integration Test و E2E</h2>
+
+<div class="grid">
+<div class="card">
+<span class="badge">Unit</span>
+<h3>Unit Test</h3>
+<p>یک بخش کوچک برنامه را در Isolation تست می‌کند.</p>
+<p>معمولاً سریع، کوچک و بدون شبکه یا دیتابیس واقعی است.</p>
+</div>
+
+<div class="card">
+<span class="badge">Integration</span>
+<h3>Integration Test</h3>
+<p>ارتباط چند Component را بررسی می‌کند؛ مثلاً API + Service + Repository + PostgreSQL.</p>
+</div>
+
+<div class="card">
+<span class="badge">E2E</span>
+<h3>End-to-End</h3>
+<p>کل Flow را از ورودی کاربر تا نتیجه نهایی بررسی می‌کند.</p>
+</div>
+
+<div class="card">
+<span class="badge">Rule</span>
+<h3>Test Pyramid</h3>
+<p>معمولاً Unit زیاد، Integration کمتر و E2E باز هم کمتر داریم.</p>
+</div>
+</div>
+</section>
+
+<section class="section" id="best">
+<h2>۱۳. اصول تست‌نویسی حرفه‌ای</h2>
+
+<h3>Test Isolation</h3>
+<p>هر تست باید مستقل از تست‌های دیگر باشد.</p>
+
+<pre><code>@pytest.fixture
+def users():
+    return []
+
+def test_create(users):
+    users.append("Ali")
+    assert users == ["Ali"]
+
+def test_empty(users):
+    assert users == []</code></pre>
+
+<h3>Happy Path و Edge Case</h3>
+<p>فقط مسیر موفق را تست نکن. برای هر Function به Zero، Empty، Negative، Invalid و Boundary Values فکر کن.</p>
+
+<h3>اسم تست خوب</h3>
+<pre><code>def test_login_returns_token_for_valid_credentials():
+    ...
+
+def test_login_fails_when_password_is_wrong():
+    ...</code></pre>
+
+<h3>Behavior را تست کن، نه Implementation را</h3>
+<pre><code>assert calculate_discount(100) == 80</code></pre>
+
+<p>این بهتر از تست کردن متغیر داخلی Function است.</p>
+
+<h3>Test باید Deterministic باشد</h3>
+<p>تست خوب باید امروز، فردا، روی Laptop و در CI نتیجه یکسان بدهد.</p>
+</section>
+
+<section class="section" id="coverage">
+<h2>۱۴. Coverage و CI/CD</h2>
+
+<h3>pytest-cov</h3>
+<pre><code>pip install pytest-cov</code></pre>
+
+<pre><code>pytest --cov=app</code></pre>
+
+<div class="warning">
+  100% Coverage به معنی 100% کیفیت تست نیست. ممکن است خط اجرا شده باشد ولی Assert درست نداشته باشی.
+</div>
+
+<h3>مثال GitLab CI</h3>
+<pre><code>test:
+  image: python:3.13
+
+  script:
+    - pip install -r requirements.txt
+    - pytest</code></pre>
+</section>
+
+<section class="section" id="project">
+<h2>۱۵. مثال پروژه واقعی کوچک</h2>
+
+<p>ساختار:</p>
+<pre><code>project/
+├── app/
+│   └── user_service.py
+└── tests/
+    ├── conftest.py
+    └── test_user_service.py</code></pre>
+
+<h3>user_service.py</h3>
+<pre><code>class UserAlreadyExists(Exception):
+    pass
+
+
+class UserService:
+
+    def __init__(self, repository, email_service):
+        self.repository = repository
+        self.email_service = email_service
+
+    def register(self, email, name):
+        if not email:
+            raise ValueError("Email is required")
+
+        if not name:
+            raise ValueError("Name is required")
+
+        existing = self.repository.find_by_email(email)
+
+        if existing:
+            raise UserAlreadyExists(email)
+
+        user = {
+            "email": email,
+            "name": name,
+            "active": True,
+        }
+
+        self.repository.save(user)
+        self.email_service.send_welcome(email)
+
+        return user</code></pre>
+
+<h3>conftest.py</h3>
+<pre><code>import pytest
+from unittest.mock import MagicMock
+from app.user_service import UserService
+
+@pytest.fixture
+def repository():
+    return MagicMock()
+
+@pytest.fixture
+def email_service():
+    return MagicMock()
+
+@pytest.fixture
+def user_service(repository, email_service):
+    return UserService(
+        repository,
+        email_service,
+    )</code></pre>
+
+<h3>Happy Path</h3>
+<pre><code>def test_register_user(
+    user_service,
+    repository,
+    email_service,
+):
+    repository.find_by_email.return_value = None
+
+    user = user_service.register(
+        "ali@example.com",
+        "Ali",
+    )
+
+    assert user == {
+        "email": "ali@example.com",
+        "name": "Ali",
+        "active": True,
+    }
+
+    repository.save.assert_called_once_with(user)
+
+    email_service.send_welcome.assert_called_once_with(
+        "ali@example.com"
+    )</code></pre>
+
+<h3>Duplicate User</h3>
+<pre><code>import pytest
+from app.user_service import UserAlreadyExists
+
+def test_duplicate_user(
+    user_service,
+    repository,
+    email_service,
+):
+    repository.find_by_email.return_value = {
+        "email": "ali@example.com"
+    }
+
+    with pytest.raises(UserAlreadyExists):
+        user_service.register(
+            "ali@example.com",
+            "Ali",
+        )
+
+    repository.save.assert_not_called()
+    email_service.send_welcome.assert_not_called()</code></pre>
+
+<h3>Invalid Input با Parametrize</h3>
+<pre><code>@pytest.mark.parametrize(
+    "email,name,error",
+    [
+        ("", "Ali", "Email is required"),
+        ("ali@example.com", "", "Name is required"),
+        (None, "Ali", "Email is required"),
+        ("ali@example.com", None, "Name is required"),
+    ]
+)
+def test_invalid_registration(
+    user_service,
+    email,
+    name,
+    error,
+):
+    with pytest.raises(
+        ValueError,
+        match=error
+    ):
+        user_service.register(
+            email,
+            name,
+        )</code></pre>
+</section>
+
+<section class="section" id="exercises">
+<h2>۱۶. ۱۰ تمرین از ساده تا حرفه‌ای</h2>
+
+<div class="exercise"><b>تمرین ۱ — جمع دو عدد:</b> تابع <code>add(a,b)</code> بساز. ابتدا سه Test جدا و سپس نسخه Parametrize بنویس.</div>
+<div class="exercise"><b>تمرین ۲ — تشخیص زوج:</b> تابع <code>is_even(number)</code> را با ورودی‌های زوج و فرد تست کن.</div>
+<div class="exercise"><b>تمرین ۳ — تقسیم و Exception:</b> برای تقسیم بر صفر <code>ValueError</code> بده و Message را هم تست کن.</div>
+<div class="exercise"><b>تمرین ۴ — Fixture کاربر:</b> Fixtureای بساز که User با name، age و active تولید کند.</div>
+<div class="exercise"><b>تمرین ۵ — Factory Fixture:</b> با <code>make_user</code> چند User مختلف بساز.</div>
+<div class="exercise"><b>تمرین ۶ — Temporary File:</b> تابع ذخیره متن بساز و با <code>tmp_path</code> تستش کن.</div>
+<div class="exercise"><b>تمرین ۷ — Environment Variable:</b> با <code>monkeypatch.setenv</code> مقدار <code>DATABASE_URL</code> را تست کن.</div>
+<div class="exercise"><b>تمرین ۸ — Mock Email:</b> بعد از Register شدن User بررسی کن <code>send_welcome()</code> دقیقاً یک بار Call شده باشد.</div>
+<div class="exercise"><b>تمرین ۹ — Order Service:</b> Payment Gateway را Mock کن و حالت success / failed را تست کن.</div>
+<div class="exercise"><b>تمرین ۱۰ — Mini Project:</b> Register User با Repository، Email Service، Duplicate User، Invalid Input، Error Handling و Parametrize بساز.</div>
+
+<hr />
+
+<h3>مدل ذهنی نهایی</h3>
+<pre><code>pytest
+  │
+  ▼
+Test
+  │
+  ├── Arrange
+  ├── Act
+  └── Assert
+       │
+       ├── Fixture
+       ├── Parametrize
+       ├── raises
+       ├── Mock
+       └── Monkeypatch</code></pre>
+
+<div class="tip">
+  اگر این شش مفهوم را خوب یاد بگیری، بخش بزرگی از pytest برایت روشن می‌شود:
+  <b>assert، fixture، parametrize، raises، mock، monkeypatch</b>.
+</div>
+</section>
+
+<div class="footer">
+  راهنمای جامع pytest • طراحی شده برای مطالعه از صفر تا سطح پروژه واقعی
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تمرین خانه — جلسه‌ی ۱۰</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:11mm; line-height:1.55; font-size:13px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:8px; margin-bottom:7px; }
+  .head h1 { font-size:24px; font-weight:900; }
+  .head .m { font-size:12px; color:#555; }
+  .name { display:flex; gap:18px; margin-bottom:12px; font-size:12px; color:#555; }
+  .name span { flex:1; border-bottom:1.5px dotted #999; padding-bottom:3px; }
+  h2 { font-size:15px; font-weight:900; margin:13px 0 7px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  ol.tasks { list-style:none; counter-reset:t; }
+  ol.tasks > li { counter-increment:t; position:relative; padding:8px 40px 8px 6px; margin-bottom:7px;
+                  border:1.5px solid #ccc; border-radius:9px; }
+  ol.tasks > li::before { content:counter(t); position:absolute; right:8px; top:7px;
+     width:23px; height:23px; border-radius:6px; background:#111; color:#fff;
+     font-weight:900; font-size:12.5px; display:grid; place-items:center; }
+  b { font-weight:900; }
+  .hint { font-size:11.5px; color:#555; margin-top:4px; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f5f5f5; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11.5px; line-height:1.7; margin-top:5px; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:9px 12px; margin-top:11px; }
+  .box .t { font-weight:900; font-size:13.5px; margin-bottom:4px; }
+  .check { list-style:none; font-size:12.5px; }
+  .check li { padding:2px 0; }
+  .check li::before { content:"☐ "; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>تمرین خانه — جلسه‌ی ۱۰</h1>
+  <div class="m">Quiz Battle · تحویل: ابتدای جلسه‌ی ۱۱</div>
+</div>
+<div class="name"><span>نام:</span><span>تیم:</span></div>
+
+<div class="box" style="margin-top:0;border-style:dashed">
+  <div class="t">🌿 همه‌ی کارهای این برگه را روی یک <code>branch</code> بزن</div>
+  <div class="hint" style="margin-top:0">
+    مستقیم روی <code>main</code> کار نکن (قانون ۸). یک branch بساز — مثلاً
+    <code>git switch -c docs/readme</code> — و آخرش PR بده تا هم‌تیمی‌ات ریویو کند.
+    <b>هر کاری که این هفته می‌کنی، همین مسیر را می‌رود.</b>
+  </div>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">🔥 هشدار: جلسه‌ی بعد «آزمون آتش» داریم</div>
+  <div class="hint" style="margin-top:0">
+    جلسه‌ی بعد، <b>تیم مقابل</b> فقط و فقط از روی <code>README.md</code> شما،
+    بازی‌تان را روی لپ‌تاپ خودش اجرا می‌کند. اجازه ندارید حرف بزنید یا کمک کنید.
+    هر جا گیر کرد، یعنی README شما آنجا کم دارد. <b>بخش الف را جدی بگیرید.</b>
+  </div>
+</div>
+
+<h2>بخش الف — 📄 <code>README.md</code></h2>
+<ol class="tasks">
+  <li>
+    یک فایل <code>README.md</code> در ریشه‌ی پروژه بساز که این شش بخش را داشته باشد:
+<pre>١. بازی چیست؟           (دو خط، برای کسی که هیچ نمی‌داند)
+٢. چه چیزی لازم است؟     (پایتون ۳.۱۰+، ویندوز)
+٣. نصب                  (دستورهای دقیق venv و requirements)
+٤. اجرا                 (دقیقاً چه بزنم؟)
+٥. قواعد بازی            (امتیاز، بونوس سرعت، قدرت ویژه)
+٦. سؤال اضافه کردن       (questions.json و قالبش)</pre>
+    <div class="hint">
+      هر دستور را در بلوک کد بگذار، و <b>دقیقاً</b> همان چیزی را بنویس که باید تایپ شود.
+      «محیط مجازی را فعال کن» کافی نیست — بنویس <code>venv\Scripts\activate</code>.
+    </div>
+  </li>
+  <li>
+    <b>خودت امتحانش کن:</b> پروژه را در یک پوشه‌ی <b>کاملاً تازه</b> کپی کن و فقط
+    از روی README پیش برو. هر جا گیر کردی، README را درست کن.
+    <div class="hint">این تنها راه فهمیدنِ چیزی است که جا انداخته‌ای.</div>
+  </li>
+</ol>
+
+<h2>بخش ب — ⏪ دو دستورِ سفر در زمان</h2>
+<ol class="tasks">
+  <li>
+    یک تغییرِ عمداً بد بزن (مثلاً یک <code>console.print</code> مزاحم اضافه کن)،
+    <b>commit کن</b>، و بعد با <code>revert</code> برش گردان.
+<pre>git log --oneline          ← هشِ commitِ بد را پیدا کن
+git revert a1b2c3d</pre>
+    <div class="hint">
+      بعدش <code>git log --oneline</code> بزن. <b>چند commit می‌بینی؟</b> ______
+      و چرا git آن commit را <b>پاک نکرد</b>؟
+      <div style="border-bottom:1.5px dotted #aaa;height:19px;margin-top:5px"></div>
+    </div>
+  </li>
+  <li>
+    این یکی را سر کلاس نزدیم — <b>یک فایل</b> را به نسخه‌ی یک commitِ قدیمی برگردان:
+<pre>git restore --source=&lt;هش&gt; -- questions.json</pre>
+    <div class="hint">
+      اول <code>questions.json</code> را خراب کن، بعد با این دستور برش گردان.
+      فرقش با <code>git restore questions.json</code> چیست؟
+      <div style="border-bottom:1.5px dotted #aaa;height:19px;margin-top:5px"></div>
+    </div>
+  </li>
+</ol>
+
+<h2>بخش ج — 🥅 تورِ آخر</h2>
+<ol class="tasks">
+  <li>
+    اگر سر کلاس نرسیدیم، <code>KeyboardInterrupt</code> و تورِ آخر را اضافه کن
+    (شکلش روی کارت خطاست)، و <b>هر دو را امتحان کن</b>:
+    <div class="hint">
+      وسط بازی <code>Ctrl+C</code> بزن → باید «خداحافظ» بگوید، نه صفحه‌ی قرمز.
+    </div>
+  </li>
+</ol>
+
+<h2>بخش د — 🛡 دو نگهبان دیگر (قانون ۹)</h2>
+<ol class="tasks">
+  <li>
+    دو تستِ نگهبانِ دیگر به <code>tests/test_guards.py</code> اضافه کن:
+    <div class="hint">
+      ۱) بانک سؤالِ <b>خالی</b> (<code>[]</code>) باید <code>ValueError</code> بدهد<br>
+      ۲) بانکی که از ROUNDS کمتر سؤال دارد، موقع <code>pick(5)</code> باید خطا بدهد
+    </div>
+  </li>
+  <li>
+    <b>ثابت کن نگهبانت واقعاً نگهبانی می‌دهد:</b> آن <code>try</code> یا <code>if</code>ی
+    که امروز اضافه کردیم را موقتاً پاک کن، <code>pytest</code> بزن، و
+    <b>متن قرمز را اینجا بنویس</b>:
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:19px;margin-top:6px"></div>
+    <div class="hint">بعد برگردانش و مطمئن شو دوباره سبز است.</div>
+  </li>
+</ol>
+
+<h2>بخش ه — 🤔 دو سؤال (روی همین برگه)</h2>
+<ol class="tasks">
+  <li>
+    یک خرابیِ دیگر نام ببر که بازی ما هنوز برایش آماده نیست.
+    <b>بدون آن داده می‌شود بازی کرد؟</b> پس باید فریاد بزند یا ادامه بدهد؟
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:19px;margin-top:6px"></div>
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:19px"></div>
+  </li>
+  <li>
+    فرض کن بازی‌ات روی لپ‌تاپ ۱۰۰ نفر است و یکی‌شان می‌گوید «خراب شد».
+    <code>game.log</code> روی لپ‌تاپ <b>اوست</b>، نه تو.
+    <b>چه کار می‌کنی؟</b>
+    <div class="hint" style="border-bottom:1.5px dotted #aaa;height:19px;margin-top:6px"></div>
+    <div class="hint">جلسه‌ی بعد جوابِ حرفه‌ای‌اش را می‌بینی.</div>
+  </li>
+</ol>
+
+<div class="box">
+  <div class="t">قبل از تحویل، چک کن</div>
+  <ul class="check">
+    <li>نام تکراری زدم → <b>دوباره پرسید</b>، نمُرد</li>
+    <li><code>questions.json</code> را قایم کردم → پیام فارسیِ روشن، بدون صفحه‌ی قرمز</li>
+    <li>یک ویرگول اضافه گذاشتم → پیام <b>شماره‌ی خط</b> را گفت</li>
+    <li><code>leaderboard.json</code> را خراب کردم → بازی <b>ادامه داد</b></li>
+    <li><code>Ctrl+C</code> زدم → «خداحافظ»</li>
+    <li><code>game.log</code> ساخته می‌شود، فارسی‌اش سالم است، و در <code>.gitignore</code> است</li>
+    <li><code>pytest</code> سبز است (قانون ۷) و push کرده‌ام</li>
+    <li>کارم را روی یک <b>branch</b> زدم و با <b>PR</b> وارد <code>main</code> کردم (قانون ۸)</li>
+    <li><code>main</code> سالم است: <code>git switch main &amp;&amp; git pull &amp;&amp; pytest</code> سبز</li>
+    <li>پروژه را در پوشه‌ی تازه فقط از روی README اجرا کردم و کار کرد</li>
+  </ul>
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐ اختیاری</div>
+  <div class="hint" style="margin-top:0">
+    <code>game.log</code> هر بار بزرگ‌تر می‌شود. با <code>RotatingFileHandler</code>
+    کاری کن وقتی به ۵۰ کیلوبایت رسید، از نو شروع کند و فقط ۲ فایل قبلی را نگه دارد.
+  </div>
+</div>
+
+<div class="box">
+  <div class="t">🔮 برای جلسه‌ی بعد</div>
+  <div class="hint" style="margin-top:0">
+    جلسه‌ی بعد بازی‌تان تبدیل به یک <b>فایل اجرایی</b> می‌شود که روی کامپیوتری
+    <b>بدونِ پایتون</b> هم اجرا می‌شود — یعنی می‌توانید به هر کسی بدهیدش.
+    و تمرین ارائه می‌کنیم، چون جلسه‌ی ۱۲ جلوی پدر و مادرهایتان ایستاده‌اید. 🏆
+  </div>
+</div>
+
+</body>
+</html>

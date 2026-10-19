@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>pytest از صفر تا حرفه‌ای — Presentation</title>
+<style>
+:root{
+  --bg:#090d18;
+  --panel:#11182b;
+  --panel2:#151f38;
+  --text:#f4f7ff;
+  --muted:#adb8d2;
+  --line:#26314d;
+  --accent:#7f9cff;
+  --accent2:#a47fff;
+  --good:#55d3aa;
+  --warn:#ffd166;
+  --danger:#ff7e8d;
+  --code:#080e1b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{
+  font-family:Tahoma,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(127,156,255,.12), transparent 28%),
+    radial-gradient(circle at 90% 8%, rgba(164,127,255,.10), transparent 24%),
+    var(--bg);
+  color:var(--text);
+}
+button{font:inherit}
+#app{height:100%;display:flex;flex-direction:column}
+.topbar{
+  height:68px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:0 22px;
+  border-bottom:1px solid var(--line);
+  background:rgba(9,13,24,.86);
+  backdrop-filter:blur(14px);
+  flex:0 0 auto;
+}
+.brand{font-weight:700;white-space:nowrap}
+.progress-wrap{
+  height:6px;
+  flex:1;
+  background:#151d30;
+  border-radius:999px;
+  overflow:hidden
+}
+.progress{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width .25s ease
+}
+.counter{
+  font-size:13px;
+  color:var(--muted);
+  min-width:82px;
+  text-align:center
+}
+.icon-btn{
+  width:38px;height:38px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#11182a;
+  color:#dbe4ff;
+  cursor:pointer
+}
+.icon-btn:hover{border-color:#40517e;background:#16213b}
+.stage{
+  flex:1;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px 28px 20px;
+}
+.slide{
+  width:min(1180px,96vw);
+  height:min(74vh,760px);
+  display:none;
+  background:linear-gradient(180deg,rgba(20,29,51,.98),rgba(15,22,39,.98));
+  border:1px solid var(--line);
+  border-radius:28px;
+  box-shadow:0 35px 90px rgba(0,0,0,.36);
+  padding:42px 48px;
+  overflow:auto;
+  position:relative;
+}
+.slide.active{display:block;animation:fade .22s ease}
+@keyframes fade{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide::-webkit-scrollbar{width:10px}
+.slide::-webkit-scrollbar-thumb{background:#2a3655;border-radius:20px}
+.eyebrow{
+  display:inline-block;
+  padding:6px 11px;
+  border-radius:999px;
+  border:1px solid rgba(127,156,255,.28);
+  background:rgba(127,156,255,.08);
+  color:#dce5ff;
+  font-size:12px;
+  margin-bottom:14px
+}
+h1{font-size:46px;line-height:1.35;margin:0 0 18px}
+h2{font-size:32px;line-height:1.4;margin:0 0 18px}
+h3{font-size:22px;margin:24px 0 10px}
+p{font-size:17px;color:var(--muted);line-height:1.95}
+.lead{font-size:20px;max-width:900px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px
+}
+.card h3{margin-top:0}
+.note,.tip,.warning{
+  padding:15px 17px;
+  border-radius:16px;
+  margin:16px 0;
+  border:1px solid
+}
+.note{background:rgba(127,156,255,.08);border-color:rgba(127,156,255,.28)}
+.tip{background:rgba(85,211,170,.08);border-color:rgba(85,211,170,.28)}
+.warning{background:rgba(255,209,102,.08);border-color:rgba(255,209,102,.28)}
+pre{
+  direction:ltr;
+  text-align:left;
+  background:var(--code);
+  border:1px solid #1c2844;
+  color:#dbe7ff;
+  padding:18px;
+  border-radius:16px;
+  overflow:auto;
+  line-height:1.65;
+  font-size:14px
+}
+code{font-family:"SFMono-Regular",Consolas,monospace}
+table{width:100%;border-collapse:collapse;margin:14px 0}
+th,td{border:1px solid var(--line);padding:12px 13px;text-align:right}
+th{background:#18233d}
+td{color:#c8d2e9}
+.kicker{font-size:14px;color:#8fa2c9}
+.exercise{
+  padding:15px 16px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.02);
+  border-radius:15px;
+  margin:10px 0
+}
+.controls{
+  height:82px;
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  padding:10px 20px 18px
+}
+.nav-btn{
+  min-width:132px;
+  height:48px;
+  border-radius:15px;
+  border:1px solid #314162;
+  background:#121a2d;
+  color:#f1f5ff;
+  cursor:pointer;
+  font-weight:700
+}
+.nav-btn.primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-color:transparent;
+  color:#fff
+}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.nav-btn:not(:disabled):hover{transform:translateY(-1px)}
+.shortcut{
+  font-size:12px;
+  color:#71809e;
+  margin:0 8px
+}
+.slide-number{
+  position:absolute;
+  left:28px;
+  top:24px;
+  color:#667491;
+  font-size:12px
+}
+ul,ol{color:var(--muted);line-height:1.95;font-size:17px}
+strong{color:#fff}
+@media(max-width:850px){
+  .slide{height:76vh;padding:30px 24px}
+  .grid{grid-template-columns:1fr}
+  h1{font-size:34px}
+  h2{font-size:27px}
+  .brand{display:none}
+  .topbar{padding:0 12px}
+  .controls{height:74px}
+  .nav-btn{min-width:105px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">pytest • آموزش جامع</div>
+    <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+    <div class="counter" id="counter">1 / 18</div>
+    <button class="icon-btn" id="fullscreenBtn" title="تمام‌صفحه">⛶</button>
+  </header>
+
+  <main class="stage">
+
+    <section class="slide active">
+      <span class="slide-number">01</span>
+      <div class="eyebrow">Python Testing • pytest</div>
+      <h1>pytest از صفر تا حرفه‌ای</h1>
+      <p class="lead">این ارائه برای کسی طراحی شده که از تست‌نویسی هیچ پیش‌زمینه‌ای ندارد. از مفهوم Test و assert شروع می‌کنیم و قدم‌به‌قدم به Fixture، Parametrize، Exception Testing، Mock، Monkeypatch، Coverage و ساختار پروژه واقعی می‌رسیم.</p>
+      <div class="tip"><strong>روش استفاده:</strong> با دکمه‌های پایین یا کلیدهای ← و → بین اسلایدها حرکت کن.</div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">02</span>
+      <div class="eyebrow">مفهوم پایه</div>
+      <h2>اصلاً Testing چیست؟</h2>
+      <p>فرض کن این تابع را نوشته‌ای:</p>
+      <pre><code>def add(a, b):
+    return a + b</code></pre>
+      <p>اگر فقط با <code>print()</code> خروجی را نگاه کنی، در پروژه‌های بزرگ خیلی زود کنترل از دستت خارج می‌شود.</p>
+      <pre><code>assert add(2, 3) == 5</code></pre>
+      <div class="note"><strong>assert</strong> یعنی: من انتظار دارم این شرط درست باشد؛ اگر نیست، تست Fail شود.</div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">03</span>
+      <div class="eyebrow">شروع کار</div>
+      <h2>نصب pytest و اولین تست</h2>
+      <pre><code>python -m venv .venv
+source .venv/bin/activate
+pip install pytest</code></pre>
+      <p>ساختار ساده پروژه:</p>
+      <pre><code>my_project/
+├── calculator.py
+└── test_calculator.py</code></pre>
+      <pre><code># test_calculator.py
+from calculator import add
+
+def test_add():
+    assert add(2, 3) == 5</code></pre>
+      <pre><code>pytest</code></pre>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">04</span>
+      <div class="eyebrow">Discovery</div>
+      <h2>pytest چطور تست‌ها را پیدا می‌کند؟</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>نام فایل</h3>
+          <pre><code>test_users.py
+test_login.py
+users_test.py</code></pre>
+        </div>
+        <div class="card">
+          <h3>نام تابع</h3>
+          <pre><code>def test_add():
+    ...
+
+def test_login():
+    ...</code></pre>
+        </div>
+      </div>
+      <div class="warning"><code>check_add()</code> به صورت پیش‌فرض Test شناخته نمی‌شود.</div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">05</span>
+      <div class="eyebrow">ساختار ذهنی</div>
+      <h2>Arrange / Act / Assert</h2>
+      <pre><code>def test_discount():
+    # Arrange
+    price = 100
+    discount = 20
+
+    # Act
+    result = price - discount
+
+    # Assert
+    assert result == 80</code></pre>
+      <div class="grid">
+        <div class="card"><h3>Arrange</h3><p>داده‌ها و dependencyها را آماده کن.</p></div>
+        <div class="card"><h3>Act</h3><p>رفتاری که می‌خواهی تست کنی اجرا کن.</p></div>
+        <div class="card"><h3>Assert</h3><p>خروجی واقعی را با انتظار مقایسه کن.</p></div>
+        <div class="card"><h3>اصل مهم</h3><p>هر Test بهتر است فقط یک رفتار مشخص را بررسی کند.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">06</span>
+      <div class="eyebrow">Command Line</div>
+      <h2>دستورهای مهم pytest</h2>
+      <table>
+        <tr><th>دستور</th><th>کاربرد</th></tr>
+        <tr><td><code>pytest -v</code></td><td>جزئیات بیشتر</td></tr>
+        <tr><td><code>pytest -s</code></td><td>نمایش print</td></tr>
+        <tr><td><code>pytest -x</code></td><td>توقف بعد از اولین Fail</td></tr>
+        <tr><td><code>pytest -k login</code></td><td>انتخاب بر اساس نام</td></tr>
+        <tr><td><code>pytest -m integration</code></td><td>انتخاب بر اساس Marker</td></tr>
+        <tr><td><code>pytest --collect-only</code></td><td>فقط نمایش Testهای پیدا شده</td></tr>
+      </table>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">07</span>
+      <div class="eyebrow">Exceptions</div>
+      <h2>تست Exception و Float</h2>
+      <pre><code>def divide(a, b):
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
+    return a / b</code></pre>
+      <pre><code>import pytest
+
+def test_divide_by_zero():
+    with pytest.raises(
+        ValueError,
+        match="Cannot divide by zero"
+    ):
+        divide(10, 0)</code></pre>
+      <p>برای Float:</p>
+      <pre><code>assert 0.1 + 0.2 == pytest.approx(0.3)</code></pre>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">08</span>
+      <div class="eyebrow">Core Concept</div>
+      <h2>Fixture چیست؟</h2>
+      <pre><code>import pytest
+
+@pytest.fixture
+def user():
+    return {
+        "name": "Ali",
+        "age": 30,
+        "active": True,
+    }</code></pre>
+      <pre><code>def test_user_name(user):
+    assert user["name"] == "Ali"</code></pre>
+      <div class="note">pytest نام پارامتر <code>user</code> را می‌بیند، Fixture هم‌نام را پیدا می‌کند و مقدارش را Inject می‌کند.</div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">09</span>
+      <div class="eyebrow">Fixture Lifecycle</div>
+      <h2>yield و Scope در Fixture</h2>
+      <pre><code>@pytest.fixture
+def database():
+    print("Connect database")
+
+    db = "connection"
+
+    yield db
+
+    print("Close database")</code></pre>
+      <table>
+        <tr><th>Scope</th><th>دفعات ساخت</th></tr>
+        <tr><td>function</td><td>برای هر Test</td></tr>
+        <tr><td>class</td><td>برای هر Class</td></tr>
+        <tr><td>module</td><td>برای هر فایل</td></tr>
+        <tr><td>session</td><td>یک بار در کل اجرای pytest</td></tr>
+      </table>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">10</span>
+      <div class="eyebrow">Shared Fixtures</div>
+      <h2>conftest.py</h2>
+      <pre><code>project/
+└── tests/
+    ├── conftest.py
+    ├── test_users.py
+    └── test_orders.py</code></pre>
+      <pre><code># conftest.py
+import pytest
+
+@pytest.fixture
+def user():
+    return {
+        "name": "Ali",
+        "age": 30
+    }</code></pre>
+      <div class="tip">Fixtureهای داخل <code>conftest.py</code> را لازم نیست در Testها import کنی.</div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">11</span>
+      <div class="eyebrow">Data-Driven Tests</div>
+      <h2>Parametrize</h2>
+      <pre><code>@pytest.mark.parametrize(
+    "a,b,expected",
+    [
+        (1, 2, 3),
+        (2, 3, 5),
+        (10, 20, 30),
+        (-1, 1, 0),
+    ]
+)
+def test_add(a, b, expected):
+    assert add(a, b) == expected</code></pre>
+      <p>یک Test را با چند Dataset اجرا می‌کند؛ برای Edge Caseها فوق‌العاده مفید است.</p>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">12</span>
+      <div class="eyebrow">Test Organization</div>
+      <h2>Marker / Skip / XFail</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Marker</h3>
+          <pre><code>@pytest.mark.slow
+def test_big_operation():
+    ...</code></pre>
+        </div>
+        <div class="card">
+          <h3>Skip</h3>
+          <pre><code>@pytest.mark.skip(
+    reason="Not implemented"
+)
+def test_payment():
+    ...</code></pre>
+        </div>
+        <div class="card">
+          <h3>XFail</h3>
+          <pre><code>@pytest.mark.xfail(
+    reason="Bug #123"
+)
+def test_bug():
+    ...</code></pre>
+        </div>
+        <div class="card">
+          <h3>Run</h3>
+          <pre><code>pytest -m slow
+pytest -m "not slow"</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">13</span>
+      <div class="eyebrow">Built-in Fixtures</div>
+      <h2>tmp_path / capsys / caplog</h2>
+      <pre><code>def test_file(tmp_path):
+    file = tmp_path / "hello.txt"
+    file.write_text("Hello")
+
+    assert file.read_text() == "Hello"</code></pre>
+      <pre><code>def test_greet(capsys):
+    greet()
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "Hello Ali\n"</code></pre>
+      <div class="note"><code>caplog</code> برای Logها، <code>capsys</code> برای stdout/stderr و <code>tmp_path</code> برای فایل‌های موقت عالی هستند.</div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">14</span>
+      <div class="eyebrow">Isolation</div>
+      <h2>Monkeypatch</h2>
+      <pre><code>import os
+
+def get_environment():
+    return os.getenv("APP_ENV")
+
+def test_environment(monkeypatch):
+    monkeypatch.setenv(
+        "APP_ENV",
+        "test"
+    )
+
+    assert get_environment() == "test"</code></pre>
+      <p>همچنین می‌توانی Function یا Attribute را موقتاً جایگزین کنی.</p>
+      <pre><code>monkeypatch.setattr(
+    service,
+    "get_price_from_api",
+    fake_price
+)</code></pre>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">15</span>
+      <div class="eyebrow">Mocking</div>
+      <h2>Mock و MagicMock</h2>
+      <pre><code>from unittest.mock import MagicMock
+
+def test_checkout_success():
+    gateway = MagicMock()
+    gateway.charge.return_value = True
+
+    service = OrderService(gateway)
+
+    result = service.checkout(200)
+
+    assert result == "success"
+    gateway.charge.assert_called_once_with(200)</code></pre>
+      <div class="tip">در Unit Test معمولاً API، Email، SMS، Payment Gateway، S3 و سرویس‌های بیرونی را Mock می‌کنیم.</div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">16</span>
+      <div class="eyebrow">Testing Strategy</div>
+      <h2>Unit / Integration / E2E</h2>
+      <div class="grid">
+        <div class="card"><h3>Unit</h3><p>یک بخش کوچک و مستقل؛ سریع و کم‌هزینه.</p></div>
+        <div class="card"><h3>Integration</h3><p>ارتباط چند Component؛ مثلاً API + Repository + DB.</p></div>
+        <div class="card"><h3>E2E</h3><p>کل مسیر از ورودی کاربر تا نتیجه نهایی.</p></div>
+        <div class="card"><h3>قاعده</h3><p>Unit زیاد، Integration کمتر، E2E کمتر از همه.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">17</span>
+      <div class="eyebrow">Best Practices</div>
+      <h2>اصول تست حرفه‌ای</h2>
+      <ul>
+        <li>هر Test مستقل از Testهای دیگر باشد.</li>
+        <li>فقط Happy Path را تست نکن؛ Edge Case را هم ببین.</li>
+        <li>اسم Test باید رفتار مورد انتظار را توضیح دهد.</li>
+        <li>Behavior را تست کن، نه جزئیات Implementation.</li>
+        <li>Test باید Deterministic باشد.</li>
+        <li>Unit Test باید سریع بماند.</li>
+      </ul>
+      <pre><code>def test_login_returns_token_for_valid_credentials():
+    ...
+
+def test_login_fails_when_password_is_wrong():
+    ...</code></pre>
+    </section>
+
+    <section class="slide">
+      <span class="slide-number">18</span>
+      <div class="eyebrow">تمرین و جمع‌بندی</div>
+      <h2>۱۰ تمرین پیشنهادی</h2>
+      <div class="exercise">۱. تابع <code>add(a,b)</code> و نسخه Parametrize آن</div>
+      <div class="exercise">۲. تابع <code>is_even(number)</code> با چند ورودی</div>
+      <div class="exercise">۳. تست <code>ValueError</code> برای تقسیم بر صفر</div>
+      <div class="exercise">۴. Fixture برای User</div>
+      <div class="exercise">۵. Factory Fixture برای ساخت چند User</div>
+      <div class="exercise">۶. تست فایل با <code>tmp_path</code></div>
+      <div class="exercise">۷. تست Environment Variable با Monkeypatch</div>
+      <div class="exercise">۸. Mock کردن Email Service</div>
+      <div class="exercise">۹. Mock کردن Payment Gateway</div>
+      <div class="exercise">۱۰. Mini Project ثبت User با Repository + Email + Validation</div>
+      <div class="tip"><strong>شش مفهوم کلیدی:</strong> assert، fixture، parametrize، raises، mock، monkeypatch</div>
+    </section>
+
+  </main>
+
+  <footer class="controls">
+    <button class="nav-btn" id="prevBtn">قبلی</button>
+    <span class="shortcut">← →</span>
+    <button class="nav-btn primary" id="nextBtn">بعدی</button>
+  </footer>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+let current = 0;
+
+function showSlide(index){
+  if(index < 0 || index >= slides.length) return;
+
+  slides[current].classList.remove('active');
+  current = index;
+  slides[current].classList.add('active');
+  slides[current].scrollTop = 0;
+
+  counter.textContent = `${current + 1} / ${slides.length}`;
+  progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === slides.length - 1;
+  nextBtn.textContent = current === slides.length - 1 ? 'پایان' : 'بعدی';
+
+  location.hash = `slide-${current + 1}`;
+}
+
+prevBtn.addEventListener('click', () => showSlide(current - 1));
+nextBtn.addEventListener('click', () => {
+  if(current < slides.length - 1) showSlide(current + 1);
+});
+
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'ArrowLeft' || e.key === 'PageDown' || e.key === ' '){
+    e.preventDefault();
+    showSlide(current + 1);
+  }
+  if(e.key === 'ArrowRight' || e.key === 'PageUp'){
+    e.preventDefault();
+    showSlide(current - 1);
+  }
+  if(e.key.toLowerCase() === 'f'){
+    toggleFullscreen();
+  }
+});
+
+function toggleFullscreen(){
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+}
+
+fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+window.addEventListener('load', () => {
+  const m = location.hash.match(/slide-(\d+)/);
+  if(m){
+    const idx = Math.max(0, Math.min(slides.length - 1, Number(m[1]) - 1));
+    showSlide(idx);
+  } else {
+    showSlide(0);
+  }
+});
+</script>
+</body>
+</html>

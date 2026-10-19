@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>کارت pytest — جلسه‌ی ۷</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:10mm; line-height:1.5; font-size:12.5px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:7px; margin-bottom:9px; }
+  .head h1 { font-size:22px; font-weight:900; }
+  .head .m { font-size:11.5px; color:#555; }
+  h2 { font-size:14px; font-weight:900; margin:12px 0 6px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f6f6f6; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11px; line-height:1.65; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; margin-top:5px; }
+  th,td { border:1.2px solid #ccc; padding:4px 7px; text-align:right; vertical-align:top; }
+  th { background:#f2f2f2; font-weight:900; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:8px 11px; margin-top:10px; }
+  .box .t { font-weight:900; font-size:13px; margin-bottom:4px; }
+  .rule { border:2.5px solid #111; border-radius:10px; padding:8px 12px; margin-top:11px;
+          text-align:center; font-weight:900; font-size:14px; }
+  .two { display:flex; gap:9px; } .two > div { flex:1; }
+  ul { margin:3px 18px 0 0; } li { padding:1.5px 0; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>کارت pytest</h1>
+  <div class="m">جلسه‌ی ۷ · Quiz Battle · رباتی که کدت را چک می‌کند</div>
+</div>
+
+<h2>📁 قرارداد — سه چیزی که باید دقیق باشد</h2>
+<pre>پروژه/
+├── engine.py
+├── game.py
+├── storage.py
+├── pytest.ini          ←  [pytest]
+└── tests/              ←     pythonpath = .
+    └── test_engine.py  ←     testpaths = tests</pre>
+<ul>
+  <li>پوشه‌ی <code>tests/</code></li>
+  <li>اسم فایل با <code>test_</code> شروع شود</li>
+  <li>اسم تابع با <code>test_</code> شروع شود ← <b>وگرنه pytest اصلاً نمی‌بیندش</b></li>
+</ul>
+
+<h2>🧪 شکل یک تست</h2>
+<pre>def test_speed_bonus_goes_to_the_faster_player():
+    m = make_match()
+    m.start_round()
+    m.submit("علی", "A", 12.0)      # ۱۲ ثانیه
+    m.submit("رضا", "A", 4.0)       # ۴ ثانیه — سریع‌تر
+    m.resolve_round()
+
+    assert m.score_of("رضا") == 13
+    assert m.score_of("علی") == 10</pre>
+
+<div class="two">
+<div>
+<h2>دستورها</h2>
+<table>
+  <tr><td><code>pytest</code></td><td>همه را اجرا کن</td></tr>
+  <tr><td><code>pytest -v</code></td><td>اسم تک‌تک تست‌ها</td></tr>
+  <tr><td><code>pytest -x</code></td><td>سرِ اولین قرمز بایست</td></tr>
+  <tr><td><code>pytest -k speed</code></td><td>فقط تست‌هایی که «speed» دارند</td></tr>
+</table>
+</div>
+<div>
+<h2><code>assert</code> یعنی «ادعا می‌کنم»</h2>
+<table>
+  <tr><td><code>assert x == 13</code></td><td>برابر است</td></tr>
+  <tr><td><code>assert x is None</code></td><td>هیچ‌کس (مساوی)</td></tr>
+  <tr><td><code>assert not m.is_over()</code></td><td>هنوز تمام نشده</td></tr>
+  <tr><td><code>assert "a" in text</code></td><td>داخلش هست</td></tr>
+</table>
+</div>
+</div>
+
+<h2>💥 تستِ خطا — «ادعا می‌کنم این خط خطا می‌دهد»</h2>
+<pre>import pytest
+
+def test_two_players_cannot_have_the_same_name():
+    with pytest.raises(ValueError):
+        Match("علی", "علی", make_questions())</pre>
+<div style="font-size:11.5px;color:#555;margin-top:3px">
+  اگر خطا <b>ندهد</b>، تست قرمز می‌شود. بله — گاهی خطا دادن، همان چیزی است که می‌خواهیم.
+</div>
+
+<h2>🔴 خواندن صفحه‌ی قرمز — از پایین به بالا</h2>
+<pre>&gt;       assert m.score_of("رضا") == 13
+E       AssertionError: assert 10 == 13
+
+tests/test_engine.py:44: AssertionError
+FAILED tests/test_engine.py::test_speed_bonus_goes_to_the_faster_player</pre>
+<table>
+  <tr><th style="width:30%">این تکه</th><th>یعنی</th></tr>
+  <tr><td><code>assert 10 == 13</code></td><td>انتظار ۱۳ داشتم، ۱۰ گرفتم</td></tr>
+  <tr><td><code>test_engine.py:44</code></td><td>خط ۴۴ همان فایل</td></tr>
+  <tr><td><code>FAILED ... ::test_speed…</code></td><td>اسم دقیقِ تستی که شکست</td></tr>
+</table>
+
+<div class="box">
+  <div class="t">📂 <code>tmp_path</code> — برای تستِ چیزی که فایل می‌نویسد</div>
+  اگر ورودیِ تستت را <code>tmp_path</code> بنامی، pytest یک <b>پوشه‌ی خالیِ موقت</b>
+  به تو می‌دهد و بعد پاکش می‌کند.
+  <pre style="margin-top:5px">def test_the_leaderboard_survives_a_restart(tmp_path):
+    path = str(tmp_path / "leaderboard.json")
+
+    board = ScoreBoard(path)
+    board.record("سارا", "علی", 30, "سارا", 39)
+
+    again = ScoreBoard(path)      # انگار برنامه بسته و باز شد
+    assert dict(again.top(5))["سارا"] == {"wins": 1, "points": 39}</pre>
+  <b>قانون:</b> تست هرگز نباید <code>leaderboard.json</code> واقعیِ تو را لمس کند.
+</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">⭐ چرا این‌ها اصلاً ممکن است؟</div>
+  <table>
+    <tr><th>قانون جلسه‌ی ۴</th><th>چه چیزی را ممکن کرد</th></tr>
+    <tr><td>موتور <code>print</code> و <code>input</code> ندارد</td>
+        <td>تست بدون آدم و بدون صفحه اجرا می‌شود</td></tr>
+    <tr><td>زمان از بیرون تزریق می‌شود</td>
+        <td>تستِ جوابِ ۳۱ ثانیه‌ای، در <b>۰٫۰۲ ثانیه</b></td></tr>
+  </table>
+</div>
+
+<div class="rule">قانون ۷: قبل از commit، pytest سبز.</div>
+
+<div style="text-align:center;font-size:12.5px;margin-top:9px">
+  «تستِ شکست‌خورده دشمن نیست. <b>خبرنگار</b> است.»
+</div>
+
+</body>
+</html>

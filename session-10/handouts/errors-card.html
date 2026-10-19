@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>کارت خطا و لاگ — جلسه‌ی ۱۰</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:10mm; line-height:1.5; font-size:12.5px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:7px; margin-bottom:9px; }
+  .head h1 { font-size:22px; font-weight:900; }
+  .head .m { font-size:11.5px; color:#555; }
+  h2 { font-size:14px; font-weight:900; margin:12px 0 6px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f6f6f6; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11px; line-height:1.65; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; margin-top:5px; }
+  th,td { border:1.2px solid #ccc; padding:4px 7px; text-align:right; vertical-align:top; }
+  th { background:#f2f2f2; font-weight:900; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:8px 11px; margin-top:10px; }
+  .box .t { font-weight:900; font-size:13px; margin-bottom:4px; }
+  .rule { border:2.5px solid #111; border-radius:10px; padding:8px 12px; margin-top:11px;
+          text-align:center; font-weight:900; font-size:13.5px; }
+  .bad { color:#b00; font-weight:900; } .good { color:#070; font-weight:900; }
+  ul { margin:3px 18px 0 0; } li { padding:1.5px 0; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>کارت خطا و لاگ</h1>
+  <div class="m">جلسه‌ی ۱۰ · Quiz Battle · بازی نمی‌میرد</div>
+</div>
+
+<h2>🧩 شکل <code>try / except</code></h2>
+<pre>try:
+    return Match(player1_name, player2_name, questions)   ← فقط خطی که ممکن است بترکد
+except ValueError as error:                               ← نوعِ خطا، نه except خالی
+    console.print(f"⛔ {error}", style="bold red")         ← واکنش: به کاربر بگو
+    console.print("دوباره امتحان کن.")                     ← و بگو حالا چه کند</pre>
+
+<table>
+  <tr><th style="width:34%">قاعده</th><th>چرا</th></tr>
+  <tr><td><code>try</code> دورِ <b>کمترین</b> کد</td>
+      <td>اگر کلِ تابع را بگیری، خطای چیزهای دیگر هم قاطی می‌شود</td></tr>
+  <tr><td><b>همیشه نوع‌دار</b> (<code>except ValueError</code>)</td>
+      <td><code>except:</code> خالی یعنی «همه را قورت بده» — یعنی باگ را قایم کن</td></tr>
+  <tr><td><b>همیشه واکنش</b></td>
+      <td>اگر جوابی برای «حالا چه کار کنم؟» نداری، اصلاً <code>try</code> نگذار</td></tr>
+  <tr><td>پیام را <b>دوباره ننویس</b></td>
+      <td><code>as error</code> بگیر و همان را نشان بده — یک حقیقت، یک جا</td></tr>
+</table>
+
+<h2>🗂 نوعِ خطا کجاست؟ اولین کلمه‌ی صفحه‌ی قرمز</h2>
+<table>
+  <tr><th style="width:36%">نوع</th><th>یعنی</th></tr>
+  <tr><td><code>ValueError</code></td><td>مقدار بی‌معنی است (دو هم‌نام، فایل خراب)</td></tr>
+  <tr><td><code>FileNotFoundError</code></td><td>فایل نیست</td></tr>
+  <tr><td><code>json.JSONDecodeError</code></td><td>فایل هست، ولی JSONِ سالم نیست</td></tr>
+  <tr><td><code>KeyError</code></td><td>این کلید در دیکشنری نیست</td></tr>
+  <tr><td><code>KeyboardInterrupt</code></td><td>کاربر <code>Ctrl+C</code> زد — این هم خطاست!</td></tr>
+</table>
+
+<h2>⚖️ جدولِ تصمیم — مهم‌ترین چیزِ این برگه</h2>
+<div class="box" style="margin-top:4px">
+  <div class="t">قبل از هر <code>try</code>، این سؤال را بپرس:</div>
+  <div style="text-align:center;font-weight:900;font-size:14px;margin:5px 0">
+    «بدون این داده می‌شود بازی کرد؟»
+  </div>
+  <table>
+    <tr><th>فایل</th><th>بدونش می‌شود بازی کرد؟</th><th>پس</th></tr>
+    <tr><td><code>questions.json</code></td><td class="bad">❌ نه</td>
+        <td>فریاد بزن و <b>تمیز ببند</b></td></tr>
+    <tr><td><code>leaderboard.json</code></td><td class="good">✅ بله (حیف است، ولی می‌شود)</td>
+        <td>از نو شروع کن و <b>ادامه بده</b></td></tr>
+  </table>
+  <div style="font-size:11.5px;color:#555;margin-top:5px">
+    مدیریت خطا یعنی <b>تصمیم‌گیری</b> — نه چسباندنِ <code>try</code> به همه‌جا.
+  </div>
+</div>
+
+<h2>📝 لاگ — دفترچه‌ای که برنامه برای <u>خودش</u> می‌نویسد</h2>
+<pre>import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.FileHandler("game.log", encoding="utf-8")],
+)</pre>
+<table>
+  <tr><th style="width:22%">سطح</th><th>یعنی</th><th>مثال</th></tr>
+  <tr><td><code>logging.info</code></td><td>این اتفاق افتاد</td><td>مسابقه شروع شد</td></tr>
+  <tr><td><code>logging.warning</code></td><td>چیزی درست نبود، ولی ادامه دادیم</td><td>نام تکراری، دوباره پرسیدیم</td></tr>
+  <tr><td><code>logging.error</code></td><td>نتوانستیم ادامه دهیم</td><td>بانک سؤال خوانده نشد</td></tr>
+  <tr><td><code>logging.exception</code></td><td>خطای پیش‌بینی‌نشده + کلِ ردِ خطا</td><td>تورِ آخر</td></tr>
+</table>
+<div class="box" style="border-style:dashed;margin-top:7px">
+  <div class="t">🔇 <code>print</code> یا <code>log</code>؟</div>
+  <code>print</code> را <b>کاربر</b> می‌بیند &nbsp;·&nbsp; <code>log</code> را <b>تو</b>.<br>
+  دو کانالِ جدا. و لاگ ساعت دارد، سطح دارد، و روی کامپیوترِ یک نفرِ دیگر هم نوشته می‌شود.<br>
+  <span style="font-size:11.5px;color:#555">و <code>game.log</code> در <code>.gitignore</code> می‌رود — تولید می‌شود، کد نیست (قانون ۶).</span>
+</div>
+
+<h2>🥅 تورِ آخر — فقط یکی، در بیرونی‌ترین لایه</h2>
+<pre>if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        console.print("\nخداحافظ!")                    ← Ctrl+C صفحه‌ی قرمز ندارد
+    except Exception as error:
+        console.print("⛔ یک مشکل پیش‌بینی‌نشده پیش آمد.")
+        logging.exception("خطای پیش‌بینی‌نشده: %s", error)   ← همه‌چیز در game.log</pre>
+<div style="font-size:11.5px;color:#555;margin-top:3px">
+  «ولی گفتی <code>except</code>ِ همه‌گیر بد است!» — فرقش در <b>واکنش</b> است:
+  این یکی چیزی را قایم نمی‌کند، به کاربر می‌گوید و کامل گزارش می‌دهد.
+  این <b>تور</b> است، نه <b>سطل زباله</b>.
+</div>
+
+<div class="rule">قانون ۸: هر <code>except</code> نوع‌دار است و واکنش دارد؛<br>
+هر باگِ حل‌شده یک تستِ نگهبان می‌گیرد.</div>
+
+<div class="box" style="margin-top:9px">
+  <div class="t">🛡 تستِ نگهبان</div>
+  <pre style="margin-top:4px">def test_a_broken_leaderboard_does_not_kill_the_game(tmp_path):
+    path = tmp_path / "leaderboard.json"
+    path.write_text('{"علی": {"wins": 2, BROKEN', encoding="utf-8")
+
+    board = ScoreBoard(str(path))      # نباید خطا بدهد
+    assert board.is_empty()</pre>
+  «درستش کردم» با «درست <b>ماند</b>» فرق دارد. نگهبان، فرقشان است.
+</div>
+
+</body>
+</html>

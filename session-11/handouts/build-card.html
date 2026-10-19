@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>کارت ساخت فایل اجرایی — جلسه‌ی ۱۱</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:10mm; line-height:1.5; font-size:12.5px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:7px; margin-bottom:9px; }
+  .head h1 { font-size:22px; font-weight:900; }
+  .head .m { font-size:11.5px; color:#555; }
+  h2 { font-size:14px; font-weight:900; margin:12px 0 6px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f6f6f6; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11px; line-height:1.65; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; margin-top:5px; }
+  th,td { border:1.2px solid #ccc; padding:4px 7px; text-align:right; vertical-align:top; }
+  th { background:#f2f2f2; font-weight:900; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:8px 11px; margin-top:10px; }
+  .box .t { font-weight:900; font-size:13px; margin-bottom:4px; }
+  .rule { border:2.5px solid #111; border-radius:10px; padding:8px 12px; margin-top:11px;
+          text-align:center; font-weight:900; font-size:13.5px; }
+  .warn { border:2px solid #111; background:#fffbe6; border-radius:9px; padding:8px 11px; margin-top:10px; }
+  ul { margin:3px 18px 0 0; } li { padding:1.5px 0; }
+  .check { list-style:none; } .check li::before { content:"☐ "; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>📦 کارت ساخت فایل اجرایی</h1>
+  <div class="m">جلسه‌ی ۱۱ · Quiz Battle · روزِ تحویل</div>
+</div>
+
+<div class="warn" style="margin-top:0">
+  <div class="t" style="font-weight:900">⚠️ اول این، بعد build</div>
+  بدون این ده خط، <code>.exe</code> ساخته می‌شود ولی با دوبار کلیک <b>می‌میرد</b>،
+  چون <code>questions.json</code> را پیدا نمی‌کند. در <code>storage.py</code>:
+  <pre style="margin-top:5px">import sys
+from pathlib import Path
+
+
+def app_dir() -> Path:
+    """پوشه‌ای که برنامه واقعاً در آن است — چه پایتون باشد، چه exe"""
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).parent      # کنار فایل exe
+    return Path(__file__).parent                # کنار فایل پایتون
+
+
+QUESTIONS_PATH = app_dir() / "questions.json"
+LEADERBOARD_PATH = app_dir() / "leaderboard.json"</pre>
+  <span style="font-size:11.5px;color:#555">
+  <code>sys.frozen</code> فقط وقتی وجود دارد که داخل exe باشیم — یعنی
+  <b>برنامه از خودش می‌پرسد الان exe هستم یا کد.</b></span>
+</div>
+
+<h2>🛠 ساخت — سه دستور</h2>
+<pre>venv\Scripts\activate          ← حتماً! وگرنه exe چهارصد مگابایت می‌شود
+pip install pyinstaller
+pip freeze > requirements.txt
+
+pyinstaller --onefile --clean --name QuizBattle game.py</pre>
+<table>
+  <tr><th style="width:26%">گزینه</th><th>یعنی</th></tr>
+  <tr><td><code>--onefile</code></td><td>همه‌چیز در <b>یک</b> فایل، نه یک پوشه‌ی شلوغ</td></tr>
+  <tr><td><code>--clean</code></td><td>از نوِ نو بساز (اگر قبلاً خراب ساخته شد)</td></tr>
+  <tr><td><code>--name</code></td><td>اسم فایل خروجی</td></tr>
+</table>
+<div style="font-size:11.5px;color:#555;margin-top:3px">
+  ⏳ بارِ اول ۱ تا ۳ دقیقه طول می‌کشد. خروجی در پوشه‌ی <code>dist\</code> است.
+</div>
+
+<h2>🎁 بسته‌ی تحویل — سه فایل، نه یکی</h2>
+<pre>release\
+├── QuizBattle.exe      ← برنامه
+├── questions.json      ← محتوای محصول، همراهش می‌رود
+└── README.md           ← چطور کار می‌کند</pre>
+<div style="font-size:11.5px;color:#555;margin-top:3px">
+  و <code>leaderboard.json</code> را <b>نگذار</b> — آن داده‌ی <i>بازیکن</i> است و
+  خودش ساخته می‌شود. (همان قانون ۶، این‌بار موقع تحویل.)
+</div>
+
+<h2>✅ آزمونِ واقعی</h2>
+<ul class="check">
+  <li>فایل exe را روی <b>دسکتاپ</b> ببر — یعنی یک پوشه‌ی کاملاً بی‌ربط</li>
+  <li>دوبار کلیک کن → باید بگوید <code>questions.json</code> نیست،
+      <b>با پیام آدمیزاد، نه دیوارِ قرمز</b></li>
+  <li><code>questions.json</code> را هم کنارش بگذار → بازی بالا می‌آید 🎉</li>
+  <li>روی <b>لپ‌تاپ یک نفرِ دیگر</b> امتحانش کن</li>
+  <li>یک مسابقه‌ی کامل بازی کن و ببین <code>leaderboard.json</code> کنارِ exe ساخته می‌شود</li>
+</ul>
+
+<h2>🚑 وقتی گیر کردی</h2>
+<table>
+  <tr><th style="width:42%">نشانه</th><th>علت و راه‌حل</th></tr>
+  <tr><td><code>'pyinstaller' is not recognized</code></td>
+      <td><code>(venv)</code> فعال نیست → <code>venv\Scripts\activate</code></td></tr>
+  <tr><td><code>FileNotFoundError</code> داخل exe</td>
+      <td>فیکس <code>app_dir()</code> نشده، یا بعدش دوباره build نشده</td></tr>
+  <tr><td>پنجره باز می‌شود و <b>فوری بسته می‌شود</b></td>
+      <td>پیام را نشان داد ولی کسی ندید → یک <code>input("Enter برای بستن… ")</code> آخرش</td></tr>
+  <tr><td>Windows SmartScreen اخطار می‌دهد</td>
+      <td><b>طبیعی است</b> (exe امضا ندارد) → More info ← Run anyway</td></tr>
+  <tr><td>آنتی‌ویروس قرنطینه‌اش کرد</td>
+      <td>همان دلیل — موقتاً اجازه بده</td></tr>
+  <tr><td><code>ModuleNotFoundError</code> داخل exe</td>
+      <td>از بیرونِ venv build کرده‌ای → داخل <code>(venv)</code> دوباره بساز</td></tr>
+  <tr><td>exe حدود ۴۰۰ مگابایت شد</td>
+      <td>از پایتونِ سیستم ساخته شده، نه venv</td></tr>
+</table>
+
+<div class="box">
+  <div class="t">🚫 و این سه تا در <code>.gitignore</code></div>
+  <pre style="margin-top:4px">build/
+dist/
+*.spec</pre>
+</div>
+
+<div class="rule">قانون ۹: خروجیِ ساخت، کد نیست.</div>
+
+<div class="box" style="border-style:dashed">
+  <div class="t">💡 و یک کار که بعداً به دردت می‌خورد</div>
+  فایل <code>build.bat</code> را کنار <code>game.py</code> نگه دار. هر وقت بازی را
+  عوض کردی، فقط دوبار کلیک کن و نسخه‌ی تازه ساخته می‌شود.
+</div>
+
+</body>
+</html>

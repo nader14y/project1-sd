@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>کارت کار تیمی با git — جلسه‌ی ۱۰</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 9mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Vazirmatn','IRANSans',Tahoma,sans-serif; color:#111; background:#fff;
+         padding:10mm; line-height:1.5; font-size:12.5px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end;
+          border-bottom:3px solid #111; padding-bottom:7px; margin-bottom:9px; }
+  .head h1 { font-size:22px; font-weight:900; }
+  .head .m { font-size:11.5px; color:#555; }
+  h2 { font-size:14px; font-weight:900; margin:12px 0 6px; display:flex; align-items:center; gap:7px; }
+  h2::after { content:""; flex:1; height:2px; background:#e0e0e0; }
+  pre { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; text-align:left;
+        background:#f6f6f6; border:1.5px solid #ddd; border-radius:7px;
+        padding:7px 10px; font-size:11px; line-height:1.65; }
+  code { font-family:'SF Mono',Menlo,Consolas,monospace; direction:ltr; display:inline-block;
+         background:#f0f0f0; border-radius:4px; padding:0 4px; font-size:11px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; margin-top:5px; }
+  th,td { border:1.2px solid #ccc; padding:4px 7px; text-align:right; vertical-align:top; }
+  th { background:#f2f2f2; font-weight:900; font-size:11.5px; }
+  .box { border:2px solid #111; border-radius:9px; padding:8px 11px; margin-top:10px; }
+  .box .t { font-weight:900; font-size:13px; margin-bottom:4px; }
+  .rule { border:2.5px solid #111; border-radius:10px; padding:8px 12px; margin-top:11px;
+          text-align:center; font-weight:900; font-size:13.5px; }
+  .bad { color:#b00; font-weight:900; } .good { color:#070; font-weight:900; }
+  ul { margin:3px 18px 0 0; } li { padding:1.5px 0; }
+  .page2 { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>کارت کار تیمی با git</h1>
+  <div class="m">جلسه‌ی ۱۰ · Quiz Battle · branch، PR، ریویو، conflict</div>
+</div>
+
+<h2>🌿 branch یعنی خطِ زمانیِ موازی</h2>
+<pre>main      ───●────────────────●─── merge ──●───
+               \             /
+fix/names       ●───●───────/</pre>
+<div style="font-size:11.5px;color:#555;margin-top:3px">
+  روی branch کار می‌کنی، خراب می‌کنی، درست می‌کنی — و <code>main</code> دست‌نخورده می‌ماند.
+  وقتی کارت تمام و <b>سالم</b> شد، برش می‌گردانی.
+</div>
+
+<h2>🔁 چرخه‌ی کامل — از صفر تا merge</h2>
+<pre>git switch main
+git pull                                  ← همیشه از main‌ِ تازه شروع کن
+git switch -c fix/duplicate-names         ← -c یعنی بساز
+
+   … کد بزن …
+
+pytest                                    ← قانون ۷: اول سبز
+git add -A
+git commit -m "Ask again when names are the same"
+git push -u origin fix/duplicate-names    ← -u فقط بارِ اول
+
+   … روی GitHub: Compare &amp; pull request …
+   … هم‌تیمی ریویو می‌کند و او merge را می‌زند …
+
+git switch main
+git pull                                  ← حالا main فیکس را دارد</pre>
+
+<table>
+  <tr><th style="width:38%">دستور</th><th>یعنی</th></tr>
+  <tr><td><code>git branch</code></td><td>الان روی کدام branchم؟</td></tr>
+  <tr><td><code>git switch -c &lt;اسم&gt;</code></td><td>branch تازه بساز و برو رویش</td></tr>
+  <tr><td><code>git switch &lt;اسم&gt;</code></td><td>برو روی branchی که هست</td></tr>
+  <tr><td><code>git log --oneline --graph</code></td><td>شکلِ واقعیِ دوشاخه‌ها</td></tr>
+  <tr><td><code>git show &lt;هش&gt;</code></td><td>در آن commit دقیقاً چه عوض شد</td></tr>
+</table>
+<div style="font-size:11.5px;color:#555;margin-top:3px">
+  اسم branch را از روی <b>کاری که می‌کند</b> بگذار، نه اسم خودت:
+  <code>fix/question-bank</code> ✅ &nbsp;·&nbsp; <code>ali-2</code> <span class="bad">❌</span>
+</div>
+
+<h2>🔀 PR و کد ریویو</h2>
+<div class="box" style="margin-top:4px">
+  <div class="t">قاعده‌ی کلاس: هر ریویو <u>حداقل یک کامنت</u> دارد. «خوبه» کامنت نیست.</div>
+  <table>
+    <tr><th style="width:26%">نوع کامنت</th><th>مثال</th></tr>
+    <tr><td>❓ سؤال</td><td>«اگر اسم خالی بگذارد چه می‌شود؟»</td></tr>
+    <tr><td>💡 پیشنهاد</td><td>«این پیام را فارسی کنیم؟»</td></tr>
+    <tr><td>👏 تحسینِ مشخص</td><td>«اینکه <code>error</code> را دوباره ننوشتی و همان پیامِ موتور را نشان دادی، عالیه»</td></tr>
+  </table>
+  <div style="font-size:11.5px;color:#555;margin-top:5px">
+    و <b>دکمه‌ی merge را نویسنده نمی‌زند</b> — ریویوکننده می‌زند. حتی در شرکت‌های واقعی.
+  </div>
+</div>
+
+<div class="rule">قانون ۸: <code>main</code> همیشه سالم و قابل‌بازی است؛<br>
+کار روی branch، و ورود به main فقط با ریویو.</div>
+
+<div class="page2"></div>
+
+<div class="head">
+  <h1>💥 conflict</h1>
+  <div class="m">صفحه‌ی ۲ · وقتی دو نفر یک خط را عوض کرده‌اند</div>
+</div>
+
+<div class="box" style="margin-top:0">
+  <div class="t">conflict یعنی خراب کردی؟ <span class="good">نه.</span></div>
+  conflict یعنی <b>دو نفر هم‌زمان کار کردند</b> — یعنی تیم دارد کار می‌کند.
+  اگر هیچ‌وقت conflict نگیرید، یعنی هم‌زمان کار نمی‌کنید.
+</div>
+
+<h2>🔍 شکلش در فایل</h2>
+<pre>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+    handlers=[logging.FileHandler("game.log", encoding="utf-8")],
+=======
+    filename="game.log",
+    encoding="utf-8",
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; fix/question-bank</pre>
+<table>
+  <tr><th style="width:32%">نشانه</th><th>یعنی</th></tr>
+  <tr><td><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code></td><td>از اینجا، <b>مالِ main</b> (کارِ آن یکی)</td></tr>
+  <tr><td><code>=======</code></td><td>مرز</td></tr>
+  <tr><td><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; fix/...</code></td><td>تا اینجا، <b>مالِ من</b></td></tr>
+</table>
+
+<h2>🛠 مراحل حل</h2>
+<pre>git switch fix/question-bank
+git pull origin main          ← main‌ِ تازه را بیاور تو
+
+   … در VS Code، هر ناحیه‌ی conflict را تصمیم بگیر …
+
+pytest                        ← ⚠️ حتماً! موقع حل، راحت یک خط اضافه پاک می‌شود
+git add game.py
+git commit -m "Merge main into question bank fix"
+git push</pre>
+
+<div class="box">
+  <div class="t">⭐ مهم‌ترین نکته‌ی این برگه</div>
+  در conflictِ امروز، <b>هر دو نسخه درست بودند</b> — هر دو لاگ را در
+  <code>game.log</code> می‌نوشتند. هیچ‌کس اشتباه نکرده بود.
+  <div style="text-align:center;font-weight:900;font-size:14px;margin:7px 0">
+    git هیچ‌وقت نمی‌داند کدام درست است.<br>این یک <u>تصمیمِ انسانی</u> است.
+  </div>
+  <span class="bad">⚠️ و <code>Accept Both</code> اینجا غلط است</span> — دو تا
+  <code>basicConfig</code> می‌شود. یکی را انتخاب کن، آن یکی را پاک.
+</div>
+
+<h2>⏪ سفر در زمان</h2>
+<table>
+  <tr><th style="width:40%">دستور</th><th>چه کار می‌کند</th></tr>
+  <tr><td><code>git restore &lt;فایل&gt;</code></td>
+      <td>تغییرِ <b>ذخیره‌نشده</b> را دور بریز</td></tr>
+  <tr><td><code>git restore --source=&lt;هش&gt; -- &lt;فایل&gt;</code></td>
+      <td><b>یک فایل</b> را به نسخه‌ی یک commitِ قدیمی برگردان</td></tr>
+  <tr><td><code>git revert &lt;هش&gt;</code></td>
+      <td>یک commitِ <b>انجام‌شده</b> را خنثی کن</td></tr>
+</table>
+
+<div class="box">
+  <div class="t">چرا <code>revert</code> تاریخچه را پاک نمی‌کند؟</div>
+  چون آن commit <b>روی GitHub رفته</b> و شاید هم‌تیمی‌ات pull کرده باشد.
+  تاریخچه‌ای که دیگران دارند را نمی‌شود پاک کرد — ولی می‌شود <b>تصحیحش کرد</b>.<br>
+  <span style="font-size:11.5px;color:#555">مثل دفتری که با خودکار نوشته شده:
+  پاک نمی‌کنی، یک خط جدید می‌نویسی.</span>
+  <pre style="margin-top:5px">git log --oneline        ← هشِ commitِ بد را پیدا کن
+git revert a1b2c3d       ← یک commitِ تازه می‌سازد که عکسش را می‌کند</pre>
+</div>
+
+<h2>🚑 وقتی گیر کردی</h2>
+<table>
+  <tr><th style="width:44%">پیام</th><th>کاری که باید بکنی</th></tr>
+  <tr><td><code>has no upstream branch</code></td><td><code>git push -u origin &lt;اسم branch&gt;</code></td></tr>
+  <tr><td><code>src refspec does not match any</code></td><td>هنوز commit نکرده‌ای — <code>git status</code></td></tr>
+  <tr><td><code>divergent branches</code></td><td><code>git config pull.rebase false</code></td></tr>
+  <tr><td>نشانه‌های <code>&lt;&lt;&lt;&lt;</code> در فایل ماند</td><td>conflict نیمه‌کاره — <code>git status</code> می‌گوید کدام فایل</td></tr>
+  <tr><td>دکمه‌ی PR روی GitHub نیست</td><td>یا push نکرده‌ای، یا روی <code>main</code> کار کرده‌ای</td></tr>
+</table>
+
+<div style="text-align:center;font-size:12.5px;margin-top:10px;font-weight:900">
+  اولین کاری که وقتی گیج شدی باید بکنی: <code>git status</code>
+</div>
+
+</body>
+</html>
