@@ -2,3 +2,8 @@
 __pycache__/
 .pytest_cache/
 leaderboard.json
+*.log
+build/
+dist/
+release/
+*.spec

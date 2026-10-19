@@ -1,17 +1,56 @@
 
+"""📒 دفتردار بازی.  ✅ وضعیت مطلوب پایان جلسه‌ی ۱۱ (جلسه‌ی آخر)
+
+🆕 دو تغییر امروز، و هر دو برای همین است که بازی را بتوانیم **به یک نفر دیگر بدهیم**:
+
+   ۱) app_dir() — فایل‌ها را کنار *خودِ برنامه* پیدا کن، نه کنار پوشه‌ی جاری.
+      بدون این، exe با دوبار کلیک کار نمی‌کند.
+
+   ۲) خطاهای روشن — چون کسی که بازی را می‌گیرد، دیوارِ قرمزِ پایتون را نمی‌فهمد.
+
+⚠️ و دقت کنید برای دو فایل، **دو تصمیمِ متفاوت** گرفته‌ایم:
+      questions.json نباشد  →  فریاد می‌زنیم؛ بدون سؤال نمی‌شود بازی کرد
+      leaderboard.json خراب →  از نو شروع می‌کنیم؛ بازی ادامه می‌دهد
+"""
+
 import json
 import random
+import sys
 from pathlib import Path
 
 from engine import Question, ROUNDS
 
-QUESTIONS_PATH = "questions.json"
-LEADERBOARD_PATH = "leaderboard.json"
+
+def app_dir() -> Path:
+    """پوشه‌ای که برنامه واقعاً در آن است — چه پایتون باشد، چه .exe
+
+    sys.frozen فقط وقتی وجود دارد که داخل یک فایل اجرایی باشیم.
+    یعنی برنامه از خودش می‌پرسد: «من الان exe هستم یا کد؟»
+    """
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).parent      # کنار فایل exe
+    return Path(__file__).parent                # کنار فایل پایتون
+
+
+QUESTIONS_PATH = app_dir() / "questions.json"
+LEADERBOARD_PATH = app_dir() / "leaderboard.json"
 
 class QuestionBank:
-    def __init__(self, path: str = QUESTIONS_PATH) -> None:
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
+    def __init__(self, path=QUESTIONS_PATH) -> None:
+        if not Path(path).exists():
+            raise FileNotFoundError(f"فایل questions.json پیدا نشد: {path}")
+
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except json.JSONDecodeError as error:
+            # خطای خام را به خطایی ترجمه می‌کنیم که *شماره‌ی خط* را بگوید
+            raise ValueError(
+                f"فایل questions.json خراب است (خط {error.lineno}): {error.msg}"
+            ) from error
+
+        if not isinstance(data, list) or not data:
+            raise ValueError("بانک سؤال باید یک لیست غیرخالی باشد")
         
         self._questions: list[Question] = []
         for item in data:
@@ -27,16 +66,24 @@ class QuestionBank:
         return len(self._questions)
 
     def pick(self, n: int = ROUNDS) -> list[Question]:
+        if self.count() < n:
+            raise ValueError(
+                f"بانک سؤال {self.count()} سؤال دارد؛ برای یک مسابقه {n} سؤال لازم است"
+            )
         return random.sample(self._questions, k=n)
 
 class ScoreBoard:
-    def __init__(self, path: str = LEADERBOARD_PATH) -> None:
+    def __init__(self, path=LEADERBOARD_PATH) -> None:
         self._path = Path(path)
         self._data: dict[str, dict[str, int]] = {}
 
         if self._path.exists():
-            with open(self._path, encoding="utf-8") as f:
-                self._data = json.load(f)
+            try:
+                with open(self._path, encoding="utf-8") as f:
+                    self._data = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                # رده‌بندیِ خراب، دلیلِ خوبی برای مُردنِ بازی نیست: از نو شروع می‌کنیم
+                self._data = {}
 
     def is_empty(self) -> bool:
         return not self._data

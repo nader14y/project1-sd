@@ -1,8 +1,18 @@
+"""👄 دهانِ بازی.  ✅ وضعیت مطلوب پایان جلسه‌ی ۱۱ (جلسه‌ی آخر)
+
+🆕 سه تغییر امروز — هر سه برای لحظه‌ای که بازی را به یک نفرِ دیگر می‌دهیم:
+
+   ۱) ask_names  → نام تکراری دیگر بازی را نمی‌اندازد وسط منو؛ دوباره می‌پرسد
+   ۲) try دورِ QuestionBank → اگر فایل سؤال نبود، پیام آدمیزاد نه دیوارِ قرمز
+   ۳) except سراسری حالا به *کاربر* هم چیزی می‌گوید، نه فقط به لاگ
+"""
+
 import time
 from rich.console import Console  # pyright: ignore[reportMissingImports]
 from engine import Match, ROUNDS
 from storage import QuestionBank, ScoreBoard
 from app_log import AppLog
+import traceback
 AppLog.setup()
 
 console = Console()
@@ -42,8 +52,7 @@ def prompt_choice(player_name, question):
         console.print("لطفاً فقط یکی از گزینه‌های A تا D را وارد کن.", style="yellow")
 
 
-def play_match(questions, player1_name="بازیکن 1", player2_name="بازیکن 2"):
-    match = Match(player1_name, player2_name, questions)
+def play_match(match):
 
     while not match.is_over():
         question = match.start_round()
@@ -82,12 +91,29 @@ def play_match(questions, player1_name="بازیکن 1", player2_name="بازی�
     return match
 
 
+def ask_names(questions):
+    """تا وقتی موتور مسابقه را قبول نکند، دوباره می‌پرسد.
+
+    ⭐ قاعده را دو جا ننوشتیم: موتور می‌داند دو هم‌نام ممنوع است،
+       و دهان فقط فریادش را می‌گیرد و دوباره می‌پرسد.
+    """
+    logger = AppLog.get("Game")
+
+    while True:
+        player1_name = input("نام بازیکن اول: ").strip() or "بازیکن 1"
+        player2_name = input("نام بازیکن دوم: ").strip() or "بازیکن 2"
+
+        try:
+            return Match(player1_name, player2_name, questions)
+        except ValueError as error:
+            logger.warning("Could not start match: %s", error)
+            console.print(f"⛔ {error}", style="bold red")
+            console.print("دوباره امتحان کن.\n", style="yellow")
+
+
 # Ask for Player names and then play match
 def play(bank, board):
-    player1_name = input("نام بازیکن اول: ").strip() or "بازیکن 1"
-    player2_name = input("نام بازیکن دوم: ").strip() or "بازیکن 2"
-
-    match = play_match(bank.pick(ROUNDS), player1_name, player2_name)
+    match = play_match(ask_names(bank.pick(ROUNDS)))
 
     board.record(
         match.winner(),
@@ -100,7 +126,22 @@ def play(bank, board):
 def main():
     logger = AppLog.get("Game")
     logger.info("Game started")
-    bank = QuestionBank()
+
+    try:
+        bank = QuestionBank()
+    except FileNotFoundError as error:
+        console.print(f"⛔ {error}", style="bold red")
+        console.print("فایل questions.json باید کنار برنامه باشد.", style="yellow")
+        logger.error("Question bank not found: %s", error)
+        input("\nEnter برای بستن… ")      # وگرنه پنجره‌ی exe فوری بسته می‌شود
+        return
+    except ValueError as error:
+        console.print(f"⛔ {error}", style="bold red")
+        console.print("فایل را باز کن و درستش کن (Shift+Alt+F).", style="yellow")
+        logger.error("Question bank is broken: %s", error)
+        input("\nEnter برای بستن… ")
+        return
+
     logger.info("Question bank initialized")
     board = ScoreBoard()
     logger.info("Score board initialized")
@@ -109,17 +150,26 @@ def main():
 
     while True:
         show_menu()
-        choice = input("انتخاب تو (۱ یا ۲): ").strip()
-        logger.info(f"User choice: {choice}")
-        if choice in ("1", "۱"):
-            logger.info("Starting a new match")
-            play(bank, board)
-            logger.info("Match finished")
-        elif choice in ("2", "۲"):
-            console.print("خداحافظ!", style="bold cyan")
-            break
-        else:
-            console.print(" فقط ۱ یا ۲ را وارد کن.", style="bold yellow")
+        try:
+            choice = input("انتخاب تو (۱ یا ۲): ").strip()
+            logger.info(f"User choice: {choice}")
+            if choice in ("1", "۱"):
+                logger.info("Starting a new match")
+                play(bank, board)
+                logger.info("Match finished")
+            elif choice in ("2", "۲"):
+                console.print("خداحافظ!", style="bold cyan")
+                break
+            else:
+                console.print(" فقط ۱ یا ۲ را وارد کن.", style="bold yellow")
+        except Exception as e:
+            # 🥅 تورِ آخر: لاگ برای *ما*، و یک جمله برای *کاربر*.
+            #    قبلاً فقط لاگ می‌کرد و کاربر هیچ نمی‌فهمید.
+            logger.error(f"Something went wrong - {str(traceback.format_exc())}")
+            console.print(f"⛔ یک مشکل پیش آمد: {e}", style="bold red")
+            console.print("جزئیاتش در فایل quiz_game.log نوشته شد.", style="yellow")
+            
+        
 
 
 if __name__ == "__main__":
