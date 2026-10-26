@@ -32,6 +32,7 @@ function message(text, retry = false) {
 }
 
 async function request(path, body) {
+  if (typeof window.quizLocalRequest === "function") return window.quizLocalRequest(path, body);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
   try {
@@ -60,6 +61,7 @@ function accept(data) {
   state = { ...state, ...data };
   if (data.csrf_token) csrf = data.csrf_token;
   initialized = true;
+  if (data.storage_warning) message(data.storage_warning);
   if (state.match?.phase === "answering") {
     deadline = performance.now() + state.match.remaining_seconds * 1000;
   }
@@ -73,12 +75,12 @@ async function sync(explicit = false) {
   try {
     const data = await request("/api/state");
     accept(data);
-    if (explicit) message("");
+    if (explicit && !data.storage_warning) message("");
     if (data.expired) message("بازی قبلی منقضی شده است. یک رقابت تازه شروع کنید.");
   } catch (error) {
     message(error.message, true);
     if (!initialized) {
-      gameRoot.innerHTML = '<div class="loading"><p>سرور بازی در دسترس نیست.</p><button class="secondary-button" data-action="retry">تلاش دوباره</button></div>';
+      gameRoot.innerHTML = '<div class="loading"><p>بازی آماده نشد؛ دوباره تلاش کنید.</p><button class="secondary-button" data-action="retry">تلاش دوباره</button></div>';
     }
   } finally {
     busy = false;
