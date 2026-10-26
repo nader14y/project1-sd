@@ -3,6 +3,10 @@ __pycache__/
 .pytest_cache/
 leaderboard.json
 *.log
+*.log.*
+.leaderboard-*.tmp
+.coverage
+htmlcov/
 build/
 dist/
 release/

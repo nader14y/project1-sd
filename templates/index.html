@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101c29">
+  <meta name="description" content="کوییز بتل؛ رقابت دوستانهٔ دونفره در پنج راند هیجان‌انگیز.">
+  <title>کوییز بتل | نبرد دانستنی‌ها</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="کوییز بتل، صفحهٔ اصلی">
+        <span class="brand-symbol" aria-hidden="true">Q<span>✦</span></span>
+        <span>کوییز<span class="brand-accent">بتل</span><small>QUIZ BATTLE</small></span>
+      </a>
+      <div class="header-caption">کمی فکر، کمی سرعت، کلی رقابت</div>
+      <button class="text-button" id="rules-button" type="button"><span aria-hidden="true">ⓘ</span> قوانین بازی</button>
+    </header>
+
+    <main>
+      <div class="intro"><span class="eyebrow"><i></i> وقت یک رقابت دوستانه‌ست</span>
+        <h1>دانستنی‌هات رو <span>به چالش بکش.</span></h1>
+        <p>دو بازیکن، پنج راند، یک برنده. آماده‌ای سریع‌تر و درست‌تر جواب بدی؟</p>
+      </div>
+      <div id="notice" class="notice" role="alert" hidden></div>
+      <div class="main-grid">
+        <section class="game-card" aria-label="محیط بازی">
+          <div class="card-topline"><span class="section-label"><span class="live-dot"></span> زمین بازی</span><span id="game-status" class="muted">رقابت دونفره</span></div>
+          <div id="game" aria-busy="true"><div class="loading"><span class="loader"></span><p>در حال آماده‌سازی زمین بازی…</p></div></div>
+        </section>
+        <aside>
+          <section class="leaderboard-card" aria-labelledby="leaderboard-title">
+            <div class="aside-heading"><span class="icon-box gold" aria-hidden="true">♜</span><div><h2 id="leaderboard-title">تالار قهرمان‌ها</h2><p>بهترین‌های این میدان</p></div></div>
+            <div class="leaderboard-labels"><span>بازیکن</span><span>برد / امتیاز</span></div>
+            <ol id="leaderboard" class="leaderboard"></ol>
+            <div class="aside-footnote">رتبه‌بندی بر اساس تعداد برد، سپس امتیاز</div>
+          </section>
+          <section class="tip-card"><span class="tip-spark" aria-hidden="true">✧</span><div><h3>هم درست، هم سریع!</h3><p>سریع‌ترین پاسخ درست، <strong>۳ امتیاز اضافه</strong> دارد. عجله کن، اما با دقت.</p></div></section>
+          <div class="local-note"><span aria-hidden="true">◈</span> کنار هم بازی کنید؛ روی یک دستگاه</div>
+        </aside>
+      </div>
+      <div class="how-to"><span class="how-label">مسیر رقابت</span><div><b>۰۱</b> اسم‌هاتون رو وارد کنید</div><span class="step-line"></span><div><b>۰۲</b> نوبتی جواب بدید</div><span class="step-line"></span><div><b>۰۳</b> قهرمان رو مشخص کنید</div></div>
+    </main>
+    <footer><span>کوییز بتل <span class="footer-dot">•</span> هر سؤال، یک فرصت تازه</span><span>ساخته‌شده برای ذهن‌های کنجکاو <span class="footer-spark">✦</span></span></footer>
+  </div>
+
+  <dialog id="rules-dialog" aria-labelledby="rules-title">
+    <div class="dialog-heading"><h2 id="rules-title">قوانین زمین بازی</h2><button id="close-rules" class="close-button" aria-label="بستن قوانین" type="button">×</button></div>
+    <p>این بازی روی یک دستگاه، به‌صورت نوبتی بین دو نفر انجام می‌شود.</p>
+    <ul class="rules-list"><li>هر مسابقه <strong>۵ راند</strong> دارد؛ در هر راند هر دو نفر به یک سؤال پاسخ می‌دهند.</li><li>پس از زدن «آماده‌ام»، <strong>۳۰ ثانیه</strong> برای پاسخ وقت دارید.</li><li>هر پاسخ درست <strong>۱۰ امتیاز</strong> و سریع‌ترین پاسخ درست <strong>۳ امتیاز اضافه</strong> دارد.</li><li>در سؤال دوبل، امتیاز پاسخ درست همراه با امتیاز سرعت دو برابر می‌شود.</li><li>در زمان مساوی، طبق قانون موتور بازی امتیاز سرعت به بازیکن اول می‌رسد.</li><li>پاسخ غلط یا پایان زمان امتیازی ندارد؛ پاسخ درست پس از نوبت هر دو نفر نمایش داده می‌شود.</li></ul>
+    <button id="understood-rules" class="primary-button" type="button">فهمیدم، بریم بازی!</button>
+  </dialog>
+  <noscript><div class="noscript">برای اجرای بازی، جاوااسکریپت مرورگر را فعال کنید.</div></noscript>
+</body>
+</html>

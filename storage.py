@@ -1,9 +1,15 @@
 import json
+import copy
+import logging
+import os
 import random
 import sys
+import tempfile
 from pathlib import Path
 
 from engine import Question, ROUNDS
+
+logger = logging.getLogger("quiz.web.storage")
 
 
 def app_dir() -> Path:
@@ -33,6 +39,19 @@ class QuestionBank:
         
         self._questions: list[Question] = []
         for item in data:
+            if not isinstance(item, dict):
+                raise ValueError("هر سؤال باید یک شیء JSON باشد")
+            if not isinstance(item.get("text"), str) or not item["text"].strip():
+                raise ValueError("متن سؤال نباید خالی باشد")
+            options = item.get("options")
+            if not isinstance(options, list) or any(
+                not isinstance(option, str) or not option.strip() for option in options
+            ):
+                raise ValueError("گزینه‌ها باید فهرستی از متن‌های غیرخالی باشند")
+            if item.get("power_up") not in (None, "double"):
+                raise ValueError("نوع امتیاز ویژه معتبر نیست")
+            if "correct" not in item:
+                raise ValueError("پاسخ درست سؤال مشخص نشده است")
             question = Question(
                 text=item["text"],
                 options=item["options"],
@@ -60,14 +79,22 @@ class ScoreBoard:
             try:
                 with open(self._path, encoding="utf-8") as f:
                     self._data = json.load(f)
-            except (json.JSONDecodeError, OSError):
+                if not isinstance(self._data, dict) or any(
+                    not isinstance(name, str) or not isinstance(stat, dict)
+                    or any(type(stat.get(key)) is not int or stat[key] < 0 for key in ("wins", "points"))
+                    for name, stat in self._data.items()
+                ):
+                    raise ValueError("Invalid leaderboard schema")
+            except (ValueError, OSError):
                 # رده‌بندیِ خراب، دلیلِ خوبی برای مُردنِ بازی نیست: از نو شروع می‌کنیم
+                logger.warning("Could not read leaderboard; starting empty", exc_info=True)
                 self._data = {}
 
     def is_empty(self) -> bool:
         return not self._data
 
     def record(self, winner, player1, score1, player2, score2) -> None:
+        previous = copy.deepcopy(self._data)
         for name, points in [(player1, score1), (player2, score2)]:
             if name not in self._data:
                 self._data[name] = {"wins": 0, "points": 0}
@@ -76,7 +103,11 @@ class ScoreBoard:
         if winner is not None:
             self._data[winner]["wins"] += 1
 
-        self._save()
+        try:
+            self._save()
+        except OSError:
+            self._data = previous
+            raise
 
     def top(self, n: int = 5) -> list[tuple[str, dict[str, int]]]:
         def wins_then_points(item):
@@ -85,5 +116,16 @@ class ScoreBoard:
         return sorted(self._data.items(), key=wins_then_points, reverse=True)[:n]
 
     def _save(self) -> None:
-        with open(self._path, "w", encoding="utf-8") as f:
-            json.dump(self._data, f, ensure_ascii=False, indent=2)
+        # Same-directory atomic replacement preserves the previous file on failure.
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=self._path.parent,
+                                             prefix=".leaderboard-", suffix=".tmp", delete=False) as f:
+                temporary = Path(f.name)
+                json.dump(self._data, f, ensure_ascii=False, indent=2)
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(temporary, self._path)
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
